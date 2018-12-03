@@ -1,0 +1,21 @@
+{
+    "name": "j0hnys/trident",
+    "description": "a laravel code generator for developing applications following Domain Driven Design (DDD) principles",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "John Stamkos",
+            "email": "tzonyss@gmail.com"
+        }
+    ],
+    "minimum-stability": "alpha",
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "j0hnys\\Trident\\TridentServiceProvider"
+            ]
+        }
+    }
+}

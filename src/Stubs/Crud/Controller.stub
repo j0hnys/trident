@@ -1,0 +1,116 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Container\Container as App;
+use App\Td\Business\Validations\{{td_entity}}Request;
+use App\Td\Workflows\Logic\{{td_entity}};
+use App\Td\Workflows\Repositories\{{td_entity}}Repository;
+use App\Td\Workflows\Exceptions\{{td_entity}}Exception;
+use App\Td\Workflows\Events\Triggers\{{td_entity}}Trigger;
+use Workflow;
+
+class {{td_entity}}Controller extends Controller
+{
+    /**
+     * @var {{td_entity}}
+     */
+    protected ${{td_entity}};
+
+    public function __construct({{td_entity}} ${{td_entity}}, App $app)
+    {
+        $this->{{td_entity}} = ${{td_entity}};
+        $this->{{td_entity}}_repository = new {{td_entity}}Repository($app);
+    }
+
+
+    //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // RESTFUL CRUD START
+    //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return $this->{{td_entity}}_repository->all();
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {   
+        return view('{{td_entity}}_create');  //ayto DEN tha to exw sto restful_crud code generation
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        return response()->json( $this->{{td_entity}}_repository->create($request->all()) );
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return response()->json( $this->{{td_entity}}_repository->find($id) );
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        ${{td_entity}} = $this->{{td_entity}}_repository->find($id);
+        return view('{{td_entity}}_edit', compact('{{td_entity}}'));    //ayto DEN tha to exw sto restful_crud code generation
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {   
+        return response()->json( $this->{{td_entity}}_repository->find($id)->update($request->all()) );
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        return response()->json( $this->{{td_entity}}_repository->destroy($id) );
+    }
+
+    //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+    // RESTFUL CRUD END
+    //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+
+    
+}
