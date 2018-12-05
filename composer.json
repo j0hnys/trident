@@ -10,7 +10,9 @@
         }
     ],
     "minimum-stability": "alpha",
-    "require": {},
+    "require": {
+        "mustache/mustache": "2.12.0"
+    },
     "extra": {
         "laravel": {
             "providers": [

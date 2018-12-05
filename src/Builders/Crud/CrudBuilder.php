@@ -18,17 +18,15 @@ class CrudBuilder
         $controller_path = base_path().'/app/Http/Controllers/'.ucfirst(strtolower($name)).'Controller.php';
         
         if (file_exists($controller_path)) {
-            throw new \Exception(ucfirst(strtolower($name)) . ' controller already exists!');
+            $this->makeDirectory($controller_path);
+
+            $stub = file_get_contents(__DIR__.'/../../../src/Stubs/Crud/Controller.stub');
+
+            $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
+            $stub = str_replace('{{Td_entity}}', ucfirst(strtolower($name)), $stub);
+            
+            file_put_contents($controller_path, $stub);
         }
-
-        $this->makeDirectory($controller_path);
-
-        $stub = file_get_contents(__DIR__.'/../../../src/Stubs/Crud/Controller.stub');
-
-        $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
-        $stub = str_replace('{{Td_entity}}', ucfirst(strtolower($name)), $stub);
-        
-        file_put_contents($controller_path, $stub);
 
 
         //
@@ -36,18 +34,15 @@ class CrudBuilder
         $model_path = base_path().'/app/Models/'.ucfirst(strtolower($name)).'.php';
         
         if (file_exists($model_path)) {
-            throw new \Exception(ucfirst(strtolower($name)) . ' model already exists!');
+            $this->makeDirectory($model_path);
+
+            $stub = file_get_contents(__DIR__.'/../../../src/Stubs/Crud/Model.stub');
+
+            $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
+            $stub = str_replace('{{Td_entity}}', ucfirst(strtolower($name)), $stub);
+            
+            file_put_contents($model_path, $stub);
         }
-
-        $this->makeDirectory($model_path);
-
-        $stub = file_get_contents(__DIR__.'/../../../src/Stubs/Crud/Model.stub');
-
-        $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
-        $stub = str_replace('{{Td_entity}}', ucfirst(strtolower($name)), $stub);
-        
-        file_put_contents($model_path, $stub);
-
     }
     
      /**
