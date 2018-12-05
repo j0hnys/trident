@@ -1,0 +1,8 @@
+<?php
+
+namespace App\Trident\Interfaces\Business\Logic;
+
+interface {{Td_entity}}Interface
+{
+    //
+}

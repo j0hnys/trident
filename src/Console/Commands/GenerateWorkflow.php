@@ -3,23 +3,23 @@
 namespace j0hnys\Trident\Console\Commands;
 
 use Illuminate\Console\Command;
-use j0hnys\Trident\Builders\Crud;
+use j0hnys\Trident\Builders;
 
-class GenerateCrud extends Command
+class GenerateWorkflow extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = "trident:generate:restful_crud {name} {model?} {--only=} {--api} {--parent=} ";
+    protected $signature = "trident:generate:workflow {name} {model?} {--only=} {--api} {--parent=} ";
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a CRUD';
+    protected $description = 'Create a workflow';
     
     /**
      * Execute the console command.
@@ -38,11 +38,11 @@ class GenerateCrud extends Command
             $parent = $this->option('parent');
            
 
-            $crud = new Crud\CrudBuilder($name);
+            $crud = new Builders\Workflow($name);
             // $controllerCrud->save();
 
 
-            $this->info($name.' RESTFUL CRUD successfully created');
+            $this->info($name.' workflow successfully created');
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());

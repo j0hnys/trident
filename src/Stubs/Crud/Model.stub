@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class {{Td_entity}} extends Model
+{
+        
+    protected $table = '{{td_entity}}';
+
+    protected $fillable = [];
+
+}
