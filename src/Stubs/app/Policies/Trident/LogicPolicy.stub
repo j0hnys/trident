@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Policies\Trident;
+
+use App\User;
+use App\Models\{{Td_entity}};
+// use App\Trident\Workflows\Repositories\{{Td_entity}}Repository as {{Td_entity}};
+use Illuminate\Auth\Access\HandlesAuthorization;
+
+class {{Td_entity}}Policy
+{
+    use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view the trident {{td_entity}}.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @return mixed
+     */
+    public function view(User $user, {{Td_entity}} ${{Td_entity}})
+    {
+        return $user->id == ${{Td_entity}}->user_id;
+    }
+
+    /**
+     * Determine whether the user can create trident {{td_entity}}.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function create(User $user)
+    {
+        //
+    }
+
+    /**
+     * Determine whether the user can update the trident {{td_entity}}.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @return mixed
+     */
+    public function update(User $user, {{Td_entity}} ${{Td_entity}})
+    {
+        return $user->id == ${{Td_entity}}->user_id;
+    }
+
+    /**
+     * Determine whether the user can delete the trident {{td_entity}}.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @return mixed
+     */
+    public function delete(User $user, {{Td_entity}} ${{Td_entity}})
+    {
+        return $user->id == ${{Td_entity}}->user_id;
+    }
+
+    /**
+     * Determine whether the user can restore the trident {{td_entity}}.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @return mixed
+     */
+    public function restore(User $user, {{Td_entity}} ${{Td_entity}})
+    {
+        return $user->id == ${{Td_entity}}->user_id;
+    }
+
+    /**
+     * Determine whether the user can permanently delete the trident {{td_entity}}.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @return mixed
+     */
+    public function forceDelete(User $user, {{Td_entity}} ${{Td_entity}})
+    {
+        return $user->id == ${{Td_entity}}->user_id;
+    }
+}

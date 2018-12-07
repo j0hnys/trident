@@ -25,7 +25,7 @@ class Validation
 
         $this->makeDirectory($workflow_validation_path);
 
-        $stub = file_get_contents(__DIR__.'/../../src/Stubs/Workflows/LogicRequestValidation.stub');
+        $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Workflows/LogicRequestValidation.stub');
 
         $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);

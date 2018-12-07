@@ -19,7 +19,7 @@ class GenerateCrud extends Command
      *
      * @var string
      */
-    protected $description = 'Create a CRUD';
+    protected $description = 'Create a RESTFUL CRUD';
     
     /**
      * Execute the console command.

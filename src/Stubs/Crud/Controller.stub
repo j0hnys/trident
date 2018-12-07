@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Trident;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Container\Container as App;
-//use App\Trident\Business\Validations\{{Td_entity}}Request;
+//use App\Trident\Workflows\Validations\{{Td_entity}}Request;
 use App\Trident\Workflows\Logic\{{Td_entity}};
 use App\Trident\Workflows\Repositories\{{Td_entity}}Repository;
 use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;

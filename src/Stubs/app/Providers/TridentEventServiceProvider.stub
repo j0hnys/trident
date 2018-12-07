@@ -19,8 +19,8 @@ class TridentEventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         {{# register_workflow_triggers_events }}
-        'App\Td\Workflows\Events\Triggers\{{Td_entity}}Trigger' => [
-            'App\Td\Workflows\Events\Listeners\{{Td_entity}}Listener',
+        'App\Trident\Workflows\Events\Triggers\{{Td_entity}}Trigger' => [
+            'App\Trident\Workflows\Events\Listeners\{{Td_entity}}Listener',
         ],
         {{/ register_workflow_triggers_events }}
     ];
@@ -32,7 +32,7 @@ class TridentEventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         {{# register_workflow_subscribers }}
-        'App\Td\Workflows\Events\Subscribers\{{Td_entity}}Subscriber',
+        'App\Trident\Workflows\Events\Subscribers\{{Td_entity}}Subscriber',
         {{/ register_workflow_subscribers }}
     ];
 

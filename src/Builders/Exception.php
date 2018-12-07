@@ -35,7 +35,7 @@ class Exception
 
         $this->makeDirectory($workflow_exception_path);
 
-        $stub = file_get_contents(__DIR__.'/../../src/Stubs/'.$type.'/LogicException.stub');
+        $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$type.'/LogicException.stub');
 
         $stub = str_replace('{{td_entity}}', strtolower($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);

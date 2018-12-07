@@ -19,7 +19,7 @@ class GenerateEvents extends Command
      *
      * @var string
      */
-    protected $description = 'Create an exception';
+    protected $description = 'Create an event';
     
     /**
      * Execute the console command.
