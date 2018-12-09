@@ -37,10 +37,12 @@ class Install
 
         file_put_contents($trident_event_service_provider_path, $stub);
 
+        //route provider
         $trident_route_service_provider_path = base_path().'/app/Providers/TridentRouteServiceProvider.php';
         $stub = file_get_contents(__DIR__.'/../../Stubs/app/Providers/TridentRouteServiceProvider.stub');
         file_put_contents($trident_route_service_provider_path, $stub);
 
+        //event provider
         $trident_event_service_provider_path = base_path().'/app/Providers/TridentEventServiceProvider.php';
         $stub = file_get_contents(__DIR__.'/../../Stubs/app/Providers/TridentEventServiceProvider.stub');
         $stub = $mustache->render($stub, [
@@ -49,6 +51,15 @@ class Install
         ]);
 
         file_put_contents($trident_event_service_provider_path, $stub);
+
+        //auth provider
+        $trident_auth_provider_path = base_path().'/app/Providers/TridentAuthServiceProvider.php';
+        $stub = file_get_contents(__DIR__.'/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
+        $stub = $mustache->render($stub, [
+            'register_workflow_policies' => $workflows,
+        ]);
+        
+        file_put_contents($trident_auth_provider_path, $stub);
 
 
         //
