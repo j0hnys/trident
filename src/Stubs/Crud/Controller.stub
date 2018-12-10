@@ -37,6 +37,7 @@ class {{Td_entity}}Controller extends Controller
      */
     public function index()
     {
+        $this->authorize('list',{{Td_entity}}Repository::class);
         return $this->{{td_entity}}_repository->all();
     }
 
@@ -47,6 +48,7 @@ class {{Td_entity}}Controller extends Controller
      */
     public function create()
     {   
+        $this->authorize('create',{{Td_entity}}Repository::class);
         return view('{{td_entity}}_create');  //ayto DEN tha to exw sto restful_crud code generation
     }
 
@@ -69,6 +71,7 @@ class {{Td_entity}}Controller extends Controller
      */
     public function show($id)
     {
+        $this->authorize('view', [$this->{{td_entity}}_repository, $id]);
         return response()->json( $this->{{td_entity}}_repository->find($id) );
     }
 
@@ -80,6 +83,7 @@ class {{Td_entity}}Controller extends Controller
      */
     public function edit($id)
     {
+        $this->authorize('update', [$this->{{td_entity}}_repository, $id]);
         ${{td_entity}} = $this->{{td_entity}}_repository->find($id);
         return view('{{td_entity}}_edit', compact('{{td_entity}}'));    //ayto DEN tha to exw sto restful_crud code generation
     }
@@ -93,6 +97,7 @@ class {{Td_entity}}Controller extends Controller
      */
     public function update(Request $request, $id)
     {   
+        $this->authorize('update', [$this->{{td_entity}}_repository, $id]);
         return response()->json( $this->{{td_entity}}_repository->find($id)->update($request->all()) );
     }
 
@@ -104,6 +109,7 @@ class {{Td_entity}}Controller extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('delete', [$this->{{td_entity}}_repository, $id]);
         return response()->json( $this->{{td_entity}}_repository->destroy($id) );
     }
 

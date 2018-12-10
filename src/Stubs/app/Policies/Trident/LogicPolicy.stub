@@ -3,13 +3,23 @@
 namespace App\Policies\Trident;
 
 use App\User;
-use App\Models\{{Td_entity}};
-// use App\Trident\Workflows\Repositories\{{Td_entity}}Repository as {{Td_entity}};
+use App\Trident\Workflows\Repositories\{{Td_entity}}Repository as {{Td_entity}};
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class {{Td_entity}}Policy
 {
     use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can create trident {{td_entity}}.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function list(User $user)
+    {
+        return true;
+    }
 
     /**
      * Determine whether the user can view the trident {{td_entity}}.
@@ -18,9 +28,9 @@ class {{Td_entity}}Policy
      * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
      * @return mixed
      */
-    public function view(User $user, {{Td_entity}} ${{Td_entity}})
+    public function view(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->user_id;
+        return $user->id == ${{Td_entity}}->find($id)->user_id;
     }
 
     /**
@@ -31,7 +41,7 @@ class {{Td_entity}}Policy
      */
     public function create(User $user)
     {
-        //
+        return true;
     }
 
     /**
@@ -41,9 +51,9 @@ class {{Td_entity}}Policy
      * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
      * @return mixed
      */
-    public function update(User $user, {{Td_entity}} ${{Td_entity}})
+    public function update(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->user_id;
+        return $user->id == ${{Td_entity}}->find($id)->user_id;
     }
 
     /**
@@ -53,9 +63,9 @@ class {{Td_entity}}Policy
      * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
      * @return mixed
      */
-    public function delete(User $user, {{Td_entity}} ${{Td_entity}})
+    public function delete(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->user_id;
+        return $user->id == ${{Td_entity}}->find($id)->user_id;
     }
 
     /**
@@ -65,9 +75,9 @@ class {{Td_entity}}Policy
      * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
      * @return mixed
      */
-    public function restore(User $user, {{Td_entity}} ${{Td_entity}})
+    public function restore(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->user_id;
+        return $user->id == ${{Td_entity}}->find($id)->user_id;
     }
 
     /**
@@ -77,8 +87,8 @@ class {{Td_entity}}Policy
      * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
      * @return mixed
      */
-    public function forceDelete(User $user, {{Td_entity}} ${{Td_entity}})
+    public function forceDelete(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->user_id;
+        return $user->id == ${{Td_entity}}->find($id)->user_id;
     }
 }

@@ -4,6 +4,7 @@ namespace j0hnys\Trident;
 
 use Illuminate\Support\ServiceProvider;
 use j0hnys\Trident\Console\Commands\GenerateCrud;
+use j0hnys\Trident\Console\Commands\GenerateControllerFunction;
 use j0hnys\Trident\Console\Commands\GenerateWorkflow;
 use j0hnys\Trident\Console\Commands\Install;
 use j0hnys\Trident\Console\Commands\GenerateValidation;
@@ -43,6 +44,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident.generate_crud', function ($app) {
             return new GenerateCrud();
         });
+        $this->app->singleton('trident.generate_controller_function', function ($app) {
+            return new GenerateControllerFunction();
+        });
         $this->app->singleton('trident.generate_workflow', function ($app) {
             return new GenerateWorkflow();
         });
@@ -62,6 +66,7 @@ class TridentServiceProvider extends ServiceProvider
 
         $this->commands([
             'trident.generate_crud',
+            'trident.generate_controller_function',
             'trident.generate_workflow',
             'trident.generate_validation',
             'trident.generate_exception',

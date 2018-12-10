@@ -1,0 +1,20 @@
+
+    /**
+     * *enter description here.*
+     *
+     * @param  {{Td_entity}}{{function_name}}Request
+     * @return \Illuminate\Http\Response
+     */
+    public function {{function_name}}({{Td_entity}}{{function_name}}Request $request)
+    {
+        $this->authorize('{{function_name}}', $this->{{td_entity}}_repository);
+
+        //
+        // TO DO
+        //
+
+    }
+
+
+
+}

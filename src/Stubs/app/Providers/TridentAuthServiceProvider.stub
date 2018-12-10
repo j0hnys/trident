@@ -14,7 +14,7 @@ class TridentAuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         {{# register_workflow_policies }}
-        'App\Models\{{Td_entity}}' => 'App\Policies\Trident\{{Td_entity}}Policy',
+        'App\Trident\Workflows\Repositories\{{Td_entity}}Repository' => 'App\Policies\Trident\{{Td_entity}}Policy',
         {{/ register_workflow_policies }}
     ];
 
