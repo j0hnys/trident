@@ -50,18 +50,6 @@ class CrudBuilder
         }
 
         //
-        //policy generation
-        $trident_policy_path = base_path().'/app/Policies/Trident/'.ucfirst(strtolower($name)).'Policy.php';
-        if (!file_exists($trident_policy_path)) {
-            $stub = file_get_contents(__DIR__.'/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
-            $stub = $mustache->render($stub, [
-                'register_workflow_policies' => $workflows,
-            ]);
-            
-            file_put_contents($trident_auth_provider_path, $stub);
-        }
-
-        //
         //update resource routes
         $Td_entities_workflows = $this->getCurrentControllers();
         
@@ -80,7 +68,6 @@ class CrudBuilder
 
         file_put_contents($trident_resource_routes_path, $stub);
 
-        
         //
         //update trident auth provider
         $trident_auth_provider_path = base_path().'/app/Providers/TridentAuthServiceProvider.php';
@@ -90,6 +77,18 @@ class CrudBuilder
         ]);
         
         file_put_contents($trident_auth_provider_path, $stub);
+
+        //
+        //policy generation
+        $trident_policy_path = base_path().'/app/Policies/Trident/'.ucfirst(strtolower($name)).'Policy.php';
+        if (!file_exists($trident_policy_path)) {
+            $stub = file_get_contents(__DIR__.'/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
+            
+            $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
+            $stub = str_replace('{{Td_entity}}', ucfirst(strtolower($name)), $stub);
+            
+            file_put_contents($trident_policy_path, $stub);
+        }
             
     }
     
