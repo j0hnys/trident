@@ -1,0 +1,18 @@
+
+    /**
+     * *description goes here*.
+     *
+     * @var array
+     * @return array
+     */
+    public function {{function_name}}(Array $data)
+    {
+        //
+        // TO DO
+        //
+
+        return $data;
+    }
+
+
+}
