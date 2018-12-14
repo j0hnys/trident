@@ -82,6 +82,8 @@ class CrudBuilder
         //policy generation
         $trident_policy_path = base_path().'/app/Policies/Trident/'.ucfirst(strtolower($name)).'Policy.php';
         if (!file_exists($trident_policy_path)) {
+            $this->makeDirectory($trident_policy_path);
+            
             $stub = file_get_contents(__DIR__.'/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
             
             $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
