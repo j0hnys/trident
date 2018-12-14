@@ -56,7 +56,7 @@ class Install
         $trident_auth_provider_path = base_path().'/app/Providers/TridentAuthServiceProvider.php';
         $stub = file_get_contents(__DIR__.'/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
         $stub = $mustache->render($stub, [
-            'register_workflow_policies' => $workflows,
+            'register_workflow_policies' => [],
         ]);
         
         file_put_contents($trident_auth_provider_path, $stub);
