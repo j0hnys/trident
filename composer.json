@@ -12,7 +12,8 @@
     "minimum-stability": "alpha",
     "require": {
         "mustache/mustache": "2.12.0",
-        "spatie/typed": "0.1.1"
+        "spatie/typed": "0.1.1",
+        "doctrine/dbal": "2.9.1"
     },
     "autoload": {
         "psr-4": {
