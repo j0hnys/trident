@@ -13,6 +13,7 @@ use j0hnys\Trident\Console\Commands\Install;
 use j0hnys\Trident\Console\Commands\GenerateValidation;
 use j0hnys\Trident\Console\Commands\GenerateException;
 use j0hnys\Trident\Console\Commands\GenerateEvents;
+use j0hnys\Trident\Console\Commands\ExportModel;
 // . . .
 
 class TridentServiceProvider extends ServiceProvider
@@ -74,6 +75,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident.generate_events', function ($app) {
             return new GenerateEvents();
         });
+        $this->app->singleton('trident.export_model', function ($app) {
+            return new ExportModel();
+        });
         // . . .
 
         $this->commands([
@@ -87,6 +91,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident.generate_exception',
             'trident.generate_events',
             'trident.install',
+            'trident.export_model',
             // . . .
         ]);
     }
