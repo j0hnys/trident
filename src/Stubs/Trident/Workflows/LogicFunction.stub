@@ -5,7 +5,7 @@
      * @var array
      * @return array
      */
-    public function {{function_name}}(Array $data)
+    public function {{function_name}}(Array $data): array
     {
         //
         // TO DO
