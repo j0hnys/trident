@@ -26,7 +26,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @var array
      * @return void
      */
-    public function demo(Array $data)   //~not to be included in code generator~   //edw tha valw spatie Struct!!! (h similar)
+    public function demo(Array $data): array   //~not to be included in code generator~   //edw tha valw spatie Struct!!! (h similar)
     {
         $string = $data['string'];
         $integer = $data['integer'];
