@@ -15,7 +15,7 @@ class Model
     public function __construct($td_entity_name)
     {
         
-        $td_entity_name = ucfirst(strtolower($td_entity_name));
+        $td_entity_name = ucfirst($td_entity_name);
 
         $app = new App();
 

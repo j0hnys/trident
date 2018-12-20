@@ -13,12 +13,12 @@ class WorkflowLogicFunction
     public function __construct($td_entity_name, $function_name)
     {
         
-        $name = ucfirst(strtolower($td_entity_name)).ucfirst(strtolower($function_name));
+        $name = ucfirst($td_entity_name).ucfirst($function_name);
 
 
         //
         //workflowLogic function generation
-        $workflow_logic_path = base_path().'/app/Trident/Workflows/Logic/'.ucfirst(strtolower($td_entity_name)).'.php';
+        $workflow_logic_path = base_path().'/app/Trident/Workflows/Logic/'.ucfirst($td_entity_name).'.php';
         
         $lines = file($workflow_logic_path); 
         $last = sizeof($lines) - 1; 
@@ -31,7 +31,7 @@ class WorkflowLogicFunction
 
         $stub = file_get_contents(__DIR__.'/../Stubs/Trident/Workflows/LogicFunction.stub');
 
-        $stub = str_replace('{{td_entity}}', strtolower($td_entity_name), $stub);
+        $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         

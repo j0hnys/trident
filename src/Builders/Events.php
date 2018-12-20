@@ -15,7 +15,7 @@ class Events
         
         $td_entity_type = strtolower($td_entity_type);
         $event_type = strtolower($event_type);
-        $td_entity_name = ucfirst(strtolower($td_entity_name));
+        $td_entity_name = ucfirst($td_entity_name);
         
         $mustache = new \Mustache_Engine;
 
@@ -46,7 +46,7 @@ class Events
                 $this->makeDirectory($workflow_event_path);
 
                 $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$type.'/Events/LogicTrigger.stub');
-                $stub = str_replace('{{td_entity}}', strtolower($td_entity_name), $stub);
+                $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
                 $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
                 
                 file_put_contents($workflow_event_path, $stub);
@@ -62,7 +62,7 @@ class Events
                 $this->makeDirectory($workflow_event_path);
 
                 $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$type.'/Events/LogicListener.stub');
-                $stub = str_replace('{{td_entity}}', strtolower($td_entity_name), $stub);
+                $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
                 $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
                 
                 file_put_contents($workflow_event_path, $stub);
@@ -79,7 +79,7 @@ class Events
                 $this->makeDirectory($workflow_event_path);
                 
                 $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$type.'/Events/Logic'.ucfirst($event_type).'.stub');
-                $stub = str_replace('{{td_entity}}', strtolower($td_entity_name), $stub);
+                $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
                 $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
                 
                 file_put_contents($workflow_event_path, $stub);
@@ -94,13 +94,13 @@ class Events
 
         $events = array_map(function($element){
             return [
-                'Td_entity' => $element,
+                'Td_entity' => ucfirst($element),
             ];
         },$Td_entities);
 
         $subscribers = array_map(function($element){
             return [
-                'Td_entity' => $element,
+                'Td_entity' => ucfirst($element),
             ];
         },$Td_entities_subscribers);
 

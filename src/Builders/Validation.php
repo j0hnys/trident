@@ -13,21 +13,21 @@ class Validation
     public function __construct($td_entity_name, $function_name)
     {
         
-        $name = ucfirst(strtolower($td_entity_name)).ucfirst(strtolower($function_name));
+        $name = ucfirst($td_entity_name).ucfirst($function_name);
 
         //
         //workflow logic generation
         $workflow_validation_path = base_path().'/app/Trident/Workflows/Validations/'.$name.'Request.php';
         
         if (file_exists($workflow_validation_path)) {
-            throw new \Exception(ucfirst(strtolower($name)) . ' validation already exists!');
+            throw new \Exception(ucfirst($name) . ' validation already exists!');
         }
 
         $this->makeDirectory($workflow_validation_path);
 
         $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Workflows/LogicRequestValidation.stub');
 
-        $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
+        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
         
         file_put_contents($workflow_validation_path, $stub);

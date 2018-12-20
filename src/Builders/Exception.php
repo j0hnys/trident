@@ -13,7 +13,7 @@ class Exception
     public function __construct($td_entity_type, $td_entity_name)
     {
         
-        $td_entity_name = ucfirst(strtolower($td_entity_name));
+        $td_entity_name = ucfirst($td_entity_name);
         $td_entity_type = strtolower($td_entity_type);
 
         $type = '';
@@ -30,14 +30,14 @@ class Exception
         $workflow_exception_path = base_path().'/app/Trident/'.$type.'/Exceptions/'.$td_entity_name.'Exception.php';
         
         if (file_exists($workflow_exception_path)) {
-            throw new \Exception(ucfirst(strtolower($td_entity_name)) . ' exception already exists!');
+            throw new \Exception(ucfirst($td_entity_name) . ' exception already exists!');
         }
 
         $this->makeDirectory($workflow_exception_path);
 
         $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$type.'/LogicException.stub');
 
-        $stub = str_replace('{{td_entity}}', strtolower($td_entity_name), $stub);
+        $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         
         file_put_contents($workflow_exception_path, $stub);

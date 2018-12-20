@@ -13,12 +13,12 @@ class PolicyFunction
     public function __construct($td_entity_name, $function_name)
     {
         
-        $name = ucfirst(strtolower($td_entity_name)).ucfirst(strtolower($function_name));
+        $name = ucfirst($td_entity_name).ucfirst($function_name);
 
 
         //
         //policy function generation
-        $policy_path = base_path().'/app/Policies/Trident/'.ucfirst(strtolower($td_entity_name)).'Policy.php';
+        $policy_path = base_path().'/app/Policies/Trident/'.ucfirst($td_entity_name).'Policy.php';
         
         $lines = file($policy_path); 
         $last = sizeof($lines) - 1; 
@@ -31,7 +31,7 @@ class PolicyFunction
 
         $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/PolicyFunction.stub');
 
-        $stub = str_replace('{{td_entity}}', strtolower($td_entity_name), $stub);
+        $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         

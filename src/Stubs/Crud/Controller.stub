@@ -60,7 +60,10 @@ class {{Td_entity}}Controller extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json( $this->{{td_entity}}_repository->create($request->all()) );
+        $data = $request->all();
+		$data['user_id'] = auth()->id();
+
+        return response()->json( $this->{{td_entity}}_repository->create($data) );
     }
 
     /**

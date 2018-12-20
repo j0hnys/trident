@@ -17,7 +17,7 @@ class Workflow
         
         //
         //workflow logic generation
-        $workflow_logic_path = base_path().'/app/Trident/Workflows/Logic/'.ucfirst(strtolower($name)).'.php';
+        $workflow_logic_path = base_path().'/app/Trident/Workflows/Logic/'.ucfirst($name).'.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/Logic.stub';
         $this->makeFile(
             $name,
@@ -28,7 +28,7 @@ class Workflow
 
         //
         //workflow exception generation
-        $workflow_exception_path = base_path().'/app/Trident/Workflows/Exceptions/'.ucfirst(strtolower($name)).'Exception.php';
+        $workflow_exception_path = base_path().'/app/Trident/Workflows/Exceptions/'.ucfirst($name).'Exception.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/LogicException.stub';
         $this->makeFile(
             $name,
@@ -39,7 +39,7 @@ class Workflow
 
         //
         //workflow interface generation
-        $workflow_interface_path = base_path().'/app/Trident/Interfaces/Workflows/Logic/'.ucfirst(strtolower($name)).'Interface.php';
+        $workflow_interface_path = base_path().'/app/Trident/Interfaces/Workflows/Logic/'.ucfirst($name).'Interface.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/LogicInterface.stub';
         $this->makeFile(
             $name,
@@ -49,7 +49,7 @@ class Workflow
 
         //
         //workflow repository generation
-        $workflow_repository_path = base_path().'/app/Trident/Workflows/Repositories/'.ucfirst(strtolower($name)).'Repository.php';
+        $workflow_repository_path = base_path().'/app/Trident/Workflows/Repositories/'.ucfirst($name).'Repository.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/LogicRepository.stub';
         $this->makeFile(
             $name,
@@ -63,7 +63,7 @@ class Workflow
 
         //
         //business logic generation
-        $business_logic_path = base_path().'/app/Trident/Business/Logic/'.ucfirst(strtolower($name)).'.php';
+        $business_logic_path = base_path().'/app/Trident/Business/Logic/'.ucfirst($name).'.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Business/Logic.stub';
         $this->makeFile(
             $name,
@@ -73,7 +73,7 @@ class Workflow
 
         //
         //business logic exception generation
-        $business_logic_exception_path = base_path().'/app/Trident/Business/Exceptions/'.ucfirst(strtolower($name)).'Exception.php';
+        $business_logic_exception_path = base_path().'/app/Trident/Business/Exceptions/'.ucfirst($name).'Exception.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Business/LogicException.stub';
         $this->makeFile(
             $name,
@@ -83,7 +83,7 @@ class Workflow
 
         //
         //business logic interface generation
-        $business_logic_interface_path = base_path().'/app/Trident/Interfaces/Business/Logic/'.ucfirst(strtolower($name)).'Interface.php';
+        $business_logic_interface_path = base_path().'/app/Trident/Interfaces/Business/Logic/'.ucfirst($name).'Interface.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Business/LogicInterface.stub';
         $this->makeFile(
             $name,
@@ -99,13 +99,13 @@ class Workflow
 
         $workflows = array_map(function($element){
             return [
-                'Td_entity' => $element,
+                'Td_entity' => ucfirst($element),
             ];
         },$Td_entities_workflows);
 
         $businesses = array_map(function($element){
             return [
-                'Td_entity' => $element,
+                'Td_entity' => ucfirst($element),
             ];
         },$Td_entities_businesses);
 

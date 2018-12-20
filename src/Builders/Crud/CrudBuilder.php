@@ -24,8 +24,8 @@ class CrudBuilder
 
             $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/Controller.stub');
 
-            $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
-            $stub = str_replace('{{Td_entity}}', ucfirst(strtolower($name)), $stub);
+            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             
             file_put_contents($controller_path, $stub);
         }
@@ -36,15 +36,15 @@ class CrudBuilder
 
         //
         //model generation
-        $model_path = base_path().'/app/Models/'.ucfirst(strtolower($name)).'.php';
+        $model_path = base_path().'/app/Models/'.ucfirst($name).'.php';
         
         if (!file_exists($model_path)) {
             $this->makeDirectory($model_path);
 
             $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/Model.stub');
 
-            $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
-            $stub = str_replace('{{Td_entity}}', ucfirst(strtolower($name)), $stub);
+            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             
             file_put_contents($model_path, $stub);
         }
@@ -55,8 +55,8 @@ class CrudBuilder
         
         $workflows = array_map(function($element){
             return [
-                'Td_entity' => $element,
-                'td_entity' => strtolower($element),
+                'Td_entity' => ucfirst($element),
+                'td_entity' => lcfirst($element),
             ];
         },$Td_entities_workflows);
 
@@ -80,14 +80,14 @@ class CrudBuilder
 
         //
         //policy generation
-        $trident_policy_path = base_path().'/app/Policies/Trident/'.ucfirst(strtolower($name)).'Policy.php';
+        $trident_policy_path = base_path().'/app/Policies/Trident/'.ucfirst($name).'Policy.php';
         if (!file_exists($trident_policy_path)) {
             $this->makeDirectory($trident_policy_path);
             
             $stub = file_get_contents(__DIR__.'/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
             
-            $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
-            $stub = str_replace('{{Td_entity}}', ucfirst(strtolower($name)), $stub);
+            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             
             file_put_contents($trident_policy_path, $stub);
         }

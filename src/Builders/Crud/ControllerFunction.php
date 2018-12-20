@@ -13,12 +13,12 @@ class ControllerFunction
     public function __construct($td_entity_name, $function_name)
     {
         
-        $name = ucfirst(strtolower($td_entity_name)).ucfirst(strtolower($function_name));
+        $name = ucfirst($td_entity_name).ucfirst($function_name);
 
 
         //
         //controller function generation
-        $controller_path = base_path().'/app/Http/Controllers/Trident/'.ucfirst(strtolower($td_entity_name)).'Controller.php';
+        $controller_path = base_path().'/app/Http/Controllers/Trident/'.ucfirst($td_entity_name).'Controller.php';
         
         $lines = file($controller_path); 
         $last = sizeof($lines) - 1 ; 
@@ -31,7 +31,7 @@ class ControllerFunction
 
         $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/ControllerFunction.stub');
 
-        $stub = str_replace('{{td_entity}}', strtolower($td_entity_name), $stub);
+        $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         
