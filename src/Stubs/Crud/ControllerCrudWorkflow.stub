@@ -37,8 +37,8 @@ class {{Td_entity}}Controller extends Controller
      */
     public function index()
     {
-        $this->authorize('list',{{Td_entity}}Repository::class);
-        return $this->{{td_entity}}_repository->all();
+        $this->authorize('list',$this->{{td_entity}}_repository);
+        return $this->{{td_entity}}_workflow->index();
     }
 
     /**
@@ -48,7 +48,7 @@ class {{Td_entity}}Controller extends Controller
      */
     public function create()
     {   
-        $this->authorize('create',{{Td_entity}}Repository::class);
+        $this->authorize('create',$this->{{td_entity}}_repository);
         return view('{{td_entity}}_create');  //ayto DEN tha to exw sto restful_crud code generation
     }
 
@@ -60,10 +60,7 @@ class {{Td_entity}}Controller extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-		$data['user_id'] = auth()->id();
-
-        return response()->json( $this->{{td_entity}}_repository->create($data) );
+        return response()->json( $this->{{td_entity}}_workflow->store($request) );
     }
 
     /**
@@ -87,7 +84,7 @@ class {{Td_entity}}Controller extends Controller
     public function edit($id)
     {
         $this->authorize('update', [$this->{{td_entity}}_repository, $id]);
-        ${{td_entity}} = $this->{{td_entity}}_repository->find($id);
+        ${{td_entity}} = $this->{{td_entity}}_workflow->edit($id);
         return view('{{td_entity}}_edit', compact('{{td_entity}}'));    //ayto DEN tha to exw sto restful_crud code generation
     }
 
@@ -101,7 +98,7 @@ class {{Td_entity}}Controller extends Controller
     public function update(Request $request, $id)
     {   
         $this->authorize('update', [$this->{{td_entity}}_repository, $id]);
-        return response()->json( $this->{{td_entity}}_repository->find($id)->update($request->all()) );
+        return response()->json( $this->{{td_entity}}_workflow->update($request,$id) );
     }
 
     /**
@@ -113,7 +110,7 @@ class {{Td_entity}}Controller extends Controller
     public function destroy($id)
     {
         $this->authorize('delete', [$this->{{td_entity}}_repository, $id]);
-        return response()->json( $this->{{td_entity}}_repository->destroy($id) );
+        return response()->json( $this->{{td_entity}}_workflow->destroy($id) );
     }
 
     //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

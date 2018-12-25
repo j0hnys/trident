@@ -3,9 +3,9 @@
 namespace App\Trident\Workflows\Logic;
 
 use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
-use App\Trident\Workflows\Repositories\{{Td_entity}}Repository;
+use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
 use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface;
-use App\Trident\Business\Logic;
+use App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface as {{Td_entity}}Business;
 
 class {{Td_entity}} implements {{Td_entity}}Interface
 {
@@ -26,10 +26,10 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @var string
      * @return void
      */
-    public function __construct($app)
+    public function __construct({{Td_entity}}Business ${{td_entity}}Business, {{Td_entity}}Repository ${{td_entity}}Repository)
     {
-        $this->{{td_entity}}_repository = new {{Td_entity}}Repository($app);
-        $this->{{td_entity}} = new Logic\{{Td_entity}}();
+        $this->{{td_entity}}_repository = ${{td_entity}}Repository;
+        $this->{{td_entity}}_business = ${{td_entity}}Business;
     }
 
 

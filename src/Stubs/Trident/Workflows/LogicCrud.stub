@@ -1,0 +1,120 @@
+<?php
+
+namespace App\Trident\Workflows\Logic;
+
+use Illuminate\Http\Request;
+use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
+use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
+use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface;
+use App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface as {{Td_entity}}Business;
+
+class {{Td_entity}} implements {{Td_entity}}Interface
+{
+    
+    /**
+     * @var App
+     */
+    protected $app;
+
+    /**
+     * @var {{Td_entity}}Repository
+     */
+    protected ${{td_entity}}_repository;
+
+    /**
+     * constructor.
+     *
+     * @var string
+     * @return void
+     */
+    public function __construct({{Td_entity}}Business ${{td_entity}}Business, {{Td_entity}}Repository ${{td_entity}}Repository)
+    {
+        $this->{{td_entity}}_repository = ${{td_entity}}Repository;
+        $this->{{td_entity}}_business = ${{td_entity}}Business;
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return $this->{{td_entity}}_repository->all();
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {   
+        //
+        // TO DO
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $data = $request->all();
+        $data['user_id'] = auth()->id();
+        
+        return $this->{{td_entity}}_repository->create($data);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        return $this->{{td_entity}}_repository->find($id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        return $this->{{td_entity}}_repository->find($id);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {   
+        $data = $request->all();
+        $data['user_id'] = auth()->id();
+
+        return $this->{{td_entity}}_repository->find($id)->update($data);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        return $this->{{td_entity}}_repository->destroy($id);
+    }
+}

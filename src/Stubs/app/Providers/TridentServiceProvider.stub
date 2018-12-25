@@ -26,12 +26,18 @@ class TridentServiceProvider extends ServiceProvider
     {
         //EDW THA PREPEI NA KANW GENERATED TOYS PROVIDERS MOY!!!
         {{# register_workflows }}
-        \App::bind('App\Trident\Workflows\Logic\{{Td_entity}}',function($app){
-            return new \App\Trident\Workflows\Logic\{{Td_entity}}($app);
+        \App::bind('App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface',function($app){
+            return new \App\Trident\Workflows\Logic\{{Td_entity}}(
+                new \App\Trident\Business\Logic\{{Td_entity}}, 
+                new \App\Trident\Workflows\Repositories\{{Td_entity}}Repository($app)
+            );
+        });
+        \App::bind('App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface',function($app){
+            return new \App\Trident\Workflows\Repositories\{{Td_entity}}Repository($app);
         });
         {{/ register_workflows }}
         {{# register_business }}
-        \App::bind('App\Trident\Business\Logic\{{Td_entity}}',function($app){
+        \App::bind('App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface',function($app){
             return new \App\Trident\Business\Logic\{{Td_entity}}($app);
         });
         {{/ register_business }}

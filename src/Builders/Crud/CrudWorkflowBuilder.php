@@ -2,7 +2,7 @@
 
 namespace j0hnys\Trident\Builders\Crud;
 
-class CrudBuilder
+class CrudWorkflowBuilder
 {
     
     /**
@@ -22,7 +22,7 @@ class CrudBuilder
         if (!file_exists($controller_path)) {
             $this->makeDirectory($controller_path);
 
-            $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/Controller.stub');
+            $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/ControllerCrudWorkflow.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);

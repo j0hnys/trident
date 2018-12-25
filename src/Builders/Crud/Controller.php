@@ -67,7 +67,7 @@ class Controller
         $this->makeDirectory($path);
 
         // $stub = $this->files->get(__DIR__ . '/../../Stubs/Crud/Controller.stub');
-        $stub = file_get_contents(base_path() . '/app/Trident/Stubs/Crud/Controller.stub');
+        $stub = file_get_contents(base_path() . '/../../Stubs/Crud/Controller.stub');
 
         $stub = str_replace('{{td_entity}}', $name, $stub);
         

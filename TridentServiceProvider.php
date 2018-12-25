@@ -9,6 +9,7 @@ use j0hnys\Trident\Console\Commands\GeneratePolicyFunction;
 use j0hnys\Trident\Console\Commands\GenerateBusinessLogicFunction;
 use j0hnys\Trident\Console\Commands\GenerateWorkflowLogicFunction;
 use j0hnys\Trident\Console\Commands\GenerateWorkflow;
+use j0hnys\Trident\Console\Commands\GenerateWorkflowRestfulCrud;
 use j0hnys\Trident\Console\Commands\Install;
 use j0hnys\Trident\Console\Commands\GenerateValidation;
 use j0hnys\Trident\Console\Commands\GenerateException;
@@ -63,6 +64,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident.generate_workflow', function ($app) {
             return new GenerateWorkflow();
         });
+        $this->app->singleton('trident.generate_workflow_restful_crud', function ($app) {
+            return new GenerateWorkflowRestfulCrud();
+        });
         $this->app->singleton('trident.install', function ($app) {
             return new Install();
         });
@@ -87,6 +91,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident.generate_business_logic_function',
             'trident.generate_workflow_logic_function',
             'trident.generate_workflow',
+            'trident.generate_workflow_restful_crud',
             'trident.generate_validation',
             'trident.generate_exception',
             'trident.generate_events',

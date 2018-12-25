@@ -25,7 +25,7 @@ class {{Td_entity}}Policy
      * Determine whether the user can view the trident {{td_entity}}.
      *
      * @param  \App\User  $user
-     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
      * @return mixed
      */
     public function view(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
@@ -48,7 +48,7 @@ class {{Td_entity}}Policy
      * Determine whether the user can update the trident {{td_entity}}.
      *
      * @param  \App\User  $user
-     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
      * @return mixed
      */
     public function update(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
@@ -60,7 +60,7 @@ class {{Td_entity}}Policy
      * Determine whether the user can delete the trident {{td_entity}}.
      *
      * @param  \App\User  $user
-     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
      * @return mixed
      */
     public function delete(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
@@ -72,7 +72,7 @@ class {{Td_entity}}Policy
      * Determine whether the user can restore the trident {{td_entity}}.
      *
      * @param  \App\User  $user
-     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
      * @return mixed
      */
     public function restore(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
@@ -84,7 +84,7 @@ class {{Td_entity}}Policy
      * Determine whether the user can permanently delete the trident {{td_entity}}.
      *
      * @param  \App\User  $user
-     * @param  \App\Models\{{Td_entity}}  ${{Td_entity}}
+     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
      * @return mixed
      */
     public function forceDelete(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
