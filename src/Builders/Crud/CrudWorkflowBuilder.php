@@ -17,7 +17,7 @@ class CrudWorkflowBuilder
 
         //
         //controller generation
-        $controller_path = base_path().'/app/Http/Controllers/Trident/'.ucfirst(strtolower($name)).'Controller.php';
+        $controller_path = base_path().'/app/Http/Controllers/Trident/'.ucfirst($name).'Controller.php';
         
         if (!file_exists($controller_path)) {
             $this->makeDirectory($controller_path);

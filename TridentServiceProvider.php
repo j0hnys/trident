@@ -9,8 +9,10 @@ use j0hnys\Trident\Console\Commands\GeneratePolicyFunction;
 use j0hnys\Trident\Console\Commands\GenerateBusinessLogicFunction;
 use j0hnys\Trident\Console\Commands\GenerateWorkflowLogicFunction;
 use j0hnys\Trident\Console\Commands\GenerateWorkflow;
+use j0hnys\Trident\Console\Commands\GenerateWorkflowTests;
 use j0hnys\Trident\Console\Commands\GenerateWorkflowRestfulCrud;
 use j0hnys\Trident\Console\Commands\Install;
+use j0hnys\Trident\Console\Commands\SetupTests;
 use j0hnys\Trident\Console\Commands\GenerateValidation;
 use j0hnys\Trident\Console\Commands\GenerateException;
 use j0hnys\Trident\Console\Commands\GenerateEvents;
@@ -64,11 +66,17 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident.generate_workflow', function ($app) {
             return new GenerateWorkflow();
         });
+        $this->app->singleton('trident.generate_workflow_tests', function ($app) {
+            return new GenerateWorkflowTests();
+        });
         $this->app->singleton('trident.generate_workflow_restful_crud', function ($app) {
             return new GenerateWorkflowRestfulCrud();
         });
         $this->app->singleton('trident.install', function ($app) {
             return new Install();
+        });
+        $this->app->singleton('trident.setup_tests', function ($app) {
+            return new SetupTests();
         });
         $this->app->singleton('trident.generate_validation', function ($app) {
             return new GenerateValidation();
@@ -91,11 +99,13 @@ class TridentServiceProvider extends ServiceProvider
             'trident.generate_business_logic_function',
             'trident.generate_workflow_logic_function',
             'trident.generate_workflow',
+            'trident.generate_workflow_tests',
             'trident.generate_workflow_restful_crud',
             'trident.generate_validation',
             'trident.generate_exception',
             'trident.generate_events',
             'trident.install',
+            'trident.setup_tests',
             'trident.export_model',
             // . . .
         ]);

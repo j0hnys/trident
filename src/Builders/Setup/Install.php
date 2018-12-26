@@ -20,7 +20,7 @@ class Install
         //folder structure creation
         if (!file_exists($app_path.'/Trident')) {
             
-            $source = __DIR__.'/../../../demo_structure/Trident';
+            $source = __DIR__.'/../../../scaffold_structure/Trident';
             $destination = $app_path.'/Trident';
             
             $this->copyFolderStructure($source, $destination);
@@ -139,14 +139,5 @@ class Install
 
     }
     
-    /**
-     * Get code and save to disk
-     * @return mixed
-     * @throws \Exception
-     */
-    public function save()
-    {
-        //
-    }
 
 }

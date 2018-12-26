@@ -1,0 +1,54 @@
+<?php
+
+namespace Tests\Trident\Workflows\Logic;
+
+use App\User;
+use App\Models\{{Td_entity}};
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class {{Td_entity}}Test extends TestCase
+{
+    use RefreshDatabase; //<-- an einai mesa THA SVHSEI T PANTA OLA APO TN DB!!!! (kanei MIGRATIONS APO TN ARXH!!)
+
+    /**
+     * A demo test example.
+     *
+     * @return void
+     */
+    public function testDemo()
+    {
+        $this->assertTrue(true);
+        return; 
+
+        $user = factory(User::class)->create();
+        ${{td_entity}} = factory({{Td_entity}}::class)->create([
+            'string_parameter' => 'xxxxxxxxx',
+        ]);
+
+        $response = $this->actingAs($user)
+                         ->get('/trident/resource/{{td_entity}}');
+
+        
+        
+        $response->assertStatus(200);
+
+        $this->assertDatabaseHas('{{td_entity}}', [
+            'string_parameter' => 'xxxxxxxxx'
+        ]);
+    }
+
+    {{# methods }}
+    /**
+     * {{method}} test example.
+     *
+     * @return void
+     */
+    public function test{{method}}()
+    {
+        $this->assertTrue(false);
+    }
+
+
+    {{/ methods }}
+}
