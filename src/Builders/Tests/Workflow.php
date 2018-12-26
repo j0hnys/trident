@@ -43,84 +43,37 @@ class Workflow
             file_put_contents($workflow_logic_test_path, $stub);
         }
 
-        return;
-
-        
-
-        //
-        //workflow logic generation
-        $workflow_logic_path = base_path().'/app/Trident/Workflows/Logic/'.ucfirst($name).'.php';
-        $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/Logic.stub';
-        $this->makeFile(
-            $name,
-            $workflow_logic_path,
-            $stub_path
-        );
-
-
-        //
-        //workflow exception generation
-        $workflow_exception_path = base_path().'/app/Trident/Workflows/Exceptions/'.ucfirst($name).'Exception.php';
-        $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/LogicException.stub';
-        $this->makeFile(
-            $name,
-            $workflow_exception_path,
-            $stub_path
-        );
-
-
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         //now we build the business logic part of this workflow
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
         //
-        //business logic generation
-        $business_logic_path = base_path().'/app/Trident/Business/Logic/'.ucfirst($name).'.php';
-        $stub_path = __DIR__.'/../../src/Stubs/Trident/Business/Logic.stub';
-        $this->makeFile(
-            $name,
-            $business_logic_path,
-            $stub_path
-        );
-
-        //
-        //business logic exception generation
-        $business_logic_exception_path = base_path().'/app/Trident/Business/Exceptions/'.ucfirst($name).'Exception.php';
-        $stub_path = __DIR__.'/../../src/Stubs/Trident/Business/LogicException.stub';
-        $this->makeFile(
-            $name,
-            $business_logic_exception_path,
-            $stub_path
-        );
-
-
-        //
-        //update TridentServiceProvider
-        $Td_entities_workflows = $this->getCurrentWorkflows();
-        $Td_entities_businesses = $this->getCurrentBusinesses();
-
-        $workflows = array_map(function($element){
+        //workflow logic test generation
+        $business_logic_test_path = base_path().'/tests/Trident/Business/Logic/'.ucfirst($name).'Test.php';
+        
+        $class_name = '\\App\\Trident\\Business\\Logic\\'.ucfirst($name);
+        $class_methods = \get_class_methods( $class_name );
+        $class_methods = array_map(function($element){
             return [
-                'Td_entity' => ucfirst($element),
+                'method' => ($element),
             ];
-        },$Td_entities_workflows);
+        },array_values(array_filter($class_methods,function($element){
+            return $element != '__construct' ? true : false;
+        })));
 
-        $businesses = array_map(function($element){
-            return [
-                'Td_entity' => ucfirst($element),
-            ];
-        },$Td_entities_businesses);
+        if (!file_exists($business_logic_test_path)) {
+            $this->makeDirectory($business_logic_test_path);
 
+            $stub = file_get_contents(__DIR__.'/../../Stubs/tests/Trident/Business/Logic/Logic.stub');
 
-        $trident_event_service_provider_path = base_path().'/app/Providers/TridentServiceProvider.php';
-        $stub = file_get_contents(__DIR__.'/../../src/Stubs/app/Providers/TridentServiceProvider.stub');
-        $stub = $mustache->render($stub, [
-            'register_workflows' => $workflows,
-            'register_business' => $businesses,
-        ]);
-
-        file_put_contents($trident_event_service_provider_path, $stub);
-
+            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
+            $stub = $mustache->render($stub, [
+                'methods' => $class_methods,
+            ]);
+            
+            file_put_contents($business_logic_test_path, $stub);
+        }
 
 
     }
@@ -201,6 +154,6 @@ class Workflow
         return $filenames;
     }
 
-    
+
 
 }
