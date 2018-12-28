@@ -15,7 +15,7 @@ The main rationale behind this is that the code generated takes care of all the 
 
 The main design principles behind the architecture that will be explained in the next sections are derived from deconstructing the basic building block of an application, which is the `function`. We can segregate a function to its parts by the purpose they have. The majority of functions that are written in any modern web application could be more or less described by the following schema.
 
-[anatomy_of_a_function](images/anatomy_of_a_function.gif)
+![anatomy_of_a_function](images/anatomy_of_a_function.gif)
 
 1. function parameters: ideally there should be a definite structure to every parameter, either being some basic type like int or string, or more complex like a collection with defined types. Generic types like object or array should be avoided.
 2. validation, authorization, authentication: incoming paremeters should be validated against set well defined set of rules. This ensures that the function input is set as the main function logic assumes, which leads to better function behaviour. Authentication and authorization most of the times come hand in hand and their purpose is to ensure that the function is used by it's indented user
