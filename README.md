@@ -68,7 +68,7 @@ The `Logic` in `Workflows` gives a good level of isolation for the whole process
 To give an example to demonstrate this lets say we have the following workflow logic snipset with the accompanied controller and business:
 
 Workflow:
-```
+```php
 <?php
 
 namespace App\Trident\Workflows\Logic;
@@ -125,7 +125,7 @@ class Test_workflow implements Test_workflowInterface
 ```
 
 Business:
-```
+```php
 <?php
 
 namespace App\Trident\Business\Logic;
@@ -164,7 +164,7 @@ class Test_workflow implements Test_workflowInterface
 ```
 
 Controller:
-```
+```php
 <?php
 
 namespace App\Http\Controllers\Trident;
