@@ -25,11 +25,13 @@ class {{Td_entity}}Request extends FormRequest
      */
     public function rules()
     {
-        return [
-            // 'id' => 'required',
-            'string_parameter' => 'string',
-            'integer_parameter' => 'integer',
-        ];  //<-- when [] there is no validation.
+        return [];
+
+        // return [
+        //     // 'id' => 'required',
+        //     'string_parameter' => 'string',
+        //     'integer_parameter' => 'integer',
+        // ];  //<-- when [] there is no validation.
     }
 
      /**
@@ -39,12 +41,14 @@ class {{Td_entity}}Request extends FormRequest
      */
     public function messages()
     {
-        return [
-            // 'id.required' => 'id is required!!',
-            'string_parameter.required' => 'string_parameter is required!!',
-            'string_parameter.string' => 'string_parameter must be string!!',
-            'integer_parameter.integer' => 'integer_parameter must be integer!!',
-        ];  //<-- when [] there is no validation.
+        return [];
+
+        // return [
+        //     // 'id.required' => 'id is required!!',
+        //     'string_parameter.required' => 'string_parameter is required!!',
+        //     'string_parameter.string' => 'string_parameter must be string!!',
+        //     'integer_parameter.integer' => 'integer_parameter must be integer!!',
+        // ];  //<-- when [] there is no validation.
     }
 
     /**

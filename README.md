@@ -15,7 +15,7 @@ The main rationale behind this is that the code generated takes care of all the 
 
 The main design principles behind the architecture that will be explained in the next sections are derived from deconstructing the basic building block of an application, which is the `function`. We can segregate a function to its parts by the purpose they have. The majority of functions that are written in any modern web application could be more or less described by the following schema.
 
-![anatomy_of_a_function](images/anatomy_of_a_function.png)
+[anatomy_of_a_function](images/anatomy_of_a_function.png)
 
 1. function parameters: ideally there should be a definite structure to every parameter, either being some basic type like int or string, or more complex like a collection with defined types. Generic types like object or array should be avoided.
 2. validation, authorization, authentication: incoming paremeters should be validated against set well defined set of rules. This ensures that the function input is set as the main function logic assumes, which leads to better function behaviour. Authentication and authorization most of the times come hand in hand and their purpose is to ensure that the function is used by it's indented user
@@ -284,7 +284,15 @@ trident:setup:tests                        |   Trident test setup
 3. `php artisan migrate`
 4. `php artisan trident:generate:workflow_restful_crud DemoProcess`
 
-In the end of this process a new controller with restful CRUD functions will be created and placed in `app/Http/Controllers/Trident` a new resource will be created in `routes/trident.php` behind the native authentication middleware, a new model in `app/Models`, a new policy for this process will be created and placed in `app/Policies/Trident` and a new exception class in `app/Trident/Workflows/Exceptions`, a new set of validation (FormRequests) will be created and placed in `app/Trident/Workflows/Validations`, a new repository in `app/Trident/Workflows/Repositories`, a new logic for this process in `app/Trident/Workflows/Logic` and finally a new business logic in `app/Trident/Business/Logic`
+In the end of this process the following will be created:
+- a new controller with restful CRUD functions will and placed in `app/Http/Controllers/Trident`
+- a new resource in `routes/trident.php` behind the native authentication middleware
+- a new model in `app/Models`, a new policy for this process and placed in `app/Policies/Trident` 
+- a new exception class in `app/Trident/Workflows/Exceptions`
+- a new set of validation (FormRequests) and placed in `app/Trident/Workflows/Validations`
+- a new repository in `app/Trident/Workflows/Repositories`
+- a new logic for this process in `app/Trident/Workflows/Logic` 
+- finally a new business logic in `app/Trident/Business/Logic`
 
 If we want to add a new function in the process, let's say a new feature we execute:
 
