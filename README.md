@@ -228,7 +228,7 @@ Folders:
 
 ## to add to a laravel project as a package
 add 
-```
+```json
 "repositories": [
     {
         "type": "vcs",
@@ -237,7 +237,7 @@ add
 ],
 ```
 and 
-```
+```json
 "require-dev": {
     "j0hnys/trident": "dev-master"
 },
