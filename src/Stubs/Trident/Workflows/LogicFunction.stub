@@ -5,13 +5,15 @@
      * @var array
      * @return array
      */
-    public function {{function_name}}(Array $data): array
+    public function {{function_name}}(Request $request, $id)
     {
+        $model = $this->{{td_entity}}_repository->find($id);
+        
         //
         // TO DO
         //
 
-        return $data;
+        return $model;
     }
 
 
