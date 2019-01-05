@@ -164,8 +164,8 @@ class WorkflowRestfulCrud
 
         $stub = file_get_contents($stub_fullpath);
 
-        $stub = str_replace('{{td_entity}}', strtolower($name), $stub);
-        $stub = str_replace('{{Td_entity}}', ucfirst(strtolower($name)), $stub);
+        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+        $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
         
         file_put_contents($fullpath_to_create, $stub);
     }

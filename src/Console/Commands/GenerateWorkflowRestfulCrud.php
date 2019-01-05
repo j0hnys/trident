@@ -43,13 +43,11 @@ class GenerateWorkflowRestfulCrud extends Command
             //workflow building
             $crud = new Builders\WorkflowRestfulCrud($name);
 
-            //vvv to be done...
-            // //new model factories
-            // $this->call('test-factory-helper:generate', [
-            //     '--dir' => ['app/Models'],  //<-- PROSOXH!! (prepei na einai array...) //ucfirst($name).'Factory'
-            // ]);
-            //^^^
-
+            //new model factory
+            $this->call('trident:generate:factory', [
+                'model' => 'App\\Models\\'.ucfirst($name),  //<-- PROSOXH!! (prepei na einai array...) //ucfirst($name).'Factory'
+            ]);
+            
             //new validation class for restful crud store
             $this->call('trident:generate:validation', [
                 'entity_name' => $name,

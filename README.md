@@ -266,6 +266,7 @@ trident:generate:business_logic_function  |     Create a business logic function
 trident:generate:controller_function       |    Create a controller function
 trident:generate:events                    |   Create an event
 trident:generate:exception                 |  Create an exception
+trident:generate:factory                   |   Create a factory for a model
 trident:generate:policy_function           |    Create a policy function
 trident:generate:restful_crud              |    Create a RESTFUL CRUD
 trident:generate:validation                |   Create a validation
