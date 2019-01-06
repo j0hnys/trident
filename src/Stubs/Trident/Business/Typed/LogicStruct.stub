@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed;
+
+use Spatie\Typed\Struct;
+use Spatie\Typed\T;
+
+class Struct{{function_name}} extends Struct
+{
+    public function __construct()
+    {
+        parent::__construct([
+            'name' => T::string(),
+            'value' => T::integer(),
+        ]);
+    }
+}
+

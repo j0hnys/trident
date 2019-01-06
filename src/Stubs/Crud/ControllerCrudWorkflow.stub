@@ -40,7 +40,7 @@ class {{Td_entity}}Controller extends Controller
     public function index()
     {
         $this->authorize('list',$this->{{td_entity}}_repository);
-        return $this->{{td_entity}}_workflow->index();
+        return $this->{{td_entity}}_workflow->index()->all();
     }
 
     /**

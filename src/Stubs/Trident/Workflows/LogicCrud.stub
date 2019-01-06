@@ -39,9 +39,9 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): {{Td_entity}}Repository
     {
-        return $this->{{td_entity}}_repository->all();
+        return $this->{{td_entity}}_repository;
     }
 
     /**
@@ -62,7 +62,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): {{Td_entity}}Repository
     {
         $data = $request->all();
         $data['user_id'] = auth()->id();
@@ -76,7 +76,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id): {{Td_entity}}Repository
     {
         return $this->{{td_entity}}_repository->find($id);
     }
@@ -87,7 +87,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): {{Td_entity}}Repository
     {
         return $this->{{td_entity}}_repository->find($id);
     }
@@ -99,7 +99,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): {{Td_entity}}Repository
     {   
         $data = $request->all();
         $data['user_id'] = auth()->id();
@@ -113,7 +113,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): {{Td_entity}}Repository
     {
         return $this->{{td_entity}}_repository->destroy($id);
     }

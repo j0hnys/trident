@@ -76,6 +76,12 @@ class Install
         $stub = file_get_contents(__DIR__.'/../../Stubs/Trident/Base/Repositories/DbRepository.stub');
         file_put_contents($trident_base_repository_path, $stub);
 
+        $typed_source_folder = __DIR__.'/../../Stubs/Trident/Base/Typed';
+        $typed_destination_folder = $app_path.'/Trident/Base/Typed';
+        
+        $this->copyFolderStructure($typed_source_folder, $typed_destination_folder);
+
+
         //
         //write resource routes file
         $trident_base_repository_path = base_path().'/routes/trident.php';
@@ -131,6 +137,32 @@ class Install
             if ($item->isDir()) {
                 //i don't want to copy any folder
                 // mkdir($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            } else {
+                //i don't want to copy any file now
+                copy($item, $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+            }
+        }
+
+    }
+
+
+     /**
+     * copy files.
+     *
+     * @param  string $path
+     * @return string
+     */
+    protected function copyFoldersAndFiles(string $source, string $destination)
+    {
+
+        foreach (
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST) as $item
+        ) {
+            if ($item->isDir()) {
+                //i don't want to copy any folder
+                mkdir($destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
             } else {
                 //i don't want to copy any file now
                 copy($item, $destination . DIRECTORY_SEPARATOR . $iterator->getSubPathName());

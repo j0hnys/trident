@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed;
+
+use App\Trident\Base\Typed\Collections\CollectionStruct;
+use Spatie\Typed\T;
+
+class CollectionStruct{{function_name}} extends CollectionStruct
+{
+    public function __construct()
+    {
+        parent::__construct([
+            'name' => T::string(),
+            'value' => T::integer(),
+        ]);
+    }
+}
+
+
+
