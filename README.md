@@ -233,13 +233,23 @@ add
     {
         "type": "vcs",
         "url": "https://github.com/j0hnys/trident"
+    },
+    {
+        "type": "vcs",
+        "url": "https://github.com/j0hnys/laravel-workflow"
+    },
+    {
+        "type": "vcs",
+        "url": "https://github.com/j0hnys/typed"
     }
 ],
 ```
 and 
 ```json
 "require-dev": {
-    "j0hnys/trident": "dev-master"
+    "j0hnys/trident": "dev-master",
+    "j0hnys/laravel-workflow": "dev-master",
+    "j0hnys/typed": "dev-master"
 },
 ```
 to laravels `composer.json`
@@ -269,6 +279,7 @@ trident:generate:exception                 |  Create an exception
 trident:generate:factory                   |   Create a factory for a model
 trident:generate:policy_function           |    Create a policy function
 trident:generate:restful_crud              |    Create a RESTFUL CRUD
+trident:generate:strict_type               |    Create a strict type
 trident:generate:validation                |   Create a validation
 trident:generate:workflow                  |   Create a workflow
 trident:generate:workflow_logic_function   |   Create a workflow logic function
