@@ -20,6 +20,9 @@ use j0hnys\Trident\Console\Commands\GenerateValidation;
 use j0hnys\Trident\Console\Commands\GenerateException;
 use j0hnys\Trident\Console\Commands\GenerateEvents;
 use j0hnys\Trident\Console\Commands\ExportModel;
+use j0hnys\Trident\Console\Commands\BuildMigrations;
+use j0hnys\Trident\Console\Commands\BuildModels;
+use j0hnys\Trident\Console\Commands\BuildModelExports;
 // . . .
 
 class TridentServiceProvider extends ServiceProvider
@@ -102,6 +105,15 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident.export_model', function ($app) {
             return new ExportModel();
         });
+        $this->app->singleton('trident.build_migrations', function ($app) {
+            return new BuildMigrations();
+        });
+        $this->app->singleton('trident.build_models', function ($app) {
+            return new BuildModels();
+        });
+        $this->app->singleton('trident.build_model_exports', function ($app) {
+            return new BuildModelExports();
+        });
         // . . .
 
         $this->commands([
@@ -122,6 +134,9 @@ class TridentServiceProvider extends ServiceProvider
             'trident.install',
             'trident.setup_tests',
             'trident.export_model',
+            'trident.build_migrations',
+            'trident.build_models',
+            'trident.build_model_exports',
             // . . .
         ]);
     }

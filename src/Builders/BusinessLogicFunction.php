@@ -58,14 +58,5 @@ class BusinessLogicFunction
         }
     }
     
-    /**
-     * Get code and save to disk
-     * @return mixed
-     * @throws \Exception
-     */
-    public function save()
-    {
-        //
-    }
 
 }

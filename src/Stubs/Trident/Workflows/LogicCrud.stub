@@ -3,7 +3,6 @@
 namespace App\Trident\Workflows\Logic;
 
 use Illuminate\Http\Request;
-use App\Models\{{Td_entity}} as {{Td_entity}}Model;
 use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
 use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
 use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface;
@@ -63,7 +62,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): {{Td_entity}}Model
+    public function store(Request $request): {{Td_entity}}Repository
     {
         $data = $request->all();
         $data['user_id'] = auth()->id();
@@ -77,7 +76,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id): {{Td_entity}}Model
+    public function show($id): {{Td_entity}}Repository
     {
         return $this->{{td_entity}}_repository->find($id);
     }
@@ -88,7 +87,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id): {{Td_entity}}Model
+    public function edit($id): {{Td_entity}}Repository
     {
         return $this->{{td_entity}}_repository->find($id);
     }
@@ -100,7 +99,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id): bool
+    public function update(Request $request, $id): {{Td_entity}}Repository
     {   
         $data = $request->all();
         $data['user_id'] = auth()->id();
@@ -114,7 +113,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id): {{Td_entity}}Model
+    public function destroy($id): {{Td_entity}}Repository
     {
         return $this->{{td_entity}}_repository->destroy($id);
     }

@@ -246,10 +246,14 @@ add
 ```
 and 
 ```json
-"require-dev": {
-    "j0hnys/trident": "dev-master",
+"require": {
     "j0hnys/laravel-workflow": "dev-master",
     "j0hnys/typed": "dev-master"
+},
+```
+```json
+"require-dev": {
+    "j0hnys/trident": "dev-master",
 },
 ```
 to laravels `composer.json`
@@ -271,8 +275,11 @@ to config/app
 
 | Command | Description |
 |---|---|
-trident:export:model     |                      export a models schema
-trident:generate:business_logic_function  |     Create a business logic function
+trident:build:migrations                   |    Create all migrations from current database connection
+trident:build:model_exports                |    Create all model exports from current models
+trident:build:models                       |    Create all models from current database connection
+trident:export:model                       |   export a models schema
+trident:generate:business_logic_function   |     Create a business logic function
 trident:generate:controller_function       |    Create a controller function
 trident:generate:events                    |   Create an event
 trident:generate:exception                 |  Create an exception

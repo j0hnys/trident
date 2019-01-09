@@ -12,8 +12,9 @@ class Model
      * @param string $name
      * @throws \Exception
      */
-    public function __construct($td_entity_name)
+    public function __construct($td_entity_name, $output_path)
     {
+        
         
         $td_entity_name = ucfirst($td_entity_name);
 
@@ -31,7 +32,7 @@ class Model
 
         //
         //export
-        $schema_export_path = base_path().'/app/Models/Schemas/Exports/'.$td_entity_name.'.json';
+        $schema_export_path = $output_path.$td_entity_name.'.json';
         $this->makeDirectory($schema_export_path);
 
         file_put_contents($schema_export_path, json_encode($tmp,JSON_PRETTY_PRINT));
