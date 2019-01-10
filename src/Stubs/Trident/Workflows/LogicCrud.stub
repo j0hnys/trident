@@ -114,7 +114,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id): {{Td_entity}}Model
+    public function destroy($id): int
     {
         return $this->{{td_entity}}_repository->destroy($id);
     }
