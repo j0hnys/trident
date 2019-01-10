@@ -2,7 +2,7 @@
 
 namespace App\Trident\Workflows\Logic;
 
-use App\Models\{{Td_entity}} as {{Td_entity}}Model
+use App\Models\{{Td_entity}} as {{Td_entity}}Model;
 use Illuminate\Http\Request;
 use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
 use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
