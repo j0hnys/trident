@@ -62,6 +62,7 @@ class {{Td_entity}}Controller extends Controller
      */
     public function store({{td_entity}}StoreRequest $request)
     {
+        $this->authorize('create',$this->{{td_entity}}_repository);
         return response()->json( $this->{{td_entity}}_workflow->store($request) );
     }
 
