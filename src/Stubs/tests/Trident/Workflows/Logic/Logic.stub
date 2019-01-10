@@ -27,7 +27,10 @@ class {{Td_entity}}Test extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-                         ->get('/trident/resource/{{td_entity}}');
+                         ->get('/trident/resource/{{td_entity}}')
+                         ->assertJsonFragment([
+                            'string_parameter' => 'xxxxxxxxx'
+                         ]);
 
         
         
