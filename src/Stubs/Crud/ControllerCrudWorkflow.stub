@@ -75,7 +75,7 @@ class {{Td_entity}}Controller extends Controller
     public function show($id)
     {
         $this->authorize('view', [$this->{{td_entity}}_repository, $id]);
-        return response()->json( $this->{{td_entity}}_repository->find($id) );
+        return response()->json( $this->{{td_entity}}_workflow->show($id) );
     }
 
     /**
