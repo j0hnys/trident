@@ -13,10 +13,15 @@ class {{Td_entity}} implements {{Td_entity}}Interface
 {
     
     /**
-     * @var App
+     * @var \App
      */
     protected $app;
 
+    /**
+     * @var {{Td_entity}}Repository
+     */
+    protected ${{td_entity}}_business;
+    
     /**
      * @var {{Td_entity}}Repository
      */
@@ -30,15 +35,15 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      */
     public function __construct({{Td_entity}}Business ${{td_entity}}Business, {{Td_entity}}Repository ${{td_entity}}Repository)
     {
-        $this->{{td_entity}}_repository = ${{td_entity}}Repository;
         $this->{{td_entity}}_business = ${{td_entity}}Business;
+        $this->{{td_entity}}_repository = ${{td_entity}}Repository;
     }
 
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return {{Td_entity}}Repository
      */
     public function index(): {{Td_entity}}Repository
     {
@@ -61,7 +66,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return {{Td_entity}}Model
      */
     public function store(Request $request): {{Td_entity}}Model
     {
@@ -75,7 +80,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return {{Td_entity}}Model
      */
     public function show($id): {{Td_entity}}Model
     {
@@ -86,7 +91,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return {{Td_entity}}Model
      */
     public function edit($id): {{Td_entity}}Model
     {
