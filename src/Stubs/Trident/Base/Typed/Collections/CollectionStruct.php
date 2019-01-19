@@ -18,13 +18,15 @@ class CollectionStruct extends Collection
     {
         $this->type = $type;
 
-        parent::__construct(T::struct($this->type));
+        parent::__construct(T::struct());
     }
 
     public function set(array $data): Collection
     {
         $tmp = new Struct($this->type);
-        $tmp->set($data);
+        foreach ($data as $element) {
+            $tmp->set($element);
+        }
         $this[] = $data;
         
         return $this;
@@ -33,7 +35,9 @@ class CollectionStruct extends Collection
     public function offsetSet($offset, $value)
     {
         $tmp = new Struct($this->type);
-        $tmp->set($value);
+        foreach ($value as $key => $element) {
+            $tmp->set($element);
+        }
 
         if (is_null($offset)) {
             $this->data[] = ($value);
