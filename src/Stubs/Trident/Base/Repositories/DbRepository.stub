@@ -141,7 +141,21 @@ abstract class DbRepository implements DbRepositoryInterface {
         return $this->model->where($attribute, '=', $value)->first($columns);
     }
 
+    /**
+     * @param array $relations
+     * @return mixed
+     */
+    public function with(array $relations) {
+        return $this->model->with($relations);
+    }
 
+    /**
+     * @param string $column_name
+     * @return mixed
+     */
+    public function where(string $column_name, $relations) {
+        return $this->model->where($column_name, $relations);
+    }
 
     // set value
     public function __set($name, $value)
