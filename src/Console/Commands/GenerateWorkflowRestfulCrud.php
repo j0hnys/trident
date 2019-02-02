@@ -12,7 +12,7 @@ class GenerateWorkflowRestfulCrud extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:workflow_restful_crud {name} {model?} {--only=} {--api} {--parent=} ";
+    protected $signature = "trident:generate:workflow_restful_crud {name} ";
 
     /**
      * The console command description.
@@ -29,14 +29,8 @@ class GenerateWorkflowRestfulCrud extends Command
     public function handle()
     {
         try {
-            $model = $this->argument('model');
             $name = $this->argument('name');
-            $only = $this->option('only');
-            $api = $this->option('api');
-            $withArr = !empty($with) ? explode(",", $with) : [];
-            $onlyArr = !empty($only) ? explode(",", $only) : '';
-            $parent = $this->option('parent');
-           
+            
             //crud building
             $crud = new Builders\Crud\CrudWorkflowBuilder($name);
             

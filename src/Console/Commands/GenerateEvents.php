@@ -12,7 +12,7 @@ class GenerateEvents extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:events {td_entity_type} {event_type} {td_entity_name} {model?} {--only=} {--api} {--parent=} ";
+    protected $signature = "trident:generate:events {td_entity_type} {event_type} {td_entity_name} ";
 
     /**
      * The console command description.
@@ -32,13 +32,7 @@ class GenerateEvents extends Command
             $td_entity_type = $this->argument('td_entity_type');
             $event_type = $this->argument('event_type');
             $td_entity_name = $this->argument('td_entity_name');
-            $model = $this->argument('model');
-            $only = $this->option('only');
-            $api = $this->option('api');
-            $withArr = !empty($with) ? explode(",", $with) : [];
-            $onlyArr = !empty($only) ? explode(",", $only) : '';
-            $parent = $this->option('parent');
-           
+            
 
             $crud = new Builders\Events($td_entity_type, $event_type, $td_entity_name);
             // $controllerCrud->save();

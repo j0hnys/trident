@@ -12,7 +12,7 @@ class GenerateStrictType extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:strict_type {strict_type_name} {function_name} {entity_name} {model?} {--only=} {--api} {--parent=} ";
+    protected $signature = "trident:generate:strict_type {strict_type_name} {function_name} {entity_name} ";
 
     /**
      * The console command description.
@@ -32,13 +32,7 @@ class GenerateStrictType extends Command
             $strict_type_name = $this->argument('strict_type_name');
             $function_name = $this->argument('function_name');
             $entity_name = $this->argument('entity_name');
-            $model = $this->argument('model');
-            $only = $this->option('only');
-            $api = $this->option('api');
-            $withArr = !empty($with) ? explode(",", $with) : [];
-            $onlyArr = !empty($only) ? explode(",", $only) : '';
-            $parent = $this->option('parent');
-           
+            
 
             $crud = new Builders\StrictType($strict_type_name, $function_name, $entity_name);
             // $controllerCrud->save();

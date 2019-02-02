@@ -273,28 +273,28 @@ to config/app
 
 # Available artisan commands
 
-| Command | Description |
-|---|---|
-trident:build:migrations                   |    Create all migrations from current database connection
-trident:build:model_exports                |    Create all model exports from current models
-trident:build:models                       |    Create all models from current database connection
-trident:export:model                       |   export a models schema
-trident:generate:business_logic_function   |     Create a business logic function
-trident:generate:controller_function       |    Create a controller function
-trident:generate:events                    |   Create an event
-trident:generate:exception                 |  Create an exception
-trident:generate:factory                   |   Create a factory for a model
-trident:generate:policy_function           |    Create a policy function
-trident:generate:restful_crud              |    Create a RESTFUL CRUD
-trident:generate:strict_type               |    Create a strict type
-trident:generate:validation                |   Create a validation
-trident:generate:workflow                  |   Create a workflow
-trident:generate:workflow_logic_function   |   Create a workflow logic function
-trident:generate:workflow_restful_crud     |   Create a workflow with the accompanied restful crud
-trident:generate:workflow_test_logic_function |  Create workflow test logic function
-trident:generate:workflow_tests            |     Create workflow tests
-trident:install                            |   Trident installer
-trident:setup:tests                        |   Trident test setup
+| Command | Description | Parameters |
+|---|---|---|
+trident:build:migrations                   |    Create all migrations from current database connection | {--output-path=}
+trident:build:model_exports                |    Create all model exports from current models | {--output-path=}
+trident:build:models                       |    Create all models from current database connection | {--output-path=}
+trident:export:model                       |   export a models schema | {entity_name} {--output-path=}
+trident:generate:business_logic_function   |     Create a business logic function | {entity_name} {function_name}
+trident:generate:controller_function       |    Create a controller function | {entity_name} {function_name}
+trident:generate:events                    |   Create an event | {td_entity_type} {event_type} {td_entity_name}
+trident:generate:exception                 |  Create an exception | {td_entity_type} {td_entity_name}
+trident:generate:factory                   |   Create a factory for a model | {model}
+trident:generate:policy_function           |    Create a policy function | {entity_name} {function_name}
+trident:generate:restful_crud              |    Create a RESTFUL CRUD | {name}
+trident:generate:strict_type               |    Create a strict type | {strict_type_name} {function_name} {entity_name}
+trident:generate:validation                |   Create a validation | {entity_name} {function_name}
+trident:generate:workflow                  |   Create a workflow | {name}
+trident:generate:workflow_logic_function   |   Create a workflow logic function | {entity_name} {function_name}
+trident:generate:workflow_restful_crud     |   Create a workflow with the accompanied restful crud | {name}
+trident:generate:workflow_test_logic_function |  Create workflow test logic function | {entity_name} {function_name}
+trident:generate:workflow_tests            |     Create workflow tests | {name}
+trident:install                            |   Trident installer | -
+trident:setup:tests                        |   Trident test setup | -
 
 ## Basic usage
 

@@ -12,7 +12,7 @@ class GenerateControllerFunction extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:controller_function {entity_name} {function_name} {model?} {--only=} {--api} {--parent=} ";
+    protected $signature = "trident:generate:controller_function {entity_name} {function_name} ";
 
     /**
      * The console command description.
@@ -31,13 +31,7 @@ class GenerateControllerFunction extends Command
         try {
             $entity_name = $this->argument('entity_name');
             $function_name = $this->argument('function_name');
-            $model = $this->argument('model');
-            $only = $this->option('only');
-            $api = $this->option('api');
-            $withArr = !empty($with) ? explode(",", $with) : [];
-            $onlyArr = !empty($only) ? explode(",", $only) : '';
-            $parent = $this->option('parent');
-           
+            
 
             $crud = new Crud\ControllerFunction($entity_name, $function_name);
             

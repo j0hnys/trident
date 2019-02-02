@@ -12,7 +12,7 @@ class GenerateException extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:exception {td_entity_type} {td_entity_name} {model?} {--only=} {--api} {--parent=} ";
+    protected $signature = "trident:generate:exception {td_entity_type} {td_entity_name} ";
 
     /**
      * The console command description.
@@ -31,13 +31,7 @@ class GenerateException extends Command
         try {
             $td_entity_type = $this->argument('td_entity_type');
             $td_entity_name = $this->argument('td_entity_name');
-            $model = $this->argument('model');
-            $only = $this->option('only');
-            $api = $this->option('api');
-            $withArr = !empty($with) ? explode(",", $with) : [];
-            $onlyArr = !empty($only) ? explode(",", $only) : '';
-            $parent = $this->option('parent');
-           
+            
 
             $crud = new Builders\Exception($td_entity_type, $td_entity_name);
             // $controllerCrud->save();

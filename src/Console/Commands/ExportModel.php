@@ -12,7 +12,7 @@ class ExportModel extends Command
      *
      * @var string
      */
-    protected $signature = "trident:export:model {entity_name} {model?} {--output-path=}";
+    protected $signature = "trident:export:model {entity_name} {--output-path=}";
 
     /**
      * The console command description.
@@ -30,7 +30,6 @@ class ExportModel extends Command
     {
         try {
             $entity_name = $this->argument('entity_name');
-            $model = $this->argument('model');
             $output_path = !empty($this->option('output-path')) ? $this->option('output-path') : base_path().'/app/Models/Schemas/Exports/';
 
             $this->makeDirectory($output_path);

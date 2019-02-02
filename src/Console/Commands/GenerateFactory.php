@@ -12,7 +12,7 @@ class GenerateFactory extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:factory {model} {--only=} {--api} {--parent=} ";
+    protected $signature = "trident:generate:factory {model} ";
 
     /**
      * The console command description.
@@ -30,12 +30,6 @@ class GenerateFactory extends Command
     {
         try {
             $model = $this->argument('model');
-            $only = $this->option('only');
-            $api = $this->option('api');
-            $withArr = !empty($with) ? explode(",", $with) : [];
-            $onlyArr = !empty($only) ? explode(",", $only) : '';
-            $parent = $this->option('parent');
-
             
             $crud = new Factories\Factory($this->laravel,$model);
             // $controllerCrud->save();

@@ -12,7 +12,7 @@ class GenerateWorkflow extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:workflow {name} {model?} {--only=} {--api} {--parent=} ";
+    protected $signature = "trident:generate:workflow {name} ";
 
     /**
      * The console command description.
@@ -29,14 +29,8 @@ class GenerateWorkflow extends Command
     public function handle()
     {
         try {
-            $model = $this->argument('model');
             $name = $this->argument('name');
-            $only = $this->option('only');
-            $api = $this->option('api');
-            $withArr = !empty($with) ? explode(",", $with) : [];
-            $onlyArr = !empty($only) ? explode(",", $only) : '';
-            $parent = $this->option('parent');
-           
+            
 
             $crud = new Builders\Workflow($name);
             // $controllerCrud->save();
