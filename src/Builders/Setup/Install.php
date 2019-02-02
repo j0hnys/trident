@@ -66,20 +66,23 @@ class Install
         //write trident base files
         $trident_base_exception_path = base_path().'/app/Trident/Base/Exceptions/DbRepositoryException.php';
         $stub = file_get_contents(__DIR__.'/../../Stubs/Trident/Base/Exceptions/DbRepositoryException.stub');
+        $this->makeDirectory($trident_base_exception_path);
         file_put_contents($trident_base_exception_path, $stub);
 
         $trident_base_repository_interface_path = base_path().'/app/Trident/Base/Interfaces/DbRepositoryInterface.php';
         $stub = file_get_contents(__DIR__.'/../../Stubs/Trident/Base/Interfaces/DbRepositoryInterface.stub');
+        $this->makeDirectory($trident_base_repository_interface_path);
         file_put_contents($trident_base_repository_interface_path, $stub);
 
         $trident_base_repository_path = base_path().'/app/Trident/Base/Repositories/DbRepository.php';
         $stub = file_get_contents(__DIR__.'/../../Stubs/Trident/Base/Repositories/DbRepository.stub');
+        $this->makeDirectory($trident_base_repository_path);
         file_put_contents($trident_base_repository_path, $stub);
 
         $typed_source_folder = __DIR__.'/../../Stubs/Trident/Base/Typed';
         $typed_destination_folder = $app_path.'/Trident/Base/Typed';
-        
-        $this->copyFolderStructure($typed_source_folder, $typed_destination_folder);
+        $this->makeDirectory($typed_destination_folder.'/a');
+        $this->copyFoldersAndFiles($typed_source_folder, $typed_destination_folder);
 
 
         //
@@ -93,6 +96,19 @@ class Install
 
 
 
+    }
+
+    /**
+     * Build the directory for the class if necessary.
+     *
+     * @param  string $path
+     * @return string
+     */
+    protected function makeDirectory($path): void
+    {
+        if (!is_dir(dirname($path))) {
+            mkdir(dirname($path), 0777, true);
+        }
     }
     
      /**
