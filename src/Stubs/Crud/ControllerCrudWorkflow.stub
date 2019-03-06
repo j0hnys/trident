@@ -4,15 +4,17 @@ namespace App\Http\Controllers\Trident;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Container\Container as App;
-//use App\Trident\Workflows\Validations\{{Td_entity}}Request;
-use App\Trident\Workflows\Validations\{{Td_entity}}StoreRequest;
-use App\Trident\Workflows\Validations\{{Td_entity}}UpdateRequest;
+// use Illuminate\Container\Container as App;
+// use Workflow;
 use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface as {{Td_entity}}Workflow;
 use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
-use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
-//use App\Trident\Workflows\Events\Triggers\{{Td_entity}}Trigger;
-//use Workflow;
+// use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
+// use App\Trident\Workflows\Events\Triggers\{{Td_entity}}Trigger;
+use App\Trident\Workflows\Validations\{{Td_entity}}StoreRequest;
+use App\Trident\Workflows\Validations\{{Td_entity}}UpdateRequest;
+use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructIndex{{Td_entity}};
+use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructStore{{Td_entity}};
+use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructUpdate{{Td_entity}};
 
 class {{Td_entity}}Controller extends Controller
 {
@@ -41,12 +43,15 @@ class {{Td_entity}}Controller extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request  $request
      * @return {{Td_entity}}Repository
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('list',$this->{{td_entity}}_repository);
-        return $this->{{td_entity}}_workflow->index()->all();
+        $structIndex{{Td_entity}} = new StructIndex{{Td_entity}}( $request->all() );
+        ${{td_entity}}ResourceCollection = $this->{{td_entity}}_workflow->index($structIndex{{Td_entity}});
+        return response()->json( ${{td_entity}}ResourceCollection );
     }
 
     /**
@@ -69,7 +74,9 @@ class {{Td_entity}}Controller extends Controller
     public function store({{td_entity}}StoreRequest $request)
     {
         $this->authorize('create',$this->{{td_entity}}_repository);
-        return response()->json( $this->{{td_entity}}_workflow->store($request) );
+        $structStore{{Td_entity}} = new StructStore{{Td_entity}}( $request->all() );
+        ${{td_entity}}Resource = $this->{{td_entity}}_workflow->store($structStore{{Td_entity}});
+        return response()->json( ${{td_entity}}Resource );
     }
 
     /**
@@ -107,7 +114,9 @@ class {{Td_entity}}Controller extends Controller
     public function update({{td_entity}}UpdateRequest $request, $id)
     {   
         $this->authorize('update', [$this->{{td_entity}}_repository, $id]);
-        return response()->json( $this->{{td_entity}}_workflow->update($request,$id) );
+        $structUpdate{{Td_entity}} = new StructUpdate{{Td_entity}}($request->all());        
+        ${{td_entity}}Resource = $this->{{td_entity}}_workflow->update($structUpdate{{Td_entity}});
+        return response()->json( ${{td_entity}}Resource );
     }
 
     /**

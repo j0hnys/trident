@@ -30,7 +30,7 @@ class {{Td_entity}}Policy
      */
     public function view(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->find($id)->user_id;
+        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class {{Td_entity}}Policy
      */
     public function update(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->find($id)->user_id;
+        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
     }
 
     /**
@@ -65,7 +65,7 @@ class {{Td_entity}}Policy
      */
     public function delete(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->find($id)->user_id;
+        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
     }
 
     /**
@@ -77,7 +77,7 @@ class {{Td_entity}}Policy
      */
     public function restore(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->find($id)->user_id;
+        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
     }
 
     /**
@@ -89,6 +89,6 @@ class {{Td_entity}}Policy
      */
     public function forceDelete(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
     {
-        return $user->id == ${{Td_entity}}->find($id)->user_id;
+        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
     }
 }

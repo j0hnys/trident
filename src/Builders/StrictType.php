@@ -70,6 +70,25 @@ class StrictType
             
             file_put_contents($struct_path, $stub);
 
+        } if (strtolower($strict_type_name == 'struct_optional')) {
+            //
+            //struct logic generation
+            $struct_path = base_path().'/app/Trident/Business/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
+            
+            if (file_exists($struct_path)) {
+                throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
+            }
+
+            $this->makeDirectory($struct_path);
+
+            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Business/Typed/LogicStructOptional.stub');
+
+            $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
+            $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
+            $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
+            
+            file_put_contents($struct_path, $stub);
+
         } else {
             throw new \Exception("unknown strict type", 1);
             
