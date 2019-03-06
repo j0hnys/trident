@@ -3,7 +3,6 @@
 namespace App\Trident\Workflows\Logic;
 
 use App\Models\{{Td_entity}} as {{Td_entity}}Model;
-use Illuminate\Http\Request;
 use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
 use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
 use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface;
@@ -135,7 +134,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Boolean
      */
     public function destroy($id)
     {

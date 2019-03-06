@@ -43,9 +43,10 @@ class {{Td_entity}}Controller extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request  $request
      * @return {{Td_entity}}Repository
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('list',$this->{{td_entity}}_repository);
         $structIndex{{Td_entity}} = new StructIndex{{Td_entity}}( $request->all() );
