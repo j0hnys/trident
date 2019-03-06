@@ -8,6 +8,11 @@ use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
 use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
 use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface;
 use App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface as {{Td_entity}}Business;
+use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructIndex{{Td_entity}};
+use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructStore{{Td_entity}};
+use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructUpdate{{Td_entity}};
+use App\Http\Resources\{{Td_entity}}\{{Td_entity}}Resource;
+use App\Http\Resources\{{Td_entity}}\{{Td_entity}}ResourceCollection;
 
 class {{Td_entity}} implements {{Td_entity}}Interface
 {
@@ -43,11 +48,16 @@ class {{Td_entity}} implements {{Td_entity}}Interface
     /**
      * Display a listing of the resource.
      *
-     * @return {{Td_entity}}Repository
+     * @param  StructIndex{{Td_entity}} $structIndex{{Td_entity}}
+     * @return {{Td_entity}}ResourceCollection
      */
-    public function index(): {{Td_entity}}Repository
+    public function index(StructIndex{{Td_entity}} $structIndex{{Td_entity}}): {{Td_entity}}ResourceCollection
     {
-        return $this->{{td_entity}}_repository;
+        $data = $structIndex{{Td_entity}}->getFilledValues();
+        
+        ${{td_entity}}s = $this->{{td_entity}}_repository->get();
+        return new {{Td_entity}}ResourceCollection(${{td_entity}}s);
+        
     }
 
     /**
@@ -65,26 +75,28 @@ class {{Td_entity}} implements {{Td_entity}}Interface
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return {{Td_entity}}Model
+     * @param  StructStore{{Td_entity}}  $structStore{{Td_entity}}
+     * @return {{Td_entity}}Resource
      */
-    public function store(Request $request): {{Td_entity}}Model
-    {
-        $data = $request->all();
-        $data['user_id'] = auth()->id();
+    public function store(StructStore{{Td_entity}}  $structStore{{Td_entity}}): {{Td_entity}}Resource
+    {        
+        $data = $structStore{{Td_entity}}->getFilledValues();
+        $new_{{td_entity}} = $this->{{td_entity}}_repository->create($data);
+
+        return new {{Td_entity}}Resource($new_{{td_entity}});
         
-        return $this->{{td_entity}}_repository->create($data);
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return {{Td_entity}}Model
+     * @return {{Td_entity}}Resource
      */
-    public function show($id): {{Td_entity}}Model
+    public function show($id): {{Td_entity}}Resource
     {
-        return $this->{{td_entity}}_repository->find($id);
+        ${{td_entity}} = $this->{{td_entity}}_repository->findOrFail($id);
+        return new {{Td_entity}}Resource(${{td_entity}});
     }
 
     /**
@@ -101,16 +113,22 @@ class {{Td_entity}} implements {{Td_entity}}Interface
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  StructUpdate{{Td_entity}}  $structUpdate{{Td_entity}}
+     * @return {{Td_entity}}Resource
      */
-    public function update(Request $request, $id)
+    public function update(StructUpdate{{Td_entity}}  $structUpdate{{Td_entity}}): {{Td_entity}}Resource
     {   
-        $data = $request->all();
-        $data['user_id'] = auth()->id();
+        $id = $structUpdate{{Td_entity}}['id'];
+        $data = $structUpdate{{Td_entity}}->getFilledValues();
+        ${{td_entity}} = $this->{{td_entity}}_repository->findOrFail($id);
 
-        return $this->{{td_entity}}_repository->find($id)->update($data);
+        try {
+            ${{td_entity}}->update($data);
+        } catch (\Exception $e) {
+            throw new {{Td_entity}}Exception('updateFailed');
+        }
+
+        return new {{Td_entity}}Resource(${{td_entity}});
     }
 
     /**
@@ -121,6 +139,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      */
     public function destroy($id)
     {
-        return $this->{{td_entity}}_repository->destroy($id);
+        $deleted_count = $this->{{td_entity}}_repository->destroy($id);
+        return ($deleted_count > 0);
     }
 }

@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed;
+
+use App\Trident\Base\Typed\Structs\StructOptionalValues;
+use Spatie\Typed\T;
+
+class Struct{{function_name}} extends StructOptionalValues
+{
+    public function __construct($data = [])
+    {
+        $this->types = [
+            'name' => T::string(),
+            'value' => T::integer(),
+        ];
+        
+        parent::__construct($this->types);
+
+        $this->set($data);
+    }
+}
+
