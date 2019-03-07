@@ -12,7 +12,7 @@ class GenerateStrictType extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:strict_type {strict_type_name} {function_name} {entity_name} ";
+    protected $signature = "trident:generate:strict_type {strict_type_name} {function_name} {entity_name} {--workflow} ";
 
     /**
      * The console command description.
@@ -32,13 +32,14 @@ class GenerateStrictType extends Command
             $strict_type_name = $this->argument('strict_type_name');
             $function_name = $this->argument('function_name');
             $entity_name = $this->argument('entity_name');
+            $domain = $this->argument('--workflow')?'Business':'Workflows';
             
 
-            $crud = new Builders\StrictType($strict_type_name, $function_name, $entity_name);
+            $crud = new Builders\StrictType($strict_type_name, $function_name, $entity_name, $domain);
             // $controllerCrud->save();
 
 
-            $this->info($strict_type_name.' '.$entity_name.' '.$function_name.' strict type successfully created');
+            $this->info($strict_type_name.' '.$entity_name.' '.$function_name.' strict type successfully created for '.$domain);
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());

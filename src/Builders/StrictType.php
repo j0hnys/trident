@@ -10,13 +10,13 @@ class StrictType
      * @param string $name
      * @throws \Exception
      */
-    public function __construct(string $strict_type_name, string $function_name, string $td_entity_name)
+    public function __construct(string $strict_type_name, string $function_name, string $td_entity_name, string $domain)
     {
         
         if (strtolower($strict_type_name == 'struct')) {
             //
             //struct logic generation
-            $struct_path = base_path().'/app/Trident/Business/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
+            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
             
             if (file_exists($struct_path)) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
@@ -24,7 +24,7 @@ class StrictType
 
             $this->makeDirectory($struct_path);
 
-            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Business/Typed/LogicStruct.stub');
+            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStruct.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
@@ -35,7 +35,7 @@ class StrictType
         } else if (strtolower($strict_type_name == 'collection_struct')) {
             //
             //struct logic generation
-            $struct_path = base_path().'/app/Trident/Business/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'CollectionStruct'.ucfirst($function_name).'.php';
+            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'CollectionStruct'.ucfirst($function_name).'.php';
             
             if (file_exists($struct_path)) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
@@ -43,7 +43,7 @@ class StrictType
 
             $this->makeDirectory($struct_path);
 
-            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Business/Typed/LogicCollectionStruct.stub');
+            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicCollectionStruct.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
@@ -54,7 +54,7 @@ class StrictType
         } else if (strtolower($strict_type_name == 'map_struct')) {
             //
             //struct logic generation
-            $struct_path = base_path().'/app/Trident/Business/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'MapStruct'.ucfirst($function_name).'.php';
+            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'MapStruct'.ucfirst($function_name).'.php';
             
             if (file_exists($struct_path)) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
@@ -62,7 +62,7 @@ class StrictType
 
             $this->makeDirectory($struct_path);
 
-            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Business/Typed/LogicMapStruct.stub');
+            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicMapStruct.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
@@ -73,7 +73,7 @@ class StrictType
         } if (strtolower($strict_type_name == 'struct_optional')) {
             //
             //struct logic generation
-            $struct_path = base_path().'/app/Trident/Business/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
+            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
             
             if (file_exists($struct_path)) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
@@ -81,11 +81,10 @@ class StrictType
 
             $this->makeDirectory($struct_path);
 
-            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Business/Typed/LogicStructOptional.stub');
+            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStructOptional.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
-            $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
             
             file_put_contents($struct_path, $stub);
 

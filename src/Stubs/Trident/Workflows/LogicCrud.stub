@@ -7,11 +7,11 @@ use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
 use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
 use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface;
 use App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface as {{Td_entity}}Business;
-use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructIndex{{Td_entity}};
-use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructStore{{Td_entity}};
-use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructUpdate{{Td_entity}};
-use App\Http\Resources\{{Td_entity}}\{{Td_entity}}Resource;
-use App\Http\Resources\{{Td_entity}}\{{Td_entity}}ResourceCollection;
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructIndex{{Td_entity}};
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructStore{{Td_entity}};
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructUpdate{{Td_entity}};
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}Resource;
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}ResourceCollection;
 
 class {{Td_entity}} implements {{Td_entity}}Interface
 {

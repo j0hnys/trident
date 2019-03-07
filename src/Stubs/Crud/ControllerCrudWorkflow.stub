@@ -12,9 +12,9 @@ use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterfa
 // use App\Trident\Workflows\Events\Triggers\{{Td_entity}}Trigger;
 use App\Trident\Workflows\Validations\{{Td_entity}}StoreRequest;
 use App\Trident\Workflows\Validations\{{Td_entity}}UpdateRequest;
-use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructIndex{{Td_entity}};
-use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructStore{{Td_entity}};
-use App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed\StructUpdate{{Td_entity}};
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructIndex{{Td_entity}};
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructStore{{Td_entity}};
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructUpdate{{Td_entity}};
 
 class {{Td_entity}}Controller extends Controller
 {
