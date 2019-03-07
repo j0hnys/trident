@@ -2,7 +2,7 @@
 
 namespace j0hnys\Trident\Builders;
 
-class StrictType
+class Resources
 {
     
     /**
