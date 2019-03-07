@@ -32,12 +32,9 @@ class GenerateStrictType extends Command
             $strict_type_name = $this->argument('strict_type_name');
             $function_name = $this->argument('function_name');
             $entity_name = $this->argument('entity_name');
-            $domain = $this->argument('--workflow')?'Business':'Workflows';
+            $domain = $this->option('workflow')?'Workflows':'Business';
             
-
-            $crud = new Builders\StrictType($strict_type_name, $function_name, $entity_name, $domain);
-            // $controllerCrud->save();
-
+            new Builders\StrictType($strict_type_name, $function_name, $entity_name, $domain);
 
             $this->info($strict_type_name.' '.$entity_name.' '.$function_name.' strict type successfully created for '.$domain);
             

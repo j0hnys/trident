@@ -2,7 +2,7 @@
 
 namespace App\Trident\Workflows\Schemas\Logic\{{Entity_name}}\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class {{Entity_name}}ResourceCollection extends ResourceCollection
 {

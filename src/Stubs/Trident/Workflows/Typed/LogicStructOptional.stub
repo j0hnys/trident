@@ -5,7 +5,7 @@ namespace App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed;
 use App\Trident\Base\Typed\Structs\StructOptionalValues;
 use Spatie\Typed\T;
 
-class Struct{{function_name}} extends StructOptionalValues
+class Struct{{function_name}}{{Td_entity}} extends StructOptionalValues
 {
     public function __construct($data = [])
     {

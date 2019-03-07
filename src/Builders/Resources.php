@@ -10,7 +10,7 @@ class Resources
      * @param string $name
      * @throws \Exception
      */
-    public function __construct(string $entity_name, boolean $is_collection, string $domain)
+    public function __construct(string $entity_name, bool $is_collection, string $domain)
     {
         //Resource logic generation
         $resource_type = $is_collection?'ResourceCollection':'Resource';

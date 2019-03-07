@@ -19,7 +19,7 @@ class GenerateResource extends Command
      *
      * @var string
      */
-    protected $description = 'Create a strict type';
+    protected $description = 'Create a resource';
     
     /**
      * Execute the console command.
@@ -30,16 +30,14 @@ class GenerateResource extends Command
     {
         try {
             $entity_name = $this->argument('entity_name');
-            $is_collection = $this->argument('collection');
-            $domain = $this->argument('--workflow')?'Business':'Workflows';
+            $is_collection = $this->option('collection');
+            $domain = $this->option('workflow')?'Workflows':'Business';
             
-            
-
             $crud = new Builders\Resources($entity_name, $is_collection, $domain);
             // $controllerCrud->save();
 
             $collection_message = $is_collection?' Collection':'';
-            $this->info($entity_name.' Resource'.$is_collection.' successfully created for '.$domain);
+            $this->info($entity_name.' Resource'.$collection_message.' successfully created for '.$domain);
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
