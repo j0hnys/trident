@@ -36,16 +36,12 @@ class TridentServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-        //vvv pio meta ayto...
-        //
-        // $configPath = __DIR__.'/../config/laravel_generator.php';
-        // $this->publishes([
-        //     $configPath => config_path('infyom/laravel_generator.php'),
-        // ]);
-        //
-        //^^^
-        //
+        $configPath = __DIR__.'/config/trident.php';
+        $this->publishes([
+            $configPath => config_path('trident.php'),
+        ], 'trident');
+
+        $this->mergeConfigFrom($configPath, 'trident');
     }
 
     /**

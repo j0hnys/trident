@@ -73,10 +73,10 @@ class StrictType
         } if (strtolower($strict_type_name == 'struct_optional')) {
             //
             //struct logic generation
-            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
+            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name). ucfirst($td_entity_name).'.php';
             
             if (file_exists($struct_path)) {
-                throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
+                throw new \Exception('Struct'.ucfirst($function_name) . ucfirst($td_entity_name) . ' struct already exists!');
             }
 
             $this->makeDirectory($struct_path);
