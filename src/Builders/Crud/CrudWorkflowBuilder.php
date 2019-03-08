@@ -2,31 +2,35 @@
 
 namespace j0hnys\Trident\Builders\Crud;
 
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use Illuminate\Console\Command;
+
 class CrudWorkflowBuilder
 {
-    
+
     /**
      * Crud constructor.
      * @param string $name
      * @throws \Exception
      */
-    public function __construct($name = 'TEST')
+    public function __construct($name = 'TEST', Command $command)
     {
-        
+
         $mustache = new \Mustache_Engine;
 
         //
         //controller generation
-        $controller_path = base_path().'/app/Http/Controllers/Trident/'.ucfirst($name).'Controller.php';
-        
+        $controller_path = base_path() . '/app/Http/Controllers/Trident/' . ucfirst($name) . 'Controller.php';
+
         if (!file_exists($controller_path)) {
             $this->makeDirectory($controller_path);
 
-            $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/ControllerCrudWorkflow.stub');
+            $stub = file_get_contents(__DIR__ . '/../../Stubs/Crud/ControllerCrudWorkflow.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-            
+
             file_put_contents($controller_path, $stub);
         }
 
@@ -36,32 +40,55 @@ class CrudWorkflowBuilder
 
         //
         //model generation
-        $model_path = base_path().'/app/Models/'.ucfirst($name).'.php';
-        
-        if (!file_exists($model_path)) {
-            $this->makeDirectory($model_path);
+        $model_path = base_path() . '/app/Models/' . ucfirst($name) . '.php';
+        $output_path = base_path() . '/app/Models/';
+        $table_name = Str::plural(lcfirst($name));
+        $table_name_singular = lcfirst($name);
+        if (Schema::hasTable(lcfirst($table_name))) {
+            // Generate model for existing table using plural table name 
+            $command->call('krlove:generate:model', [
+                'class-name' => ucfirst($name),
+                '--output-path' => $output_path,
+                '--table-name' => $table_name,
+                '--namespace' => 'App\\Models',
+                '--backup' => file_exists($model_path),
+            ]);
+        } elseif (Schema::hasTable(lcfirst($table_name_singular))) {
+            // Generate model for existing table using singular table name 
+            $command->call('krlove:generate:model', [
+                'class-name' => ucfirst($name),
+                '--output-path' => $output_path,
+                '--table-name' => $table_name_singular,
+                '--namespace' => 'App\\Models',
+                '--backup' => file_exists($model_path),
+            ]);
+        } else {
+            if (!file_exists($model_path)) {
+                $this->makeDirectory($model_path);
 
-            $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/Model.stub');
+                $stub = file_get_contents(__DIR__ . '/../../Stubs/Crud/Model.stub');
 
-            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-            $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-            
-            file_put_contents($model_path, $stub);
+                $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+                $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
+
+                file_put_contents($model_path, $stub);
+            }
         }
+
 
         //
         //update resource routes
         $Td_entities_workflows = $this->getCurrentControllers();
-        
-        $workflows = array_map(function($element){
+
+        $workflows = array_map(function ($element) {
             return [
                 'Td_entity' => ucfirst($element),
                 'td_entity' => lcfirst($element),
             ];
-        },$Td_entities_workflows);
+        }, $Td_entities_workflows);
 
-        $trident_resource_routes_path = base_path().'/routes/trident.php';
-        $stub = file_get_contents(__DIR__.'/../../Stubs/routes/trident.stub');
+        $trident_resource_routes_path = base_path() . '/routes/trident.php';
+        $stub = file_get_contents(__DIR__ . '/../../Stubs/routes/trident.stub');
         $stub = $mustache->render($stub, [
             'register_resource_routes' => $workflows,
         ]);
@@ -70,32 +97,31 @@ class CrudWorkflowBuilder
 
         //
         //update trident auth provider
-        $trident_auth_provider_path = base_path().'/app/Providers/TridentAuthServiceProvider.php';
-        $stub = file_get_contents(__DIR__.'/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
+        $trident_auth_provider_path = base_path() . '/app/Providers/TridentAuthServiceProvider.php';
+        $stub = file_get_contents(__DIR__ . '/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
         $stub = $mustache->render($stub, [
             'register_workflow_policies' => $workflows,
         ]);
-        
+
         file_put_contents($trident_auth_provider_path, $stub);
 
         //
         //policy generation
-        $trident_policy_path = base_path().'/app/Policies/Trident/'.ucfirst($name).'Policy.php';
+        $trident_policy_path = base_path() . '/app/Policies/Trident/' . ucfirst($name) . 'Policy.php';
         if (!file_exists($trident_policy_path)) {
             $this->makeDirectory($trident_policy_path);
-            
-            $stub = file_get_contents(__DIR__.'/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
-            
+
+            $stub = file_get_contents(__DIR__ . '/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
+
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-            
+
             file_put_contents($trident_policy_path, $stub);
         }
-            
     }
-    
 
-     /**
+
+    /**
      * Build the directory for the class if necessary.
      *
      * @param  string $path
@@ -116,17 +142,15 @@ class CrudWorkflowBuilder
      */
     public function getCurrentControllers()
     {
-        $files = scandir(base_path().'/app/Http/Controllers/Trident/');
+        $files = scandir(base_path() . '/app/Http/Controllers/Trident/');
 
         $filenames = [];
         foreach ($files as $file) {
             if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('Controller.php','',$file);
+                $filenames[] = str_replace('Controller.php', '', $file);
             }
         }
 
         return $filenames;
     }
-
-    
 }

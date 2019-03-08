@@ -32,7 +32,7 @@ class GenerateWorkflowRestfulCrud extends Command
             $name = $this->argument('name');
             
             //crud building
-            $crud = new Builders\Crud\CrudWorkflowBuilder($name);
+            $crud = new Builders\Crud\CrudWorkflowBuilder($name, $this);
             
             //workflow building
             $crud = new Builders\WorkflowRestfulCrud($name);
