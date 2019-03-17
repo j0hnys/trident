@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed;
+
+use App\Trident\Base\Typed\Maps\MapStruct;
+use Spatie\Typed\T;
+
+class MapStruct{{function_name}} extends MapStruct
+{
+    public function __construct()
+    {
+        parent::__construct(T::string(),[
+            'name' => T::string(),
+            'value' => T::integer(),
+        ]);
+    }
+}
+
+
+

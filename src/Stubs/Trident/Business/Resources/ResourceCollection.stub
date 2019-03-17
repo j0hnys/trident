@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Trident\Business\Schemas\Logic\{{Entity_name}}\Resources;
+
+use Illuminate\Http\Resources\Json\ResourceCollection;
+
+class {{Entity_name}}ResourceCollection extends ResourceCollection
+{
+    /**
+     * The resource that this resource collects.
+     *
+     * @var string
+     */
+    public $collects = 'App\Trident\Business\Schemas\Logic\{{Entity_name}}\Resources\{{Entity_name}}Resource';
+    
+    /**
+     * Transform the resource collection into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array
+     */
+    public function toArray($request)
+    {
+        // $this->collection->each( ... )
+
+        return parent::toArray($request);
+    }
+
+}

@@ -183,7 +183,7 @@ class Factory
                                 $relatedModel = '\\' . get_class($relationObj->getRelated());
                                 $relatedObj = new $relatedModel;
 
-                                $property = $relationObj->getForeignKey();
+                                $property = $relatedObj->getForeignKey();
                                 $properties[$property] = $this->setProperty($property,'function () {
              return factory('.get_class($relationObj->getRelated()).'::class)->create()->'.$relatedObj->getKeyName().';
         }');

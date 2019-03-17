@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed;
+namespace App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed;
 
 use App\Trident\Base\Typed\Structs\StructOptionalValues;
 use Spatie\Typed\T;

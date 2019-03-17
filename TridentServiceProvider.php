@@ -23,6 +23,7 @@ use j0hnys\Trident\Console\Commands\ExportModel;
 use j0hnys\Trident\Console\Commands\BuildMigrations;
 use j0hnys\Trident\Console\Commands\BuildModels;
 use j0hnys\Trident\Console\Commands\BuildModelExports;
+use j0hnys\Trident\Console\Commands\GenerateResource;
 // . . .
 
 class TridentServiceProvider extends ServiceProvider
@@ -35,16 +36,12 @@ class TridentServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-        //vvv pio meta ayto...
-        //
-        // $configPath = __DIR__.'/../config/laravel_generator.php';
-        // $this->publishes([
-        //     $configPath => config_path('infyom/laravel_generator.php'),
-        // ]);
-        //
-        //^^^
-        //
+        $configPath = __DIR__.'/config/trident.php';
+        $this->publishes([
+            $configPath => config_path('trident.php'),
+        ], 'trident');
+
+        $this->mergeConfigFrom($configPath, 'trident');
     }
 
     /**
@@ -114,6 +111,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident.build_model_exports', function ($app) {
             return new BuildModelExports();
         });
+        $this->app->singleton('trident:generate:resource', function ($app) {
+            return new GenerateResource();
+        });
         // . . .
 
         $this->commands([
@@ -137,6 +137,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident.build_migrations',
             'trident.build_models',
             'trident.build_model_exports',
+            'trident:generate:resource',
             // . . .
         ]);
     }
