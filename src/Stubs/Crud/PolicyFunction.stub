@@ -8,7 +8,7 @@
      */
     public function {{function_name}}(User $user, {{Td_entity}} ${{td_entity}}, int $id)
     {
-        return $user->id == ${{td_entity}}->find($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 
 
