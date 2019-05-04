@@ -15,7 +15,8 @@
         "doctrine/dbal": "2.9.1",
         "symfony/class-loader": "^2.3|3.*",
         "krlove/eloquent-model-generator": "1.3.2",
-        "xethron/migrations-generator": "2.0.2"
+        "xethron/migrations-generator": "2.0.2",
+        "nikic/php-parser": "4.2.1"
     },
     "autoload": {
         "psr-4": {
