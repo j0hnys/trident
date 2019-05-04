@@ -35,7 +35,7 @@ class RefreshDIBinds extends Command
             $crud = new Refresh\DIBinds();
 
 
-            $this->info($name.' workflow tests successfully created');
+            // $this->info($name.' workflow tests successfully created');
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
