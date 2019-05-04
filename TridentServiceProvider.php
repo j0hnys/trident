@@ -24,6 +24,7 @@ use j0hnys\Trident\Console\Commands\BuildMigrations;
 use j0hnys\Trident\Console\Commands\BuildModels;
 use j0hnys\Trident\Console\Commands\BuildModelExports;
 use j0hnys\Trident\Console\Commands\GenerateResource;
+use j0hnys\Trident\Console\Commands\RefreshDIBinds;
 // . . .
 
 class TridentServiceProvider extends ServiceProvider
@@ -114,6 +115,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident:generate:resource', function ($app) {
             return new GenerateResource();
         });
+        $this->app->singleton('trident:refresh:di_binds', function ($app) {
+            return new RefreshDIBinds();
+        });
         // . . .
 
         $this->commands([
@@ -138,6 +142,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident.build_models',
             'trident.build_model_exports',
             'trident:generate:resource',
+            'trident:refresh:di_binds',
             // . . .
         ]);
     }
