@@ -20,12 +20,112 @@ class DIBinds
         
         $mustache = new \Mustache_Engine;
 
-        dump('faseis');
 
-        $name = 'DemoProcess';
+        $Td_entities_workflows = $this->getCurrentWorkflows();
+        $Td_entities_businesses = $this->getCurrentBusinesses();
 
-        $code = file_get_contents( base_path().'/app/Trident/Workflows/Logic/'.ucfirst($name).'.php' );
+        $workflow_logic_di_interfaces = [];
+        $business_logic_di_interfaces = [];
 
+        foreach ($Td_entities_workflows as $Td_entities_workflow) {
+
+            $name = $Td_entities_workflow;
+    
+            $code = file_get_contents( base_path().'/app/Trident/Workflows/Logic/'.ucfirst($name).'.php' );
+            $workflow_logic_di_interfaces[$name] = array_map(function($element) {
+                return implode('\\', $element->name->parts);
+            }, $this->getDIInterfaces($code));
+        }
+
+        foreach ($Td_entities_businesses as $Td_entities_business) {
+            
+            $name = $Td_entities_business;
+
+            $code = file_get_contents( base_path().'/app/Trident/Business/Logic/'.ucfirst($name).'.php' );
+            $business_logic_di_interfaces[$name] = array_map(function($element) {
+                return implode('\\', $element->name->parts);
+            }, $this->getDIInterfaces($code));
+        }
+
+        $workflow_logic_interface_class_instantiations = [];
+        foreach ($workflow_logic_di_interfaces as $workflow_logic => $di_interfaces) {
+            foreach ($di_interfaces as $di_interface) {
+                $class_name = str_replace('Interfaces','',$di_interface);
+                $class_name = str_replace('Interface','',$class_name);
+                $class_name = str_replace('\\\\','\\',$class_name);
+    
+                if (strpos($class_name,'\\Repositories')) {
+                    $workflow_logic_interface_class_instantiations []= 'new \\'.$class_name.'($app)';
+                } else {
+                    $workflow_logic_interface_class_instantiations []= 'new \\'.$class_name;
+                }
+            }
+        }
+
+        $business_logic_interface_class_instantiations = [];
+        foreach ($business_logic_di_interfaces as $business_logic => $di_interfaces) {
+            foreach ($di_interfaces as $di_interface) {
+                $class_name = str_replace('Interfaces','',$di_interface);
+                $class_name = str_replace('Interface','',$class_name);
+                $class_name = str_replace('\\\\','\\',$class_name);
+    
+                if (strpos($class_name,'\\Repositories')) {
+                    $business_logic_interface_class_instantiations []= 'new \\'.$class_name.'($app)';
+                } else {
+                    $business_logic_interface_class_instantiations []= 'new \\'.$class_name;
+                }
+            }
+        }
+
+
+        // dump([
+        //     // '$Td_entities_workflows' => $Td_entities_workflows,
+        //     // '$Td_entities_businesses' => $Td_entities_businesses,
+        //     // '$workflow_logic_di_interfaces' => $workflow_logic_di_interfaces,
+        //     // '$business_logic_di_interfaces' => $business_logic_di_interfaces,
+        //     '$workflow_logic_interface_class_instantiations_string' => $workflow_logic_interface_class_instantiations_string,
+        //     '$business_logic_interface_class_instantiations_string' => $business_logic_interface_class_instantiations_string,
+        // ]);
+
+        //
+        //update TridentServiceProvider
+        $workflows = [];
+        if (!empty($workflow_logic_interface_class_instantiations)) {
+            $workflows = array_map(function($element) use ($workflow_logic_interface_class_instantiations){
+                return [
+                    'Td_entity' => ucfirst($element),
+                    'interface_class_instantiations' => implode(",\n", $workflow_logic_interface_class_instantiations),
+                ];
+            },$Td_entities_workflows);
+        }
+
+        $businesses = [];
+        if (!empty($business_logic_interface_class_instantiations)) {
+            $businesses = array_map(function($element) use ($business_logic_interface_class_instantiations) {
+                return [
+                    'Td_entity' => ucfirst($element),
+                    'interface_class_instantiations' => implode(",\n", $business_logic_interface_class_instantiations),
+                ];
+            },$Td_entities_businesses);
+        }
+
+
+        $trident_event_service_provider_path = base_path().'/app/Providers/TridentServiceProvider.php';
+        $stub = file_get_contents(__DIR__.'/../../../src/Stubs/app/Providers/TridentServiceProvider_dynamic.stub');
+        $stub = $mustache->render($stub, [
+            'register_workflows' => $workflows,
+            'register_business' => $businesses,
+        ]);
+        
+
+        file_put_contents($trident_event_service_provider_path, $stub);
+
+
+    }
+
+
+    public function getDIInterfaces(string $code)
+    {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         try {
             $ast = $parser->parse($code);
@@ -79,9 +179,9 @@ class DIBinds
 
         });
 
-        dump([
-            '$analysis_result' => $analysis_result,
-        ]);
+        // dump([
+        //     '$analysis_result' => $analysis_result,
+        // ]);
 
         $di_interfaces = [];
 
@@ -91,7 +191,7 @@ class DIBinds
                     if (!empty($used_namespace->alias)) {
                         if ($used_namespace->alias == $constructor_param->type->parts[0]) {
                             // dump('USED INTERFACE FOUND!! '.$used_namespace->alias.' | '.implode('\\',$used_namespace->name->parts));
-                            $di_interfaces []= [
+                            $di_interfaces []= (object)[
                                 'name' => $used_namespace->name
                             ];
                         }
@@ -103,11 +203,11 @@ class DIBinds
 
         }
 
-        dump([
-            '$di_interfaces' => $di_interfaces,
-        ]);
+        // dump([
+        //     '$di_interfaces' => $di_interfaces,
+        // ]);
 
-
+        return $di_interfaces;
 
         // dump($code);
 
@@ -125,76 +225,8 @@ class DIBinds
         //     }
         // });
         // $modifiedStmts = $traverser->traverse($ast);
-
-
-
-
-
-
-
-
-        // //
-        // //workflow logic test generation
-        // $workflow_logic_test_path = base_path().'/tests/Trident/Workflows/Logic/'.ucfirst($name).'Test.php';
-        
-        // $class_name = '\\App\\Trident\\Workflows\\Logic\\'.ucfirst($name);
-        // $class_methods = \get_class_methods( $class_name );
-        // $class_methods = array_map(function($element){
-        //     return [
-        //         'method' => ($element),
-        //     ];
-        // },array_values(array_filter($class_methods,function($element){
-        //     return $element != '__construct' ? true : false;
-        // })));
-
-        // if (!file_exists($workflow_logic_test_path)) {
-        //     $this->makeDirectory($workflow_logic_test_path);
-
-        //     $stub = file_get_contents(__DIR__.'/../../Stubs/tests/Trident/Workflows/Logic/Logic.stub');
-
-        //     $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-        //     $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-        //     $stub = $mustache->render($stub, [
-        //         'methods' => $class_methods,
-        //     ]);
-            
-        //     file_put_contents($workflow_logic_test_path, $stub);
-        // }
-
-        // //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // //now we build the business logic part of this workflow
-        // //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-        // //
-        // //workflow logic test generation
-        // $business_logic_test_path = base_path().'/tests/Trident/Business/Logic/'.ucfirst($name).'Test.php';
-        
-        // $class_name = '\\App\\Trident\\Business\\Logic\\'.ucfirst($name);
-        // $class_methods = \get_class_methods( $class_name );
-        // $class_methods = array_map(function($element){
-        //     return [
-        //         'method' => ($element),
-        //     ];
-        // },array_values(array_filter($class_methods,function($element){
-        //     return $element != '__construct' ? true : false;
-        // })));
-
-        // if (!file_exists($business_logic_test_path)) {
-        //     $this->makeDirectory($business_logic_test_path);
-
-        //     $stub = file_get_contents(__DIR__.'/../../Stubs/tests/Trident/Business/Logic/Logic.stub');
-
-        //     $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-        //     $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-        //     $stub = $mustache->render($stub, [
-        //         'methods' => $class_methods,
-        //     ]);
-            
-        //     file_put_contents($business_logic_test_path, $stub);
-        // }
-
-
     }
+
     
      /**
      * Build the directory for the class if necessary.
