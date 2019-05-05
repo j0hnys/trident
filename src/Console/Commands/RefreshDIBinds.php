@@ -33,7 +33,7 @@ class RefreshDIBinds extends Command
             
 
             $crud = new Refresh\DIBinds();
-
+            
 
             // $this->info($name.' workflow tests successfully created');
             
