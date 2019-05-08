@@ -53,11 +53,15 @@ class DIBinds
                 $class_name = str_replace('Interfaces','',$di_interface);
                 $class_name = str_replace('Interface','',$class_name);
                 $class_name = str_replace('\\\\','\\',$class_name);
+
+                if (!isset($workflow_logic_interface_class_instantiations[$workflow_logic])) {
+                    $workflow_logic_interface_class_instantiations[$workflow_logic] = [];
+                }
     
                 if (strpos($class_name,'\\Repositories')) {
-                    $workflow_logic_interface_class_instantiations []= 'new \\'.$class_name.'($app)';
+                    $workflow_logic_interface_class_instantiations[$workflow_logic] []= 'new \\'.$class_name.'($app)';
                 } else {
-                    $workflow_logic_interface_class_instantiations []= 'new \\'.$class_name;
+                    $workflow_logic_interface_class_instantiations[$workflow_logic] []= 'new \\'.$class_name;
                 }
             }
         }
@@ -68,11 +72,15 @@ class DIBinds
                 $class_name = str_replace('Interfaces','',$di_interface);
                 $class_name = str_replace('Interface','',$class_name);
                 $class_name = str_replace('\\\\','\\',$class_name);
+
+                if (!isset($business_logic_interface_class_instantiations[$business_logic])) {
+                    $business_logic_interface_class_instantiations[$business_logic] = [];
+                }
     
                 if (strpos($class_name,'\\Repositories')) {
-                    $business_logic_interface_class_instantiations []= 'new \\'.$class_name.'($app)';
+                    $business_logic_interface_class_instantiations[$business_logic] []= 'new \\'.$class_name.'($app)';
                 } else {
-                    $business_logic_interface_class_instantiations []= 'new \\'.$class_name;
+                    $business_logic_interface_class_instantiations[$business_logic] []= 'new \\'.$class_name;
                 }
             }
         }
@@ -94,7 +102,7 @@ class DIBinds
             $workflows = array_map(function($element) use ($workflow_logic_interface_class_instantiations){
                 return [
                     'Td_entity' => ucfirst($element),
-                    'interface_class_instantiations' => implode(",\n", $workflow_logic_interface_class_instantiations),
+                    'interface_class_instantiations' => implode(",\n", $workflow_logic_interface_class_instantiations[$element]),
                 ];
             },$Td_entities_workflows);
         }
@@ -104,7 +112,7 @@ class DIBinds
             $businesses = array_map(function($element) use ($business_logic_interface_class_instantiations) {
                 return [
                     'Td_entity' => ucfirst($element),
-                    'interface_class_instantiations' => implode(",\n", $business_logic_interface_class_instantiations),
+                    'interface_class_instantiations' => implode(",\n", $business_logic_interface_class_instantiations[$element]),
                 ];
             },$Td_entities_businesses);
         }
