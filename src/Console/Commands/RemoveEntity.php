@@ -32,7 +32,7 @@ class RemoveEntity extends Command
             $name = $this->argument('name');
             
 
-            $crud = new Remove\Entity();
+            $crud = new Remove\Entity($name);
             
 
             $this->info($name.' removed successfully');
