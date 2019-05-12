@@ -25,6 +25,7 @@ use j0hnys\Trident\Console\Commands\BuildModels;
 use j0hnys\Trident\Console\Commands\BuildModelExports;
 use j0hnys\Trident\Console\Commands\GenerateResource;
 use j0hnys\Trident\Console\Commands\RefreshDIBinds;
+use j0hnys\Trident\Console\Commands\RemoveEntity;
 // . . .
 
 class TridentServiceProvider extends ServiceProvider
@@ -118,6 +119,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident:refresh:di_binds', function ($app) {
             return new RefreshDIBinds();
         });
+        $this->app->singleton('trident:remove:entity', function ($app) {
+            return new RemoveEntity();
+        });
         // . . .
 
         $this->commands([
@@ -143,6 +147,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident.build_model_exports',
             'trident:generate:resource',
             'trident:refresh:di_binds',
+            'trident:remove:entity',
             // . . .
         ]);
     }
