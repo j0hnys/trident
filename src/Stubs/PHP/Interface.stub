@@ -1,0 +1,14 @@
+<?php
+
+namespace {{namespace}};
+
+{{# used_namespaces }}
+{{ used_namespace }}
+{{/ used_namespaces }}
+
+interface {{class_name}}Interface
+{
+    {{# function_signatures }}
+    {{ function_signature }}
+    {{/ function_signatures }}
+}

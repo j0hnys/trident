@@ -12,7 +12,7 @@ class RefreshClassInterface extends Command
      *
      * @var string
      */
-    protected $signature = "trident:refresh:class_interface";
+    protected $signature = "trident:refresh:class_interface {name} {relative_input_path} {relative_output_path}";
 
     /**
      * The console command description.
@@ -29,13 +29,19 @@ class RefreshClassInterface extends Command
     public function handle()
     {
         try {
-            // $name = $this->argument('name');
+            $name = $this->argument('name');
+            $relative_input_path = $this->argument('relative_input_path');
+            $relative_output_path = $this->argument('relative_output_path');
             
 
-            $crud = new Refresh\ClassInterface();
+            $crud = new Refresh\ClassInterface(
+                $name,
+                $relative_input_path,
+                $relative_output_path
+            );
             
 
-            // $this->info($name.' workflow tests successfully created');
+            $this->info($name.'Interface updated successfully!');
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
