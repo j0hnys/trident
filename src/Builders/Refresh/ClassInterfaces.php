@@ -11,14 +11,38 @@ class ClassInterfaces
      * @param string $name
      * @throws \Exception
      */
-    public function __construct($type)
+    public function __construct($command, $type)
     {
         // $name = 'DemoProcess';
         // $input_path = base_path().'/'.'app/Trident/Workflows/Logic';
         // $output_path = base_path().'/'.'app/Trident/Interfaces/Workflows/Logic';
 
 
-        dd('dsmsdlkmcdsmklsdmcl');
+        // dd('dsmsdlkmcdsmklsdmcl');
+
+        if ($type == 'workflows') {
+            $workflow_names = $this->getCurrentWorkflows();
+
+            foreach ($workflow_names as $workflow_name) {
+                $command->call('trident:refresh:class_interface', [
+                    'name' => $workflow_name,
+                    'relative_input_path' => 'app/Trident/Workflows/Logic',
+                    'relative_output_path' => 'app/Trident/Interfaces/Workflows/Logic',
+                ]);
+            }
+        } else if ($type == 'businesses') {
+            $business_names = $this->getCurrentBusinesses();
+
+            foreach ($business_names as $business_name) {
+                $command->call('trident:refresh:class_interface', [
+                    'name' => $business_name,
+                    'relative_input_path' => 'app/Trident/Business/Logic',
+                    'relative_output_path' => 'app/Trident/Interfaces/Business/Logic',
+                ]);
+            }
+        }
+
+
 
 
     }
