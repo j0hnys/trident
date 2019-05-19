@@ -26,6 +26,7 @@ use j0hnys\Trident\Console\Commands\BuildModelExports;
 use j0hnys\Trident\Console\Commands\GenerateResource;
 use j0hnys\Trident\Console\Commands\RefreshDIBinds;
 use j0hnys\Trident\Console\Commands\RefreshClassInterface;
+use j0hnys\Trident\Console\Commands\RefreshClassInterfaces;
 use j0hnys\Trident\Console\Commands\RemoveEntity;
 // . . .
 
@@ -123,6 +124,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident:refresh:class_interface', function ($app) {
             return new RefreshClassInterface();
         });
+        $this->app->singleton('trident:refresh:class_interfaces', function ($app) {
+            return new RefreshClassInterfaces();
+        });
         $this->app->singleton('trident:remove:entity', function ($app) {
             return new RemoveEntity();
         });
@@ -152,6 +156,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident:generate:resource',
             'trident:refresh:di_binds',
             'trident:refresh:class_interface',
+            'trident:refresh:class_interfaces',
             'trident:remove:entity',
             // . . .
         ]);
