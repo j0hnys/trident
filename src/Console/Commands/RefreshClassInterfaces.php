@@ -33,7 +33,8 @@ class RefreshClassInterfaces extends Command
             
 
             $crud = new Refresh\ClassInterfaces(
-                $type,
+                $this,
+                $type
             );
             
 

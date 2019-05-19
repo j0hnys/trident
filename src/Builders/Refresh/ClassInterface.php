@@ -178,7 +178,12 @@ class ClassInterface
                     $type = null;
                     if ($parameter->type) {
                         $type = $parameter->type;
-                        $type_name = $parameter->type->parts[ count($parameter->type->parts)-1 ];
+                        $type_name = '';
+                        if (isset($parameter->type->parts)) {
+                            $type_name = $parameter->type->parts[ count($parameter->type->parts)-1 ];
+                        } else {
+                            $type_name = $type->name;
+                        }
 
                         //gia na valw t swsta `use` sthn arxh toy arxeioy
                         foreach ($analysis_result->used_namespaces as $index => $used_namespace) {
@@ -200,7 +205,13 @@ class ClassInterface
 
 
                     if (isset($type) && isset($parameter->var)) {
-                        $function_signature_parameters []= implode('\\',$type->parts).' $'.$parameter->var->name;
+                        $tmp_type = '';
+                        if (isset($type->parts)) {
+                            $tmp_type = implode('\\',$type->parts);
+                        } else {
+                            $tmp_type = $type->name;
+                        }
+                        $function_signature_parameters []= $tmp_type.' $'.$parameter->var->name;
                     } else if (isset($parameter->var)) {
                         $function_signature_parameters []= '$'.$parameter->var->name;
                     }
