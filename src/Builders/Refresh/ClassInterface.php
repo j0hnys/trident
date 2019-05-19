@@ -15,128 +15,54 @@ class ClassInterface
      * @param string $name
      * @throws \Exception
      */
-    public function __construct($name = 'TEST')
+    public function __construct($name, $relative_input_path, $relative_output_path)
     {
+        // $name = 'DemoProcess';
+        // $input_path = base_path().'/'.'app/Trident/Workflows/Logic';
+        // $output_path = base_path().'/'.'app/Trident/Interfaces/Workflows/Logic';
+
+        $input_path = base_path().'/'.$relative_input_path;
+        $output_path = base_path().'/'.$relative_output_path;
         
-
-        dd('in here');
-
 
         $mustache = new \Mustache_Engine;
-
-
-        $Td_entities_workflows = $this->getCurrentWorkflows();
-        $Td_entities_businesses = $this->getCurrentBusinesses();
-
-        $workflow_logic_di_interfaces = [];
-        $business_logic_di_interfaces = [];
-
-        foreach ($Td_entities_workflows as $Td_entities_workflow) {
-
-            $name = $Td_entities_workflow;
-    
-            $code = file_get_contents( base_path().'/app/Trident/Workflows/Logic/'.ucfirst($name).'.php' );
-            $workflow_logic_di_interfaces[$name] = array_map(function($element) {
-                return implode('\\', $element->name->parts);
-            }, $this->getDIInterfaces($code));
-        }
-
-        foreach ($Td_entities_businesses as $Td_entities_business) {
-            
-            $name = $Td_entities_business;
-
-            $code = file_get_contents( base_path().'/app/Trident/Business/Logic/'.ucfirst($name).'.php' );
-            $business_logic_di_interfaces[$name] = array_map(function($element) {
-                return implode('\\', $element->name->parts);
-            }, $this->getDIInterfaces($code));
-        }
-
-        $workflow_logic_interface_class_instantiations = [];
-        foreach ($workflow_logic_di_interfaces as $workflow_logic => $di_interfaces) {
-            foreach ($di_interfaces as $di_interface) {
-                $class_name = str_replace('Interfaces','',$di_interface);
-                $class_name = str_replace('Interface','',$class_name);
-                $class_name = str_replace('\\\\','\\',$class_name);
-
-                if (!isset($workflow_logic_interface_class_instantiations[$workflow_logic])) {
-                    $workflow_logic_interface_class_instantiations[$workflow_logic] = [];
-                }
-    
-                if (strpos($class_name,'\\Repositories')) {
-                    $workflow_logic_interface_class_instantiations[$workflow_logic] []= 'new \\'.$class_name.'($app)';
-                } else {
-                    $workflow_logic_interface_class_instantiations[$workflow_logic] []= 'new \\'.$class_name;
-                }
-            }
-        }
-
-        $business_logic_interface_class_instantiations = [];
-        foreach ($business_logic_di_interfaces as $business_logic => $di_interfaces) {
-            foreach ($di_interfaces as $di_interface) {
-                $class_name = str_replace('Interfaces','',$di_interface);
-                $class_name = str_replace('Interface','',$class_name);
-                $class_name = str_replace('\\\\','\\',$class_name);
-
-                if (!isset($business_logic_interface_class_instantiations[$business_logic])) {
-                    $business_logic_interface_class_instantiations[$business_logic] = [];
-                }
-    
-                if (strpos($class_name,'\\Repositories')) {
-                    $business_logic_interface_class_instantiations[$business_logic] []= 'new \\'.$class_name.'($app)';
-                } else {
-                    $business_logic_interface_class_instantiations[$business_logic] []= 'new \\'.$class_name;
-                }
-            }
-        }
-
-
-        // dump([
-        //     // '$Td_entities_workflows' => $Td_entities_workflows,
-        //     // '$Td_entities_businesses' => $Td_entities_businesses,
-        //     // '$workflow_logic_di_interfaces' => $workflow_logic_di_interfaces,
-        //     // '$business_logic_di_interfaces' => $business_logic_di_interfaces,
-        //     '$workflow_logic_interface_class_instantiations_string' => $workflow_logic_interface_class_instantiations_string,
-        //     '$business_logic_interface_class_instantiations_string' => $business_logic_interface_class_instantiations_string,
-        // ]);
-
-        //
-        //update TridentServiceProvider
-        $workflows = [];
-        if (!empty($workflow_logic_interface_class_instantiations)) {
-            $workflows = array_map(function($element) use ($workflow_logic_interface_class_instantiations){
-                return [
-                    'Td_entity' => ucfirst($element),
-                    'interface_class_instantiations' => implode(",\n", $workflow_logic_interface_class_instantiations[$element]),
-                ];
-            },$Td_entities_workflows);
-        }
-
-        $businesses = [];
-        if (!empty($business_logic_interface_class_instantiations)) {
-            $businesses = array_map(function($element) use ($business_logic_interface_class_instantiations) {
-                return [
-                    'Td_entity' => ucfirst($element),
-                    'interface_class_instantiations' => implode(",\n", $business_logic_interface_class_instantiations[$element]),
-                ];
-            },$Td_entities_businesses);
-        }
-
-
-        $trident_event_service_provider_path = base_path().'/app/Providers/TridentServiceProvider.php';
-        $stub = file_get_contents(__DIR__.'/../../../src/Stubs/app/Providers/TridentServiceProvider_dynamic.stub');
-        $stub = $mustache->render($stub, [
-            'register_workflows' => $workflows,
-            'register_business' => $businesses,
-        ]);
         
 
-        file_put_contents($trident_event_service_provider_path, $stub);
+        $code = file_get_contents( $input_path.'/'.$name.'.php' );
+        $result = $this->getClassFunctionSignatures($code);
 
 
+        $namespace = $result->strings->class_implemented_interfaces_namespaces[0];
+
+        $used_namespaces = array_map(function($element){
+            return [
+                'used_namespace' => $element,
+            ];
+        },$result->strings->used_namespaces);
+
+        $class_name = $result->strings->class_name;
+
+        $function_signatures = array_map(function($element){
+            return [
+                'function_signature' => $element,
+            ];
+        },$result->strings->function_signatures);
+
+
+        $stub = file_get_contents(__DIR__.'/../../../src/Stubs/PHP/Interface.stub');
+        $stub = $mustache->render($stub, [
+            'namespace' => $namespace,
+            'used_namespaces' => $used_namespaces,
+            'class_name' => $class_name,
+            'function_signatures' => $function_signatures,
+        ]);
+                
+
+        file_put_contents($output_path.'/'.$name.'Interface.php', $stub);
     }
 
 
-    public function getDIInterfaces(string $code)
+    public function getClassFunctionSignatures(string $code)
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         try {
@@ -147,96 +73,185 @@ class ClassInterface
         }
 
         // $dumper = new NodeDumper;
-        // dump($ast[0]->exprs);
-        // echo $dumper->dump($ast) . "\n";
-
+        // // dump($ast[0]->exprs);
+        // echo $dumper->dump($ast) . "\n"; exit;
+        
 
         $analysis_result = (object)[
+            'class_namespace' => null,
+            'class_name' => '',
             'used_namespaces' => [],
-            'constructor_params' => [],
+            'implemented_interfaces' => [],
+            'functions_signature' => [],
         ];
 
         $nodeFinder = new NodeFinder;
         $nodeFinder->find($ast, function(Node $node) use (&$analysis_result){
+            if ($node instanceof Node\Stmt\Namespace_) {
+                $analysis_result->class_namespace = $node->name;
+            }
+
+
             if ($node instanceof Node\Stmt\Use_) {
-                // dump([
-                //     // '$node->getAttributes()' => $node->getAttributes(),
-                //     // '$node->getSubNodeNames()' => $node->getSubNodeNames(),
-                //     // '$node->getLine()' => $node->getLine(),
-                //     // '$node->getType()' => $node->getType(),
-                //     // '$node->uses[0]->name->parts' => $node->uses[0]->name->parts,
-                //     '$node' => $node,
-                //     // '$node->uses[0]->name->parts' => $node->uses[0]->name->parts,
-                //     // '$node->uses[0]->alias' => $node->uses[0]->alias,
-                // ]);
 
                 $analysis_result->used_namespaces []= $node->uses[0];
 
             }
 
+            if ($node instanceof Node\Stmt\Class_) {
+                $analysis_result->class_name = $node->name;
+                $analysis_result->implemented_interfaces []= $node->implements;
+            }
+
             if ($node instanceof Node\Stmt\ClassMethod) {
-                if ($node->name == '__construct') {
-                    if (!empty($node->params)) {
-                        $tmp = [];
-                        foreach ($node->params as $parameter) {
-                            $tmp []= (object)[
-                                'type' => $parameter->type,
-                                'var' => $parameter->var,
-                            ];
-                        }
-                        $analysis_result->constructor_params = $tmp;
+                $tmp_function = (object)[
+                    'flags' => $node->flags,  //dld public (1), protected (2), private (4), e.t.c.
+                    'name' => $node->name,
+                ];
+
+                if (!empty($node->params)) {
+                    $tmp = [];
+                    foreach ($node->params as $parameter) {
+                        $tmp []= (object)[
+                            'type' => $parameter->type,
+                            'var' => $parameter->var,
+                        ];
                     }
+                    $tmp_function->parameters []= $tmp;
                 }
+                
+                $analysis_result->functions_signature []= $tmp_function;
             }
 
         });
 
-        // dump([
-        //     '$analysis_result' => $analysis_result,
-        // ]);
+        $class_namespace_string = '';
+        if (isset($analysis_result->class_namespace)) {
+            $class_namespace_string = implode('\\',$analysis_result->class_namespace->parts);
+        }
 
-        $di_interfaces = [];
+        $class_implemented_interfaces_namespaces_strings = [];
+        foreach ($analysis_result->implemented_interfaces[0] as $implemented_interface) {
+            $interface_name = $implemented_interface->parts[ count($implemented_interface->parts)-1 ];
+            $tmp_used_namespace = null;
 
-        foreach ($analysis_result->constructor_params as $constructor_param) {
-            foreach ($analysis_result->used_namespaces as $used_namespace) {
-                if (count($constructor_param->type->parts) == 1) {  //dld exw alias
-                    if (!empty($used_namespace->alias)) {
-                        if ($used_namespace->alias == $constructor_param->type->parts[0]) {
-                            // dump('USED INTERFACE FOUND!! '.$used_namespace->alias.' | '.implode('\\',$used_namespace->name->parts));
-                            $di_interfaces []= (object)[
-                                'name' => $used_namespace->name
-                            ];
-                        }
+            //gia na valw t swsta `use` sthn arxh toy arxeioy
+            foreach ($analysis_result->used_namespaces as $index => $used_namespace) {
+                if (isset($used_namespace->alias)) {
+                    if ($interface_name == $used_namespace->alias) {
+                        $tmp_used_namespace = $used_namespace;
                     }
                 } else {
-                    // TO DO
+                    if ($interface_name == $used_namespace->name->parts[ count($used_namespace->name->parts)-1 ]) {
+                        $tmp_used_namespace = $used_namespace;
+                    }
                 }
             }
 
+            array_pop($tmp_used_namespace->name->parts);
+            $class_implemented_interfaces_namespaces_strings []= implode('\\', $tmp_used_namespace->name->parts );
         }
 
+
+        //gia t interface
+        $used_namespaces_indexes = [];
+        $function_signature_strings = [];
+        foreach ($analysis_result->functions_signature as $function_signature) {
+            $function_signature_string = '';
+
+            //gia tn modifier/access
+            if ($function_signature->flags == 1) {
+                $function_signature_string .= 'public ';
+            } else if ($function_signature->flags == 2) {
+                $function_signature_string .= 'protected ';
+            } else if ($function_signature->flags == 4) {
+                $function_signature_string .= 'private ';
+            }
+
+            //t onoma
+            $function_signature_string .= 'function '.$function_signature->name.'(';
+            
+            //gia tis parametroys
+            if (isset($function_signature->parameters)) {
+                $function_signature_parameters = [];
+                foreach ($function_signature->parameters[0] as $parameter) {
+                    $type = null;
+                    if ($parameter->type) {
+                        $type = $parameter->type;
+                        $type_name = $parameter->type->parts[ count($parameter->type->parts)-1 ];
+
+                        //gia na valw t swsta `use` sthn arxh toy arxeioy
+                        foreach ($analysis_result->used_namespaces as $index => $used_namespace) {
+                            if (isset($used_namespace->alias)) {
+                                if ($type_name == $used_namespace->alias) {
+                                    if (!in_array($index, $used_namespaces_indexes)) {
+                                        $used_namespaces_indexes []= $index;
+                                    }
+                                }
+                            } else {
+                                if ($type_name == $used_namespace->name->parts[ count($used_namespace->name->parts)-1 ]) {
+                                    if (!in_array($index, $used_namespaces_indexes)) {
+                                        $used_namespaces_indexes []= $index;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
+                    if (isset($type) && isset($parameter->var)) {
+                        $function_signature_parameters []= implode('\\',$type->parts).' $'.$parameter->var->name;
+                    } else if (isset($parameter->var)) {
+                        $function_signature_parameters []= '$'.$parameter->var->name;
+                    }
+                }
+
+                $function_signature_string .= implode(', ',$function_signature_parameters).');';
+            } else {
+                $function_signature_string .= ');';
+            }            
+
+
+            $function_signature_strings []= $function_signature_string;
+        }
+
+        //sort $used_namespaces_indexes ascending order
+        sort($used_namespaces_indexes);
+
+        $used_namespaces_strings = [];
+        foreach ($used_namespaces_indexes as $used_namespaces_index) {
+            $used_namespaces_string = 'use ';
+            $tmp_used_namespace = $analysis_result->used_namespaces[$used_namespaces_index];
+
+            $used_namespaces_string .= implode('\\',$tmp_used_namespace->name->parts);
+            if (isset($tmp_used_namespace->alias)) {
+                $used_namespaces_string .= ' as '.$tmp_used_namespace->alias.';';
+            } else {
+                $used_namespaces_string .= ';';
+            }
+
+            $used_namespaces_strings []= $used_namespaces_string;
+        }
+
+
         // dump([
-        //     '$di_interfaces' => $di_interfaces,
+        //     // '$analysis_result' => $analysis_result,
+        //     // '$analysis_result->used_namespaces' => $analysis_result->used_namespaces,
+        //     // '$analysis_result->functions_signature' => $analysis_result->functions_signature,
+        //     // '$used_namespaces_indexes' => $used_namespaces_indexes,
+        //     '$used_namespaces_strings' => $used_namespaces_strings,
+        //     '$function_signature_strings' => $function_signature_strings,
         // ]);
 
-        return $di_interfaces;
-
-        // dump($code);
-
-        // $traverser = new NodeTraverser;
-        // $traverser->addVisitor(new class extends NodeVisitorAbstract {
-        //     public function leaveNode(Node $node) {
-
-        //         dump([
-        //             '$node' => $node,
-        //         ]);
-
-        //         // if ($node instanceof Node\Scalar\LNumber) {
-        //         //     return new Node\Scalar\String_((string) $node->value);
-        //         // }
-        //     }
-        // });
-        // $modifiedStmts = $traverser->traverse($ast);
+        return (object)[
+            'strings' => (object)[
+                'class_implemented_interfaces_namespaces' => $class_implemented_interfaces_namespaces_strings,
+                'class_namespace' => $class_namespace_string,
+                'class_name' => $analysis_result->class_name->name,
+                'used_namespaces' => $used_namespaces_strings,
+                'function_signatures' => $function_signature_strings,
+            ]
+        ];
     }
 
     
