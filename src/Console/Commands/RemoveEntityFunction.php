@@ -32,7 +32,7 @@ class RemoveEntityFunction extends Command
             $name = $this->argument('name');
             
 
-            $crud = new Remove\Function($name);
+            $crud = new Remove\EntityFunction($name);
             
 
             $this->info($name.' removed successfully');
