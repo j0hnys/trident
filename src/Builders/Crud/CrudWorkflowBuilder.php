@@ -41,7 +41,7 @@ class CrudWorkflowBuilder
         //
         //model generation
         $model_path = base_path() . '/app/Models/' . ucfirst($name) . '.php';
-        $output_path = base_path() . '/app/Models/';
+        $output_path = './Models/';
         $table_name = Str::plural( Str::snake($name) );
         $table_name_singular = Str::snake($name);
         if (Schema::hasTable(lcfirst($table_name))) {
