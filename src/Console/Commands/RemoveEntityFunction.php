@@ -12,7 +12,7 @@ class RemoveEntityFunction extends Command
      *
      * @var string
      */
-    protected $signature = "trident:remove:entity_function {name}";
+    protected $signature = "trident:remove:entity_function {entity_name} {function_name}";
 
     /**
      * The console command description.
@@ -29,13 +29,14 @@ class RemoveEntityFunction extends Command
     public function handle()
     {
         try {
-            $name = $this->argument('name');
+            $entity_name = $this->argument('entity_name');
+            $function_name = $this->argument('function_name');
             
 
-            $crud = new Remove\EntityFunction($name);
+            $crud = new Remove\EntityFunction($entity_name, $function_name);
             
 
-            $this->info($name.' removed successfully');
+            $this->info($entity_name.': '.$function_name.' removed successfully');
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
