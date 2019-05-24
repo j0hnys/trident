@@ -18,8 +18,6 @@ interface {{Td_entity}}RepositoryInterface
 
     public function delete($id);
 
-    public function destroy($id);
-
     public function findBy($attribute, $value, array $columns);
 
     public function with(array $relations);
