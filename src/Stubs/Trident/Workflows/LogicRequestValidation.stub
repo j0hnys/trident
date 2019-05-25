@@ -25,7 +25,14 @@ class {{Td_entity}}Request extends FormRequest
      */
     public function rules()
     {
-        return [];
+        return [
+        {{# rules }}
+            {{{rule}}}
+        {{/ rules }}
+        {{^ rules }}
+            //
+        {{/ rules }}
+        ];
 
         // return [
         //     // 'id' => 'required',
@@ -41,7 +48,14 @@ class {{Td_entity}}Request extends FormRequest
      */
     public function messages()
     {
-        return [];
+        return [
+        {{# messages }}
+            {{{message}}}
+        {{/ messages }}
+        {{^ messages }}
+            //
+        {{/ messages }}
+        ];
 
         // return [
         //     // 'id.required' => 'id is required!!',
