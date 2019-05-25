@@ -2,6 +2,8 @@
 
 namespace j0hnys\Trident\Builders;
 
+use function GuzzleHttp\json_decode;
+
 class Validation
 {
     
@@ -12,8 +14,43 @@ class Validation
      */
     public function __construct($td_entity_name, $function_name)
     {
-        
         $name = ucfirst($td_entity_name).ucfirst($function_name);
+
+        $mustache = new \Mustache_Engine;
+
+
+        $schema = [];
+        $configuration = config('trident');
+        if (!empty($configuration)) {
+            if (isset($configuration['solution']['schemas']['folder'])) {
+                $tmp_schemas = $this->getFolderFiles($configuration['solution']['schemas']['folder']);
+
+                foreach ($tmp_schemas as $tmp_schema) {
+                    if ($tmp_schema == $td_entity_name.'.json') {
+                        $schema = json_decode(file_get_contents( $configuration['solution']['schemas']['folder'].'/'.$tmp_schema ),true);
+                    }
+                }
+            }
+        }
+
+
+        $rules = [];
+        $messages = [];
+        if (!empty($schema)) {
+            foreach ($schema as $key => $data) {
+                if (isset($data['input']['validation']['rule'])) {
+                    $rules []= [
+                        'rule' => '\''.$key.'\' => \''.$data['input']['validation']['rule'].'\','
+                    ];
+                }
+                if (isset($data['input']['validation']['message'])) {
+                    $messages []= [
+                        'message' => '\''.$key.'\' => \''.$data['input']['validation']['message'].'\','
+                    ];
+                }
+            }
+        }
+
 
         //
         //workflow logic generation
@@ -25,10 +62,14 @@ class Validation
 
         $this->makeDirectory($workflow_validation_path);
 
-        $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Workflows/LogicRequestValidation.stub');
 
-        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-        $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
+        $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Workflows/LogicRequestValidation.stub');
+        $stub = $mustache->render($stub, [
+            'td_entity' => lcfirst($name),
+            'Td_entity' => ucfirst($name),
+            'rules' => $rules,
+            'messages' => $messages,
+        ]);
         
         file_put_contents($workflow_validation_path, $stub);
         
@@ -49,13 +90,22 @@ class Validation
     }
     
     /**
-     * Get code and save to disk
-     * @return mixed
-     * @throws \Exception
+     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
+     *
+     * @return array
      */
-    public function save()
+    public function getFolderFiles($absolute_folder_path)
     {
-        //
+        $files = scandir($absolute_folder_path);
+
+        $filenames = [];
+        foreach ($files as $file) {
+            if ($file != '.' && $file != '..') {
+                $filenames []= str_replace('.php','',$file);
+            }
+        }
+
+        return $filenames;
     }
 
 }
