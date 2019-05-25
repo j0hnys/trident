@@ -10,8 +10,12 @@ class Struct{{function_name}} extends Struct
     public function __construct()
     {
         parent::__construct([
-            'name' => T::string(),
-            'value' => T::integer(),
+        {{# types }}
+            {{{type}}}
+        {{/ types }}
+        {{^ types }}
+            //
+        {{/ types }}
         ]);
     }
 }
