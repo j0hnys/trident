@@ -64,6 +64,7 @@ class Resources
         $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Resources/'.$resource_type.'.stub');
         $stub = $mustache->render($stub, [
             'Entity_name' => ucfirst($entity_name),
+            'render_types' => !empty($types) ? true : false,
             'types' => $types,
         ]);
         
