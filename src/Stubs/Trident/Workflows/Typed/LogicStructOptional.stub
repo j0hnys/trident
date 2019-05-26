@@ -10,8 +10,12 @@ class Struct{{function_name}}{{Td_entity}} extends StructOptionalValues
     public function __construct($data = [])
     {
         $this->types = [
-            // 'name' => T::string(),
-            // 'value' => T::integer(),
+        {{# types }}
+            {{{type}}}
+        {{/ types }}
+        {{^ types }}
+            //
+        {{/ types }}
         ];
         
         parent::__construct($this->types);

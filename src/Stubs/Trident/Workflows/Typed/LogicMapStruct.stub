@@ -10,8 +10,12 @@ class MapStruct{{function_name}} extends MapStruct
     public function __construct()
     {
         parent::__construct(T::string(),[
-            'name' => T::string(),
-            'value' => T::integer(),
+        {{# types }}
+            {{{type}}}
+        {{/ types }}
+        {{^ types }}
+            //
+        {{/ types }}
         ]);
     }
 }

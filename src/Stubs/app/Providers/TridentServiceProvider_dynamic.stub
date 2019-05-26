@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Container\Container as App;
+use Illuminate\Support\ServiceProvider;
+
+class TridentServiceProvider extends ServiceProvider
+{
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        //
+    }
+
+    /**
+     * Register services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //EDW THA PREPEI NA KANW GENERATED TOYS PROVIDERS MOY!!!
+        {{# register_workflows }}
+        \App::bind('App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface',function($app){
+            return new \App\Trident\Workflows\Logic\{{Td_entity}}(
+                {{interface_class_instantiations}}
+            );
+        });
+        \App::bind('App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface',function($app){
+            return new \App\Trident\Workflows\Repositories\{{Td_entity}}Repository($app);
+        });
+        {{/ register_workflows }}
+        {{# register_business }}
+        \App::bind('App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface',function($app){
+            {{interface_class_instantiations}}
+        });
+        {{/ register_business }}
+    }
+}

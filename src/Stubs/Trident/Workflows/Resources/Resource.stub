@@ -14,6 +14,14 @@ class {{Entity_name}}Resource extends JsonResource
      */
     public function toArray($request)
     {
+        {{# render_types }}
+        return [
+        {{# types }}
+            {{{type}}}
+        {{/ types }}
+        ];
+        {{/ render_types }}
+
         // return [
         //     'id' => $this->id,
         //     'name' => $this->name,
