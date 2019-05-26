@@ -12,7 +12,7 @@ class RemoveEntity extends Command
      *
      * @var string
      */
-    protected $signature = "trident:remove:entity {name}";
+    protected $signature = "trident:remove:entity {td_entity_name}";
 
     /**
      * The console command description.
@@ -29,13 +29,13 @@ class RemoveEntity extends Command
     public function handle()
     {
         try {
-            $name = $this->argument('name');
+            $td_entity_name = $this->argument('td_entity_name');
             
 
-            $crud = new Remove\Entity($name);
+            $crud = new Remove\Entity($td_entity_name);
             
 
-            $this->info($name.' removed successfully');
+            $this->info($td_entity_name.' removed successfully');
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());

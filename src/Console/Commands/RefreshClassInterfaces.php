@@ -12,7 +12,7 @@ class RefreshClassInterfaces extends Command
      *
      * @var string
      */
-    protected $signature = "trident:refresh:class_interfaces {type}";
+    protected $signature = "trident:refresh:class_interfaces {td_entity_type}";
 
     /**
      * The console command description.
@@ -29,16 +29,16 @@ class RefreshClassInterfaces extends Command
     public function handle()
     {
         try {
-            $type = $this->argument('type');
+            $td_entity_type = $this->argument('td_entity_type');
             
 
             $crud = new Refresh\ClassInterfaces(
                 $this,
-                $type
+                $td_entity_type
             );
             
 
-            $this->info($type.'Interface updated successfully!');
+            $this->info($td_entity_type.'Interface updated successfully!');
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
