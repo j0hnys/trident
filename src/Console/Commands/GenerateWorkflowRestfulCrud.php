@@ -4,6 +4,8 @@ namespace j0hnys\Trident\Console\Commands;
 
 use Illuminate\Console\Command;
 use j0hnys\Trident\Builders;
+use j0hnys\Trident\Base\Constants\Declarations;
+
 
 class GenerateWorkflowRestfulCrud extends Command
 {
@@ -21,6 +23,15 @@ class GenerateWorkflowRestfulCrud extends Command
      */
     protected $description = 'Create a workflow with the accompanied restful crud';
     
+    public function __construct()
+    {
+        parent::__construct();
+
+        Declarations::TRIDENT;
+
+        dd('in here');
+    }
+
     /**
      * Execute the console command.
      *
