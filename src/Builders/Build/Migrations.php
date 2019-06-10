@@ -19,7 +19,7 @@ class Migrations
      * @param Command $command
      * @return void
      */
-    public function generate(string $output_path, Command $command): void
+    public function generate(?string $output_path, Command $command): void
     {
         $output_path = !empty($output_path) ? $output_path : $this->storage_disk->getBasePath().'/database/generated_migrations/';
             

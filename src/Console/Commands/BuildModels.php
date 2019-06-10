@@ -21,6 +21,16 @@ class BuildModels extends Command
      */
     protected $description = 'Create all models from current database connection';
     
+    private $models;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->models = new Build\Models();
+
+    }
+
     /**
      * Execute the console command.
      *
@@ -29,12 +39,10 @@ class BuildModels extends Command
     public function handle()
     {
         try {
-            $output_path = !empty($this->option('output-path')) ? $this->option('output-path') : base_path().'/database/generated_models/';
-            
-            $this->makeDirectory($output_path);
-            
+            $output_path = $this->option('output-path');
+                        
 
-            $crud = new Build\Models([
+            $crud = $this->models->generate([
                 'output_path' => $output_path,
             ], $this);
 
