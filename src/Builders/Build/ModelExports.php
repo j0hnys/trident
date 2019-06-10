@@ -27,8 +27,6 @@ class ModelExports
                 '--output-path' => $output_path,
             ]);
         }
-    
-
     }
 
 

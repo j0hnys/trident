@@ -15,6 +15,14 @@ class Disk
     }
 
     /**
+     * @return string
+     */
+    public function getBasePath(): string
+    {
+        return $this->base_path;
+    }
+
+    /**
      * @param string $path
      * @param array $options
      * @return string
@@ -47,6 +55,15 @@ class Disk
 
     /**
      * @param string $path
+     * @return boolean
+     */
+    public function fileExists(string $path): bool
+    {
+        return file_exists($path);
+    }
+
+    /**
+     * @param string $path
      * @return array
      */
     public function getFolderFileNames(string $path): array
@@ -67,7 +84,7 @@ class Disk
      * @param string $path
      * @return void
      */
-    protected function makeDirectory(string $path): void
+    public function makeDirectory(string $path): void
     {
         if (!is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
@@ -137,7 +154,7 @@ class Disk
      * @param string $destination
      * @return void
      */
-    protected function copyFoldersAndFiles(string $source, string $destination): void
+    public function copyFoldersAndFiles(string $source, string $destination): void
     {
         foreach (
         $iterator = new \RecursiveIteratorIterator(

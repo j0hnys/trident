@@ -23,6 +23,9 @@ class GenerateWorkflowRestfulCrud extends Command
      */
     protected $description = 'Create a workflow with the accompanied restful crud';
     
+    private $crud_builder;
+    private $crud_workflow_builder;
+
     public function __construct()
     {
         parent::__construct();
@@ -30,6 +33,8 @@ class GenerateWorkflowRestfulCrud extends Command
         $Declarations = new Declarations();
         $Declarations->get();
 
+        $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder();
+        $this->crud_workflow_builder = new Builders\WorkflowRestfulCrud();
         
     }
 
@@ -42,62 +47,11 @@ class GenerateWorkflowRestfulCrud extends Command
     {
         try {
             $name = $this->argument('name');
-            
-            //crud building
-            $crud = new Builders\Crud\CrudWorkflowBuilder($name, $this);
-            
+                        
             //workflow building
-            $crud = new Builders\WorkflowRestfulCrud($name);
+            $crud = $this->crud_workflow_builder->generate($name, $this);
 
-            //new model factory
-            $this->call('trident:generate:factory', [
-                'model' => 'App\\Models\\'.ucfirst($name),  //<-- PROSOXH!! (prepei na einai array...) //ucfirst($name).'Factory'
-            ]);
             
-            //new validation class for restful crud store
-            $this->call('trident:generate:validation', [
-                'entity_name' => $name,
-                'function_name' => 'store',
-            ]);
-
-            //new validation class for restful crud update
-            $this->call('trident:generate:validation', [
-                'entity_name' => $name,
-                'function_name' => 'update',
-            ]);
-            
-            // Make the basic strict types for crud
-            $this->call('trident:generate:strict_type', [
-                'strict_type_name' => 'struct_optional',
-                'function_name' => 'store',
-                'entity_name' => ucfirst($name),
-                '--workflow' => true,
-            ]);
-            $this->call('trident:generate:strict_type', [
-                'strict_type_name' => 'struct_optional',
-                'function_name' => 'update',
-                'entity_name' => ucfirst($name),
-                '--workflow' => true,
-            ]);
-            $this->call('trident:generate:strict_type', [
-                'strict_type_name' => 'struct_optional',
-                'function_name' => 'index',
-                'entity_name' => ucfirst($name),
-                '--workflow' => true,
-            ]);
-            
-            // Make the basic resource and it's collection
-            $this->call('trident:generate:resource', [
-                'entity_name' => ucfirst($name),
-                '--collection' => false,
-                '--workflow' => true,
-            ]);
-            $this->call('trident:generate:resource', [
-                'entity_name' => ucfirst($name),
-                '--collection' => true,
-                '--workflow' => true,
-            ]);
-
             $this->info($name.' workflow restful crud successfully created');
             
         } catch (\Exception $ex) {
