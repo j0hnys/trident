@@ -30,11 +30,7 @@ class GenerateWorkflowRestfulCrud extends Command
         $Declarations = new Declarations();
         $Declarations->get();
 
-        // dump([
-        //     '$Declarations->get()' => $Declarations->get(),
-        // ]);
-
-        // dd('in here');
+        
     }
 
     /**
