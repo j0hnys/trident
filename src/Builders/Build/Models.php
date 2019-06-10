@@ -19,8 +19,6 @@ class Models
         $table_names = \DB::connection()->getDoctrineSchemaManager()->listTableNames();
         
         foreach ($table_names as $table_name) {
-            //new validation class
-
             $camel_case_table_name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table_name)));
             $camel_case_table_name[0] = strtoupper($camel_case_table_name[0]);
 

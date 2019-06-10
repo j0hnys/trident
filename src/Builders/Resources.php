@@ -53,11 +53,6 @@ class Resources
         }
 
 
-        // dd([
-        //     '$types' => $types,
-        // ]);
-
-
         $this->makeDirectory($struct_path);
         
         

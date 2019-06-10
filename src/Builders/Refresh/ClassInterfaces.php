@@ -13,12 +13,6 @@ class ClassInterfaces
      */
     public function __construct($command, $type)
     {
-        // $name = 'DemoProcess';
-        // $input_path = base_path().'/'.'app/Trident/Workflows/Logic';
-        // $output_path = base_path().'/'.'app/Trident/Interfaces/Workflows/Logic';
-
-
-        // dd('dsmsdlkmcdsmklsdmcl');
 
         if ($type == 'workflows') {
             $workflow_names = $this->getCurrentWorkflows();
@@ -41,8 +35,6 @@ class ClassInterfaces
                 ]);
             }
         }
-
-
 
 
     }

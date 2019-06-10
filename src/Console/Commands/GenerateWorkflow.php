@@ -33,8 +33,7 @@ class GenerateWorkflow extends Command
             
 
             $crud = new Builders\Workflow($name);
-            // $controllerCrud->save();
-
+            
 
             $this->info($name.' workflow successfully created');
             

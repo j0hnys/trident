@@ -33,8 +33,7 @@ class GenerateWorkflowTests extends Command
             
 
             $crud = new Tests\Workflow($name);
-            // $controllerCrud->save();
-
+            
 
             $this->info($name.' workflow tests successfully created');
             

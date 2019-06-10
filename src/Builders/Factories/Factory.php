@@ -33,12 +33,9 @@ class Factory
         $mustache = new \Mustache_Engine;
         $this->laravel = $laravel;
 
-
         if (empty($model)) {
             throw new \Exception("model name cannot be empty", 1);
         }
-
-
 
         //
         //
@@ -53,19 +50,14 @@ class Factory
         if (file_exists($fullpath_to_create)) {
             throw new \Exception($fullpath_to_create . ' already exists!');
         }
-        
-
-        // $this->comment("Loading model '$model'");
-        
 
         if (!$reflectionClass->IsInstantiable()) {
             // ignore abstract class or interface
             throw new \Exception($fullpath_to_create . ' cannot be instantiated');
         }
 
-        $model_instance = $this->laravel->make($model);
 
-        // dd($model_instance);
+        $model_instance = $this->laravel->make($model);
 
         $properties = [];
 
@@ -74,12 +66,6 @@ class Factory
         $methods = $this->getPropertiesFromMethods($model_instance);
 
         $properties = array_values(array_merge($properties_from_table, $methods));
-
-        // $output = $this->createFactory($model);
-            
-
-        // dd($properties);
-
 
         $factory_path = base_path().'/database/factories/Models/'.$reflectionClass->getShortName().'.php';
         $stub = file_get_contents(__DIR__.'/../../Stubs/database/factories/Factory.stub');
@@ -354,15 +340,5 @@ class Factory
         return $filenames;
     }
 
-
-    /**
-     * Get code and save to disk
-     * @return mixed
-     * @throws \Exception
-     */
-    public function save()
-    {
-        //
-    }
 
 }

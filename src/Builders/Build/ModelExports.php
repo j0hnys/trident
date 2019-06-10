@@ -20,8 +20,6 @@ class ModelExports
         $files = $this->getFolderFileNames($input_path);
 
         foreach ($files as $file) {
-            //new validation class
-
             $file_name = str_replace('.php', '', $file);
             
             $command->call('trident:export:model', [

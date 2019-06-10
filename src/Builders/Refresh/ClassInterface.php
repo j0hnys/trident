@@ -17,10 +17,6 @@ class ClassInterface
      */
     public function __construct($name, $relative_input_path, $relative_output_path)
     {
-        // $name = 'DemoProcess';
-        // $input_path = base_path().'/'.'app/Trident/Workflows/Logic';
-        // $output_path = base_path().'/'.'app/Trident/Interfaces/Workflows/Logic';
-
         $input_path = base_path().'/'.$relative_input_path;
         $output_path = base_path().'/'.$relative_output_path;
         
@@ -72,11 +68,6 @@ class ClassInterface
             return;
         }
 
-        // $dumper = new NodeDumper;
-        // // dump($ast[0]->exprs);
-        // echo $dumper->dump($ast) . "\n"; exit;
-        
-
         $analysis_result = (object)[
             'class_namespace' => null,
             'class_name' => '',
@@ -93,9 +84,7 @@ class ClassInterface
 
 
             if ($node instanceof Node\Stmt\Use_) {
-
                 $analysis_result->used_namespaces []= $node->uses[0];
-
             }
 
             if ($node instanceof Node\Stmt\Class_) {
@@ -243,16 +232,7 @@ class ClassInterface
 
             $used_namespaces_strings []= $used_namespaces_string;
         }
-
-
-        // dump([
-        //     // '$analysis_result' => $analysis_result,
-        //     // '$analysis_result->used_namespaces' => $analysis_result->used_namespaces,
-        //     // '$analysis_result->functions_signature' => $analysis_result->functions_signature,
-        //     // '$used_namespaces_indexes' => $used_namespaces_indexes,
-        //     '$used_namespaces_strings' => $used_namespaces_strings,
-        //     '$function_signature_strings' => $function_signature_strings,
-        // ]);
+        
 
         return (object)[
             'strings' => (object)[

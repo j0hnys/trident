@@ -34,8 +34,7 @@ class GenerateResource extends Command
             $domain = $this->option('workflow')?'Workflows':'Business';
             
             $crud = new Builders\Resources($entity_name, $is_collection, $domain);
-            // $controllerCrud->save();
-
+            
             $collection_message = $is_collection?' Collection':'';
             $this->info($entity_name.' Resource'.$collection_message.' successfully created for '.$domain);
             

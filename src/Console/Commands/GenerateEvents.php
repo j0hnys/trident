@@ -35,8 +35,7 @@ class GenerateEvents extends Command
             
 
             $crud = new Builders\Events($td_entity_type, $event_type, $td_entity_name);
-            // $controllerCrud->save();
-
+            
 
             $this->info($td_entity_type.' '.$td_entity_name.' event successfully created');
             

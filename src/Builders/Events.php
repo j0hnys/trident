@@ -40,9 +40,7 @@ class Events
             $workflow_event_path = base_path().'/app/Trident/'.$type.'/Events/Triggers/'.$td_entity_name.'Trigger.php';
             
             if (!file_exists($workflow_event_path)) {
-                // throw new \Exception(ucfirst(strtolower($td_entity_name)) . ' trigger already exists!');
-                // echo ucfirst(strtolower($td_entity_name)) . ' trigger already exists!'."\n";
-            
+                
                 $this->makeDirectory($workflow_event_path);
 
                 $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$type.'/Events/LogicTrigger.stub');
@@ -57,8 +55,7 @@ class Events
             $workflow_event_path = base_path().'/app/Trident/'.$type.'/Events/Listeners/'.$td_entity_name.'Listener.php';
             
             if (!file_exists($workflow_event_path)) {
-                // throw new \Exception(ucfirst(strtolower($td_entity_name)) . ' listener already exists!');
-
+                
                 $this->makeDirectory($workflow_event_path);
 
                 $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$type.'/Events/LogicListener.stub');
@@ -74,7 +71,6 @@ class Events
             $workflow_event_path = base_path().'/app/Trident/'.$type.'/Events/Subscribers/'.$td_entity_name.ucfirst($event_type).'.php';
             
             if (!file_exists($workflow_event_path)) {
-                // throw new \Exception(ucfirst(strtolower($td_entity_name)) . ' event already exists!');
                 
                 $this->makeDirectory($workflow_event_path);
                 
@@ -166,16 +162,6 @@ class Events
         if (!is_dir(dirname($path))) {
             mkdir(dirname($path), 0777, true);
         }
-    }
-    
-    /**
-     * Get code and save to disk
-     * @return mixed
-     * @throws \Exception
-     */
-    public function save()
-    {
-        //
     }
 
 }

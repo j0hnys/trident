@@ -16,11 +16,7 @@ class EntityFunction
      * @throws \Exception
      */
     public function __construct($name, $function_name)
-    {
-        // $name = 'DemoProcess';
-        // $function_name = 'update';
-
-        
+    {        
         //
         //
         //workflow
@@ -107,26 +103,8 @@ class EntityFunction
         }
         //
         //
-        //
+        //   
 
-
-
-
-        // dump([
-        //     // '$used_namespace_paths' => $used_namespace_paths,
-        //     '$workflow_result' => $workflow_result,
-        // ]);
-
-        
-        
-
-
-
-
-        return true;
-
-
-        
     }
 
 
@@ -139,11 +117,6 @@ class EntityFunction
             echo "Parse error: {$error->getMessage()}\n";
             return;
         }
-
-        // $dumper = new NodeDumper;
-        // // dump($ast[0]->exprs);
-        // echo $dumper->dump($ast) . "\n"; exit;
-        
 
         $analysis_result = (object)[
             'class_namespace' => null,
@@ -171,12 +144,6 @@ class EntityFunction
             if ($node instanceof Node\Stmt\ClassMethod) {
 
                 if ($node->name == $function_name) {
-                    // dd([
-                    //     // '$node' => $node,
-                    //     '$node->returnType' => $node->returnType,
-                    //     // '$node->getAttributes()' => $node->getAttributes()['comments'][0]->getLine(),
-                    // ]);
-
                     $tmp_function = (object)[
                         'flags' => $node->flags,  //dld public (1), protected (2), private (4), e.t.c.
                         'name' => $node->name,
@@ -219,9 +186,6 @@ class EntityFunction
 
         });
 
-        // dd([
-        //     '$analysis_result' => $analysis_result,
-        // ]);
 
         $class_namespace_string = '';
         if (isset($analysis_result->class_namespace)) {
@@ -250,9 +214,6 @@ class EntityFunction
             $class_implemented_interfaces_namespaces_strings []= implode('\\', $tmp_used_namespace->name->parts );
         }
 
-        // dd([
-        //     '$analysis_result->function_signature_' => $analysis_result->function_signature_,
-        // ]);
 
         //gia t interface
         $used_namespaces_indexes = [];
@@ -311,8 +272,7 @@ class EntityFunction
                 }
             }   
              
-        }
-        
+        }        
 
         //sort $used_namespaces_indexes ascending order
         sort($used_namespaces_indexes);
@@ -321,16 +281,6 @@ class EntityFunction
             $analysis_result->function_signature_->used_namespaces_indexes = $used_namespaces_indexes;        
         }
 
-
-
-        // dump([
-        //     '$analysis_result' => $analysis_result,
-        //     // '$analysis_result->used_namespaces' => $analysis_result->used_namespaces,
-        //     // '$analysis_result->functions_signature' => $analysis_result->functions_signature,
-        //     // '$used_namespaces_indexes' => $used_namespaces_indexes,
-        //     // '$used_namespaces_strings' => $used_namespaces_strings,
-        //     // '$function_signature_strings' => $function_signature_strings,
-        // ]);
 
         return $analysis_result;
     }

@@ -34,8 +34,7 @@ class GenerateWorkflowTestLogicFunction extends Command
             
 
             $crud = new Tests\WorkflowLogicFunction($entity_name, $function_name);
-            // $controllerCrud->save();
-
+            
 
             $this->info('function "'. $function_name.'" successfully created');
             

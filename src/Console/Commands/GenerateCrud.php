@@ -33,8 +33,7 @@ class GenerateCrud extends Command
             
 
             $crud = new Crud\CrudBuilder($name);
-            // $controllerCrud->save();
-
+            
 
             $this->info($name.' RESTFUL CRUD successfully created');
             

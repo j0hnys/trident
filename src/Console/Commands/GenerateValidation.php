@@ -34,8 +34,7 @@ class GenerateValidation extends Command
             
 
             $crud = new Builders\Validation($entity_name, $function_name);
-            // $controllerCrud->save();
-
+            
 
             $this->info($entity_name.' '.$function_name.' validation successfully created');
             

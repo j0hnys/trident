@@ -36,13 +36,6 @@ class BusinessLogicFunction
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         
         file_put_contents($business_logic_path, $stub, FILE_APPEND);
-        
-
-        // $this->call('email:send', [
-        //     'user' => 1, '--queue' => 'default'
-        // ]);
-
-
     }
     
      /**

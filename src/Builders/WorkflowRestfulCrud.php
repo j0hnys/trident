@@ -127,10 +127,8 @@ class WorkflowRestfulCrud
             'register_business' => $businesses,
         ]);
 
+
         file_put_contents($trident_event_service_provider_path, $stub);
-
-
-
     }
     
      /**
@@ -208,16 +206,6 @@ class WorkflowRestfulCrud
 
         return $filenames;
     }
-
-
-    /**
-     * Get code and save to disk
-     * @return mixed
-     * @throws \Exception
-     */
-    public function save()
-    {
-        //
-    }
+    
 
 }

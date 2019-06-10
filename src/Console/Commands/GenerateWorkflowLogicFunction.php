@@ -64,7 +64,6 @@ class GenerateWorkflowLogicFunction extends Command
                 'function_name' => $function_name,
             ]);
 
-            ////use App\Trident\Workflows\Validations\Super_testRequest;
             
             $controller_class_name = ucfirst($entity_name).'Controller.php';
             $validation_class_name = ucfirst($entity_name).ucfirst($function_name);

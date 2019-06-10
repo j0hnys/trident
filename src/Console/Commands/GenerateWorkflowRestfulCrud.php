@@ -27,9 +27,14 @@ class GenerateWorkflowRestfulCrud extends Command
     {
         parent::__construct();
 
-        Declarations::TRIDENT;
+        $Declarations = new Declarations();
+        $Declarations->get();
 
-        dd('in here');
+        // dump([
+        //     '$Declarations->get()' => $Declarations->get(),
+        // ]);
+
+        // dd('in here');
     }
 
     /**

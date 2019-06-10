@@ -27,8 +27,7 @@ class ControllerFunction
         $fp = fopen($controller_path, 'w'); 
         fwrite($fp, implode('', $lines)); 
         fclose($fp); 
-
-
+        
         $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/ControllerFunction.stub');
 
         $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
@@ -36,13 +35,6 @@ class ControllerFunction
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         
         file_put_contents($controller_path, $stub, FILE_APPEND);
-        
-
-        // $this->call('email:send', [
-        //     'user' => 1, '--queue' => 'default'
-        // ]);
-
-
     }
     
      /**

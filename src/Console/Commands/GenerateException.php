@@ -34,8 +34,7 @@ class GenerateException extends Command
             
 
             $crud = new Builders\Exception($td_entity_type, $td_entity_name);
-            // $controllerCrud->save();
-
+            
 
             $this->info($td_entity_type.' '.$td_entity_name.' exception successfully created');
             

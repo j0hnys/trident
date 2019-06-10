@@ -32,8 +32,7 @@ class GenerateFactory extends Command
             $model = $this->argument('model');
             
             $crud = new Factories\Factory($this->laravel,$model);
-            // $controllerCrud->save();
-
+            
 
             $this->info($model.' factory successfully created');
             

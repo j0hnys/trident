@@ -28,14 +28,9 @@ class RefreshDIBinds extends Command
      */
     public function handle()
     {
-        try {
-            // $name = $this->argument('name');
-            
+        try {            
 
-            $crud = new Refresh\DIBinds();
-            
-
-            // $this->info($name.' workflow tests successfully created');
+            $crud = new Refresh\DIBinds();            
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());

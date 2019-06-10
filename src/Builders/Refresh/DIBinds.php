@@ -85,16 +85,7 @@ class DIBinds
             }
         }
 
-
-        // dump([
-        //     // '$Td_entities_workflows' => $Td_entities_workflows,
-        //     // '$Td_entities_businesses' => $Td_entities_businesses,
-        //     // '$workflow_logic_di_interfaces' => $workflow_logic_di_interfaces,
-        //     // '$business_logic_di_interfaces' => $business_logic_di_interfaces,
-        //     '$workflow_logic_interface_class_instantiations_string' => $workflow_logic_interface_class_instantiations_string,
-        //     '$business_logic_interface_class_instantiations_string' => $business_logic_interface_class_instantiations_string,
-        // ]);
-
+        
         //
         //update TridentServiceProvider
         $workflows = [];
@@ -142,11 +133,6 @@ class DIBinds
             return;
         }
 
-        // $dumper = new NodeDumper;
-        // dump($ast[0]->exprs);
-        // echo $dumper->dump($ast) . "\n";
-
-
         $analysis_result = (object)[
             'used_namespaces' => [],
             'constructor_params' => [],
@@ -155,19 +141,7 @@ class DIBinds
         $nodeFinder = new NodeFinder;
         $nodeFinder->find($ast, function(Node $node) use (&$analysis_result){
             if ($node instanceof Node\Stmt\Use_) {
-                // dump([
-                //     // '$node->getAttributes()' => $node->getAttributes(),
-                //     // '$node->getSubNodeNames()' => $node->getSubNodeNames(),
-                //     // '$node->getLine()' => $node->getLine(),
-                //     // '$node->getType()' => $node->getType(),
-                //     // '$node->uses[0]->name->parts' => $node->uses[0]->name->parts,
-                //     '$node' => $node,
-                //     // '$node->uses[0]->name->parts' => $node->uses[0]->name->parts,
-                //     // '$node->uses[0]->alias' => $node->uses[0]->alias,
-                // ]);
-
                 $analysis_result->used_namespaces []= $node->uses[0];
-
             }
 
             if ($node instanceof Node\Stmt\ClassMethod) {
@@ -187,9 +161,6 @@ class DIBinds
 
         });
 
-        // dump([
-        //     '$analysis_result' => $analysis_result,
-        // ]);
 
         $di_interfaces = [];
 
@@ -198,7 +169,6 @@ class DIBinds
                 if (count($constructor_param->type->parts) == 1) {  //dld exw alias
                     if (!empty($used_namespace->alias)) {
                         if ($used_namespace->alias == $constructor_param->type->parts[0]) {
-                            // dump('USED INTERFACE FOUND!! '.$used_namespace->alias.' | '.implode('\\',$used_namespace->name->parts));
                             $di_interfaces []= (object)[
                                 'name' => $used_namespace->name
                             ];
@@ -211,28 +181,8 @@ class DIBinds
 
         }
 
-        // dump([
-        //     '$di_interfaces' => $di_interfaces,
-        // ]);
 
         return $di_interfaces;
-
-        // dump($code);
-
-        // $traverser = new NodeTraverser;
-        // $traverser->addVisitor(new class extends NodeVisitorAbstract {
-        //     public function leaveNode(Node $node) {
-
-        //         dump([
-        //             '$node' => $node,
-        //         ]);
-
-        //         // if ($node instanceof Node\Scalar\LNumber) {
-        //         //     return new Node\Scalar\String_((string) $node->value);
-        //         // }
-        //     }
-        // });
-        // $modifiedStmts = $traverser->traverse($ast);
     }
 
     

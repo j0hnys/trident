@@ -36,13 +36,6 @@ class PolicyFunction
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         
         file_put_contents($policy_path, $stub, FILE_APPEND);
-        
-
-        // $this->call('email:send', [
-        //     'user' => 1, '--queue' => 'default'
-        // ]);
-
-
     }
     
      /**
