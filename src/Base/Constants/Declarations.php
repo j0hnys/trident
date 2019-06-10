@@ -19,9 +19,46 @@ class Declarations
         'STRUCT_OPTIONAL' => true,
     ];
 
-    public function get() {
+    /**
+     * @return array
+     */
+    public function get(): array {
         $oClass = new \ReflectionClass(__CLASS__);
-        
-        return $oClass->getConstants();
+        $constants = $oClass->getConstants();
+
+        return $constants;
     }
+
+
+    function arraySearchRecursive($needle, $haystack, $strict = false, $path = [])
+    {
+        if ( !is_array($haystack) ) {
+            return false;
+        }
+    
+        foreach( $haystack as $key => $val ) {
+            if (is_array($val) && $subPath = arraySearchRecursive($needle, $val, $strict, $path) ) {
+                $path = array_merge($path, [$key], $subPath);
+                return $path;
+            } else if ( (!$strict && $val == $needle) || ($strict && $val === $needle) ) {
+                $path []= $key;
+                return $path;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param string $constant
+     * @return array
+     */
+    public function search(string $constant): array
+    {
+        $all_constants = $this->get();
+        
+        
+    }
+
 }
