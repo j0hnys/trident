@@ -3,7 +3,7 @@
 namespace j0hnys\Trident\Console\Commands;
 
 use Illuminate\Console\Command;
-use j0hnys\Trident\Builders;
+use j0hnys\Trident\Builders\Build\Migrations;
 
 class BuildMigrations extends Command
 {
@@ -21,6 +21,15 @@ class BuildMigrations extends Command
      */
     protected $description = 'Create all migrations from current database connection';
     
+    private $migrations;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->migrations = new Migrations();
+    }
+
     /**
      * Execute the console command.
      *
@@ -29,32 +38,14 @@ class BuildMigrations extends Command
     public function handle()
     {
         try {
-            $output_path = !empty($this->option('output-path')) ? $this->option('output-path') : base_path().'/database/generated_migrations/';
+            $output_path = $this->option('output-path');
             
-            $this->makeDirectory($output_path);
-            
-            //new validation class
-            $this->call('migrate:generate', [
-                '-p' => $output_path,
-            ]);
+            $this->migrations->generate($output_path, $this);
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
         }
     }
-
-
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir(($path))) {
-            mkdir(($path), 0777, true);
-        }
-    }
+    
 
 }
