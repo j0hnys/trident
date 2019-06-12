@@ -21,6 +21,16 @@ class GenerateEvents extends Command
      */
     protected $description = 'Create an event';
     
+    private $events;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->events = new Builders\Events();
+
+    }
+
     /**
      * Execute the console command.
      *
@@ -34,7 +44,7 @@ class GenerateEvents extends Command
             $td_entity_name = $this->argument('td_entity_name');
             
 
-            $crud = new Builders\Events($td_entity_type, $event_type, $td_entity_name);
+            $crud = $this->events->generate($td_entity_type, $event_type, $td_entity_name);
             
 
             $this->info($td_entity_type.' '.$td_entity_name.' event successfully created');

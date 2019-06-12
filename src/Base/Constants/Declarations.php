@@ -5,18 +5,42 @@ namespace j0hnys\Trident\Base\Constants;
 class Declarations
 {
     const ENTITIES = [
-        'WORKFLOW' => true,
-        'BUSINESS' => true,
+        'WORKFLOW' => [
+            'name' => 'workflow',
+            'enabled' => true
+        ],
+        'BUSINESS' => [
+            'name' => 'business',
+            'enabled' => true
+        ],
     ];
     const EVENTS = [
-        'SUBSCRIBER' => true,
-        'TRIGGER_LISTENER' => true,
+        'SUBSCRIBER' => [
+            'name' => 'subscriber',
+            'enabled' => true
+        ],
+        'TRIGGER_LISTENER' => [
+            'name' => 'trigger_listener',
+            'enabled' => true
+        ],
     ];
     const STRICT_TYPES = [
-        'STRUCT' => true,
-        'COLLECTION_STRUCT' => true,
-        'MAP_STRUCT' => true,
-        'STRUCT_OPTIONAL' => true,
+        'STRUCT' => [
+            'name' => 'struct',
+            'enabled' => true
+        ],
+        'COLLECTION_STRUCT' => [
+            'name' => 'collection_struct',
+            'enabled' => true
+        ],
+        'MAP_STRUCT' => [
+            'name' => 'map_struct',
+            'enabled' => true
+        ],
+        'STRUCT_OPTIONAL' => [
+            'name' => 'struct_optional',
+            'enabled' => true
+        ],
     ];
 
     /**

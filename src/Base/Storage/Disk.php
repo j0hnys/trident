@@ -50,7 +50,24 @@ class Disk
      */
     public function writeFile(string $path, string $content, array $options = [])
     {
-        return file_put_contents($path,$content);
+        $option = '';
+        if (isset($options['append_file'])) {
+            $option = FILE_APPEND;
+        }
+
+        if (!empty($option)) {
+            return file_put_contents($path,$content,$option);
+        } else {
+            return file_put_contents($path,$content);
+        }
+    }
+
+
+    public function writeFileArray(string $path, array $lines, array $options = [])
+    {
+        $fp = fopen($path, 'w'); 
+        fwrite($fp, implode('', $lines)); 
+        fclose($fp);
     }
 
     /**

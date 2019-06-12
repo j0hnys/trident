@@ -21,6 +21,16 @@ class GenerateBusinessLogicFunction extends Command
      */
     protected $description = 'Create a business logic function';
     
+    private $business_logic_function;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->business_logic_function = new Builders\BusinessLogicFunction();
+
+    }
+
     /**
      * Execute the console command.
      *
@@ -33,7 +43,7 @@ class GenerateBusinessLogicFunction extends Command
             $function_name = $this->argument('function_name');
             
 
-            $builders = new Builders\BusinessLogicFunction($entity_name, $function_name);
+            $builders = $this->business_logic_function->generate($entity_name, $function_name);
             
 
             $this->info($entity_name.' '.$function_name.' business logic function successfully created');
