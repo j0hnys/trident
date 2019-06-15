@@ -20,6 +20,16 @@ class GenerateWorkflow extends Command
      * @var string
      */
     protected $description = 'Create a workflow';
+
+    private $workflow;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->workflow = new Builders\Workflow();
+
+    }
     
     /**
      * Execute the console command.
@@ -32,7 +42,7 @@ class GenerateWorkflow extends Command
             $name = $this->argument('name');
             
 
-            $crud = new Builders\Workflow($name);
+            $crud = $this->workflow->generate($name);
             
 
             $this->info($name.' workflow successfully created');
