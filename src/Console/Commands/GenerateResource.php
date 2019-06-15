@@ -20,6 +20,16 @@ class GenerateResource extends Command
      * @var string
      */
     protected $description = 'Create a resource';
+
+    private $resources;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->resources = new Builders\Resources();
+
+    }
     
     /**
      * Execute the console command.
@@ -33,7 +43,7 @@ class GenerateResource extends Command
             $is_collection = $this->option('collection');
             $domain = $this->option('workflow')?'Workflows':'Business';
             
-            $crud = new Builders\Resources($entity_name, $is_collection, $domain);
+            $crud = $this->resources->generate($entity_name, $is_collection, $domain);
             
             $collection_message = $is_collection?' Collection':'';
             $this->info($entity_name.' Resource'.$collection_message.' successfully created for '.$domain);

@@ -20,6 +20,16 @@ class GenerateStrictType extends Command
      * @var string
      */
     protected $description = 'Create a strict type';
+
+    private $strict_type;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->strict_type = new Builders\StrictType();
+
+    }
     
     /**
      * Execute the console command.
@@ -34,7 +44,7 @@ class GenerateStrictType extends Command
             $entity_name = $this->argument('entity_name');
             $domain = $this->option('workflow')?'Workflows':'Business';
             
-            new Builders\StrictType($strict_type_name, $function_name, $entity_name, $domain);
+            $this->strict_type->generate($strict_type_name, $function_name, $entity_name, $domain);
 
             $this->info($strict_type_name.' '.$entity_name.' '.$function_name.' strict type successfully created for '.$domain);
             

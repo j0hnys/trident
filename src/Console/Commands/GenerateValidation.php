@@ -20,6 +20,16 @@ class GenerateValidation extends Command
      * @var string
      */
     protected $description = 'Create a validation';
+
+    private $validation;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->validation = new Builders\Validation();
+
+    }
     
     /**
      * Execute the console command.
@@ -33,7 +43,7 @@ class GenerateValidation extends Command
             $function_name = $this->argument('function_name');
             
 
-            $crud = new Builders\Validation($entity_name, $function_name);
+            $crud = $this->validation->generate($entity_name, $function_name);
             
 
             $this->info($entity_name.' '.$function_name.' validation successfully created');

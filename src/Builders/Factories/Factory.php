@@ -13,6 +13,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\ClassLoader\ClassMapGenerator;
 
+use j0hnys\Trident\Base\Storage\Disk;
+
 class Factory
 {
     
@@ -21,16 +23,22 @@ class Factory
      */
     protected $laravel;
 
+    private $storage_disk;
+
+    public function __construct()
+    {
+        $this->storage_disk = new Disk();
+        $this->mustache = new \Mustache_Engine;
+    }
+
 
     /**
      * Crud constructor.
      * @param string $name
      * @throws \Exception
      */
-    public function __construct($laravel, string $model = '')
+    public function generate($laravel, string $model = '')
     {
-        
-        $mustache = new \Mustache_Engine;
         $this->laravel = $laravel;
 
         if (empty($model)) {
@@ -67,19 +75,19 @@ class Factory
 
         $properties = array_values(array_merge($properties_from_table, $methods));
 
-        $factory_path = base_path().'/database/factories/Models/'.$reflectionClass->getShortName().'.php';
-        $stub = file_get_contents(__DIR__.'/../../Stubs/database/factories/Factory.stub');
-        $stub = $mustache->render($stub, [
+        $factory_path = $this->storage_disk->getBasePath().'/database/factories/Models/'.$reflectionClass->getShortName().'.php';
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/database/factories/Factory.stub');
+        $stub = $this->mustache->render($stub, [
             'class_name' => get_class($model_instance),
             'properties' => $properties,
         ]);
 
-        if (file_exists($factory_path)) {
+        if ($this->storage_disk->fileExists($factory_path)) {
             throw new \Exception($factory_path . ' already exists!');
         }
-        $this->makeDirectory($factory_path);
+        $this->storage_disk->makeDirectory($factory_path);
 
-        file_put_contents($factory_path, $stub);
+        $this->storage_disk->writeFile($factory_path, $stub);
     }
 
 
@@ -261,83 +269,6 @@ class Factory
 
 
         return $property;
-    }
-
-
-    
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    private function makeDirectory(string $path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
-
-     /**
-     * make the appropriate file for the class if necessary.
-     *
-     * @param  string $path
-     * @return void
-     */
-    private function makeFile(string $name, string $fullpath_to_create, string $stub_fullpath)
-    {
-        
-        if (file_exists($fullpath_to_create)) {
-            throw new \Exception($fullpath_to_create . ' already exists!');
-        }
-
-        $this->makeDirectory($fullpath_to_create);
-
-        $stub = file_get_contents($stub_fullpath);
-
-        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-        $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-        
-        file_put_contents($fullpath_to_create, $stub);
-    }
-    
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentWorkflows()
-    {
-        $files = scandir(base_path().'/app/Trident/Workflows/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentBusinesses()
-    {
-        $files = scandir(base_path().'/app/Trident/Business/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
     }
 
 
