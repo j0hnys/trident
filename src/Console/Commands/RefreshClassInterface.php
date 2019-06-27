@@ -21,6 +21,16 @@ class RefreshClassInterface extends Command
      */
     protected $description = 'Refreshes the interface that a class implements according to class functions';
     
+    private $refresh_class_interface;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->refresh_class_interface = new Refresh\ClassInterface();
+        
+    }
+
     /**
      * Execute the console command.
      *
@@ -34,7 +44,7 @@ class RefreshClassInterface extends Command
             $relative_output_path = $this->argument('relative_output_path');
             
 
-            $crud = new Refresh\ClassInterface(
+            $crud = $this->refresh_class_interface->make(
                 $name,
                 $relative_input_path,
                 $relative_output_path

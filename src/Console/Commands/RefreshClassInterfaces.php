@@ -21,6 +21,16 @@ class RefreshClassInterfaces extends Command
      */
     protected $description = 'Refreshes all the interfaces from the classes of a specific type/folder';
     
+    private $refresh_class_interfaces;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->refresh_class_interfaces = new Refresh\ClassInterfaces();
+        
+    }
+
     /**
      * Execute the console command.
      *
@@ -32,7 +42,7 @@ class RefreshClassInterfaces extends Command
             $td_entity_type = $this->argument('td_entity_type');
             
 
-            $crud = new Refresh\ClassInterfaces(
+            $crud = $this->refresh_class_interfaces->make(
                 $this,
                 $td_entity_type
             );

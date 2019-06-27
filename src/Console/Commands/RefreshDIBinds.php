@@ -21,6 +21,16 @@ class RefreshDIBinds extends Command
      */
     protected $description = 'Refreshes DI containers binds';
     
+    private $refresh_di_binds;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->refresh_di_binds = new Refresh\DIBinds();
+        
+    }
+
     /**
      * Execute the console command.
      *
@@ -30,7 +40,7 @@ class RefreshDIBinds extends Command
     {
         try {            
 
-            $crud = new Refresh\DIBinds();            
+            $crud = $this->refresh_di_binds->make();            
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());

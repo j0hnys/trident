@@ -7,22 +7,35 @@ use PhpParser\NodeDumper;
 use PhpParser\ParserFactory;
 use PhpParser\{Node, NodeFinder};
 
+use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Storage\Trident;
+use j0hnys\Trident\Base\Constants\Declarations;
+
 class DIBinds
 {
+    private $storage_disk;
+    private $storage_trident;
+    private $mustache;
+    private $declarations;
+
+    public function __construct()
+    {
+        $this->storage_disk = new Disk();        
+        $this->storage_trident = new Trident();
+        $this->mustache = new \Mustache_Engine;
+        $this->declarations = new Declarations();
+    }
     
     /**
      * Crud constructor.
      * @param string $name
      * @throws \Exception
      */
-    public function __construct($name = 'TEST')
+    public function make($name = 'TEST')
     {
-        
-        $mustache = new \Mustache_Engine;
 
-
-        $Td_entities_workflows = $this->getCurrentWorkflows();
-        $Td_entities_businesses = $this->getCurrentBusinesses();
+        $Td_entities_workflows = $this->storage_trident->getCurrentWorkflows();
+        $Td_entities_businesses = $this->storage_trident->getCurrentBusinesses();
 
         $workflow_logic_di_interfaces = [];
         $business_logic_di_interfaces = [];
@@ -31,7 +44,7 @@ class DIBinds
 
             $name = $Td_entities_workflow;
     
-            $code = file_get_contents( base_path().'/app/Trident/Workflows/Logic/'.ucfirst($name).'.php' );
+            $code = $this->storage_disk->readFile( $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.ucfirst($name).'.php' );
             $workflow_logic_di_interfaces[$name] = array_map(function($element) {
                 return implode('\\', $element->name->parts);
             }, $this->getDIInterfaces($code));
@@ -41,7 +54,7 @@ class DIBinds
             
             $name = $Td_entities_business;
 
-            $code = file_get_contents( base_path().'/app/Trident/Business/Logic/'.ucfirst($name).'.php' );
+            $code = $this->storage_disk->readFile( $this->storage_disk->getBasePath().'/app/Trident/Business/Logic/'.ucfirst($name).'.php' );
             $business_logic_di_interfaces[$name] = array_map(function($element) {
                 return implode('\\', $element->name->parts);
             }, $this->getDIInterfaces($code));
@@ -109,15 +122,15 @@ class DIBinds
         }
 
 
-        $trident_event_service_provider_path = base_path().'/app/Providers/TridentServiceProvider.php';
-        $stub = file_get_contents(__DIR__.'/../../../src/Stubs/app/Providers/TridentServiceProvider_dynamic.stub');
-        $stub = $mustache->render($stub, [
+        $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentServiceProvider.php';
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../../src/Stubs/app/Providers/TridentServiceProvider_dynamic.stub');
+        $stub = $this->mustache->render($stub, [
             'register_workflows' => $workflows,
             'register_business' => $businesses,
         ]);
         
 
-        file_put_contents($trident_event_service_provider_path, $stub);
+        $this->storage_disk->writeFile($trident_event_service_provider_path, $stub);
 
 
     }
@@ -184,84 +197,6 @@ class DIBinds
 
         return $di_interfaces;
     }
-
-    
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory(string $path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
-
-     /**
-     * make the appropriate file for the class if necessary.
-     *
-     * @param  string $path
-     * @return void
-     */
-    protected function makeFile(string $name, string $fullpath_to_create, string $stub_fullpath)
-    {
-        
-        if (file_exists($fullpath_to_create)) {
-            // throw new \Exception($fullpath_to_create . ' already exists!');
-            return;
-        }
-
-        $this->makeDirectory($fullpath_to_create);
-
-        $stub = file_get_contents($stub_fullpath);
-
-        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-        $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-        
-        file_put_contents($fullpath_to_create, $stub);
-    }
-    
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentWorkflows()
-    {
-        $files = scandir(base_path().'/app/Trident/Workflows/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentBusinesses()
-    {
-        $files = scandir(base_path().'/app/Trident/Business/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
 
 
 }
