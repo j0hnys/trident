@@ -20,6 +20,16 @@ class GenerateWorkflowTests extends Command
      * @var string
      */
     protected $description = 'Create workflow tests';
+
+    private $workflow;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->workflow = new Tests\Workflow();
+        
+    }
     
     /**
      * Execute the console command.
@@ -32,7 +42,7 @@ class GenerateWorkflowTests extends Command
             $name = $this->argument('name');
             
 
-            $crud = new Tests\Workflow($name);
+            $crud = $this->workflow->generate($name);
             
 
             $this->info($name.' workflow tests successfully created');

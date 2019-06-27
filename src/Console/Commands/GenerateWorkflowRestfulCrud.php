@@ -23,7 +23,6 @@ class GenerateWorkflowRestfulCrud extends Command
      */
     protected $description = 'Create a workflow with the accompanied restful crud';
     
-    private $crud_builder;
     private $crud_workflow_builder;
 
     public function __construct()
@@ -33,7 +32,6 @@ class GenerateWorkflowRestfulCrud extends Command
         $Declarations = new Declarations();
         $Declarations->get();
 
-        $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder();
         $this->crud_workflow_builder = new Builders\WorkflowRestfulCrud();
         
     }

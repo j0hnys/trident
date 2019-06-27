@@ -2,22 +2,30 @@
 
 namespace j0hnys\Trident\Builders\Tests;
 
+use j0hnys\Trident\Base\Storage\Disk;
+
 class Workflow
 {
-    
+    private $storage_disk;
+    private $mustache;
+
+    public function __construct()
+    {
+        $this->storage_disk = new Disk();
+        $this->mustache = new \Mustache_Engine;
+    }
+
     /**
      * Crud constructor.
      * @param string $name
      * @throws \Exception
      */
-    public function __construct($name = 'TEST')
+    public function generate($name = 'TEST')
     {
         
-        $mustache = new \Mustache_Engine;
-
         //
         //workflow logic test generation
-        $workflow_logic_test_path = base_path().'/tests/Trident/Workflows/Logic/'.ucfirst($name).'Test.php';
+        $workflow_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Workflows/Logic/'.ucfirst($name).'Test.php';
         
         $class_name = '\\App\\Trident\\Workflows\\Logic\\'.ucfirst($name);
         $class_methods = \get_class_methods( $class_name );
@@ -29,18 +37,18 @@ class Workflow
             return $element != '__construct' ? true : false;
         })));
 
-        if (!file_exists($workflow_logic_test_path)) {
-            $this->makeDirectory($workflow_logic_test_path);
+        if (!$this->storage_disk->fileExists($workflow_logic_test_path)) {
+            $this->storage_disk->makeDirectory($workflow_logic_test_path);
 
-            $stub = file_get_contents(__DIR__.'/../../Stubs/tests/Trident/Workflows/Logic/Logic.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Workflows/Logic/Logic.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-            $stub = $mustache->render($stub, [
+            $stub = $this->mustache->render($stub, [
                 'methods' => $class_methods,
             ]);
             
-            file_put_contents($workflow_logic_test_path, $stub);
+            $this->storage_disk->writeFile($workflow_logic_test_path, $stub);
         }
 
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -49,7 +57,7 @@ class Workflow
 
         //
         //workflow logic test generation
-        $business_logic_test_path = base_path().'/tests/Trident/Business/Logic/'.ucfirst($name).'Test.php';
+        $business_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Business/Logic/'.ucfirst($name).'Test.php';
         
         $class_name = '\\App\\Trident\\Business\\Logic\\'.ucfirst($name);
         $class_methods = \get_class_methods( $class_name );
@@ -61,99 +69,23 @@ class Workflow
             return $element != '__construct' ? true : false;
         })));
 
-        if (!file_exists($business_logic_test_path)) {
-            $this->makeDirectory($business_logic_test_path);
+        if (!$this->storage_disk->fileExists($business_logic_test_path)) {
+            $this->storage_disk->makeDirectory($business_logic_test_path);
 
-            $stub = file_get_contents(__DIR__.'/../../Stubs/tests/Trident/Business/Logic/Logic.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Business/Logic/Logic.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-            $stub = $mustache->render($stub, [
+            $stub = $this->mustache->render($stub, [
                 'methods' => $class_methods,
             ]);
             
-            file_put_contents($business_logic_test_path, $stub);
+            $this->storage_disk->writeFile($business_logic_test_path, $stub);
         }
 
 
     }
     
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory(string $path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
-
-     /**
-     * make the appropriate file for the class if necessary.
-     *
-     * @param  string $path
-     * @return void
-     */
-    protected function makeFile(string $name, string $fullpath_to_create, string $stub_fullpath)
-    {
-        
-        if (file_exists($fullpath_to_create)) {
-            // throw new \Exception($fullpath_to_create . ' already exists!');
-            return;
-        }
-
-        $this->makeDirectory($fullpath_to_create);
-
-        $stub = file_get_contents($stub_fullpath);
-
-        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-        $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-        
-        file_put_contents($fullpath_to_create, $stub);
-    }
-    
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentWorkflows()
-    {
-        $files = scandir(base_path().'/app/Trident/Workflows/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentBusinesses()
-    {
-        $files = scandir(base_path().'/app/Trident/Business/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
 
 
 }

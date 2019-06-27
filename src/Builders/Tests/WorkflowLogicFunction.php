@@ -2,15 +2,23 @@
 
 namespace j0hnys\Trident\Builders\Tests;
 
+use j0hnys\Trident\Base\Storage\Disk;
+
 class WorkflowLogicFunction
 {
-    
+    private $storage_disk;
+
+    public function __construct()
+    {
+        $this->storage_disk = new Disk();
+    }
+
     /**
      *  constructor.
      * @param string $name
      * @throws \Exception
      */
-    public function __construct(string $td_entity_name, string $function_name)
+    public function generate(string $td_entity_name, string $function_name)
     {
         if (empty($td_entity_name)) {
             throw new \Exception("entity name cannot be empty!!", 1);
@@ -22,24 +30,23 @@ class WorkflowLogicFunction
 
         //
         //workflow logic test function generation
-        $workflow_logic_test_path = base_path().'/tests/Trident/Workflows/Logic/'.ucfirst($td_entity_name).'Test.php';
+        $workflow_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Workflows/Logic/'.ucfirst($td_entity_name).'Test.php';
         
-        $lines = file($workflow_logic_test_path); 
+        $lines = $this->storage_disk->readFileArray($workflow_logic_test_path); 
         $last = sizeof($lines) - 1; 
         unset($lines[$last]); 
 
-        $fp = fopen($workflow_logic_test_path, 'w'); 
-        fwrite($fp, implode('', $lines)); 
-        fclose($fp); 
+        $this->storage_disk->writeFileArray($workflow_logic_test_path, $lines); 
 
-
-        $stub = file_get_contents(__DIR__.'/../../Stubs/tests/Trident/Workflows/Logic/LogicFunction.stub');
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Workflows/Logic/LogicFunction.stub');
 
         $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         
-        file_put_contents($workflow_logic_test_path, $stub, FILE_APPEND);
+        $this->storage_disk->writeFile($workflow_logic_test_path, $stub, [
+            'append_file' => true
+        ]);
         
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         //now we build the business logic part of this workflow
@@ -47,40 +54,26 @@ class WorkflowLogicFunction
 
         //
         //business logic test function generation
-        $business_logic_test_path = base_path().'/tests/Trident/Business/Logic/'.ucfirst($td_entity_name).'Test.php';
+        $business_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Business/Logic/'.ucfirst($td_entity_name).'Test.php';
         
-        $lines = file($business_logic_test_path); 
+        $lines = $this->storage_disk->readFileArray($business_logic_test_path); 
         $last = sizeof($lines) - 1; 
         unset($lines[$last]); 
 
-        $fp = fopen($business_logic_test_path, 'w'); 
-        fwrite($fp, implode('', $lines)); 
-        fclose($fp); 
+        $this->storage_disk->writeFileArray($business_logic_test_path, $lines); 
 
-
-        $stub = file_get_contents(__DIR__.'/../../Stubs/tests/Trident/Business/Logic/LogicFunction.stub');
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Business/Logic/LogicFunction.stub');
 
         $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         
-        file_put_contents($business_logic_test_path, $stub, FILE_APPEND);
-
+        $this->storage_disk->writeFile($business_logic_test_path, $stub, [
+            'append_file' => true
+        ]);
 
     }
     
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory(string $path): void
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
     
 
 }
