@@ -22,6 +22,17 @@ class SetupTests extends Command
      */
     protected $description = 'Trident test setup ';
 
+    private $setup_tests;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setup_tests = new Setup\Tests();
+        
+    }
+
+
     /**
      * Execute the console command.
      *
@@ -32,7 +43,7 @@ class SetupTests extends Command
         try {
            
 
-            $install = new Setup\Tests();
+            $install = $this->setup_tests->run();
             
 
             $this->info('Trident tests setup successful');

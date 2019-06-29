@@ -7,22 +7,35 @@ use PhpParser\NodeDumper;
 use PhpParser\ParserFactory;
 use PhpParser\{Node, NodeFinder};
 
+use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Storage\Trident;
+
 class EntityFunction
 {
+    private $storage_disk;
+    private $storage_trident;
+    private $mustache;
+
+    public function __construct()
+    {
+        $this->storage_disk = new Disk();        
+        $this->storage_trident = new Trident();
+        $this->mustache = new \Mustache_Engine;
+    }
     
     /**
      * Crud constructor.
      * @param string $name
      * @throws \Exception
      */
-    public function __construct($name, $function_name)
+    public function run($name, $function_name)
     {        
         //
         //
         //workflow
-        $workflow_input_path = base_path().'/'.'app/Trident/Workflows/Logic';
-        $code = file_get_contents( $workflow_input_path.'/'.$name.'.php' );
-        $workflow_file = file( $workflow_input_path.'/'.$name.'.php' );
+        $workflow_input_path = $this->storage_disk->getBasePath().'/'.'app/Trident/Workflows/Logic';
+        $code = $this->storage_disk->readFile( $workflow_input_path.'/'.$name.'.php' );
+        $workflow_file = $this->storage_disk->readFileArray( $workflow_input_path.'/'.$name.'.php' );
         $workflow_result = $this->getClassFunctionSignature($code, $function_name);
 
         //remove connected files
@@ -32,10 +45,10 @@ class EntityFunction
                 $used_namespace = $workflow_result->used_namespaces[$used_namespaces_index]->name->parts;
                 array_shift($used_namespace);
     
-                $used_namespace_paths []= base_path().'/'.'app/'.implode('/',$used_namespace).'.php'; 
+                $used_namespace_paths []= $this->storage_disk->getBasePath().'/'.'app/'.implode('/',$used_namespace).'.php'; 
             }
             foreach ($used_namespace_paths as $used_namespace_path) {
-                is_file($used_namespace_path) ? unlink($used_namespace_path) : '';
+                $this->storage_disk->isFile($used_namespace_path) ? $this->storage_disk->deleteFile($used_namespace_path) : '';
             }
         }
 
@@ -54,7 +67,7 @@ class EntityFunction
             $output_file_path = $workflow_input_path.'/'.$name.'.php';
     
             // Write back to file
-            file_put_contents($output_file_path, $output);
+            $this->storage_disk->writeFile($output_file_path, $output);
         }
         //
         //
@@ -65,9 +78,9 @@ class EntityFunction
         //
         //
         //controller
-        $controller_input_path = base_path().'/'.'app/Http/Controllers/Trident';
-        $code = file_get_contents( $controller_input_path.'/'.$name.'Controller.php' );
-        $controller_file = file( $controller_input_path.'/'.$name.'Controller.php' );
+        $controller_input_path = $this->storage_disk->getBasePath().'/'.'app/Http/Controllers/Trident';
+        $code = $this->storage_disk->readFile( $controller_input_path.'/'.$name.'Controller.php' );
+        $controller_file = $this->storage_disk->readFileArray( $controller_input_path.'/'.$name.'Controller.php' );
         $controller_result = $this->getClassFunctionSignature($code, $function_name);
 
         //remove connected files
@@ -77,10 +90,10 @@ class EntityFunction
                 $used_namespace = $controller_result->used_namespaces[$used_namespaces_index]->name->parts;
                 array_shift($used_namespace);
     
-                $used_namespace_paths []= base_path().'/'.'app/'.implode('/',$used_namespace).'.php'; 
+                $used_namespace_paths []= $this->storage_disk->getBasePath().'/'.'app/'.implode('/',$used_namespace).'.php'; 
             }
             foreach ($used_namespace_paths as $used_namespace_path) {
-                is_file($used_namespace_path) ? unlink($used_namespace_path) : '';
+                $this->storage_disk->isFile($used_namespace_path) ? $this->storage_disk->deleteFile($used_namespace_path) : '';
             }
         } 
 
@@ -99,7 +112,7 @@ class EntityFunction
             $output_file_path = $controller_input_path.'/'.$name.'Controller.php';
     
             // Write back to file
-            file_put_contents($output_file_path, $output);
+            $this->storage_disk->writeFile($output_file_path, $output);
         }
         //
         //
@@ -283,83 +296,6 @@ class EntityFunction
 
 
         return $analysis_result;
-    }
-
-
-    /**
-     * removes directory deleting child folders and files
-     *
-     * @param [type] $dir
-     * @return void
-     */
-    public function deleteDirectory($dir) {
-        if (is_dir($dir)) {
-            $files = array_diff(scandir($dir), array('.','..'));
-            foreach ($files as $file) {
-                (is_dir("$dir/$file")) ? $this->deleteDirectory("$dir/$file") : unlink("$dir/$file");
-            }
-            return rmdir($dir);
-        }
-    } 
-
-
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentControllers()
-    {
-        $files = scandir(base_path() . '/app/Http/Controllers/Trident/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames[] = str_replace('Controller.php', '', $file);
-            }
-        }
-
-        return $filenames;
-    }
-
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentWorkflows()
-    {
-        $files = scandir(base_path().'/app/Trident/Workflows/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentBusinesses()
-    {
-        $files = scandir(base_path().'/app/Trident/Business/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
     }
 
 

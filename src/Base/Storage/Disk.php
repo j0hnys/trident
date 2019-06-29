@@ -81,6 +81,15 @@ class Disk
 
     /**
      * @param string $path
+     * @return boolean
+     */
+    public function isFile(string $path): bool
+    {
+        return is_file($path);
+    }
+
+    /**
+     * @param string $path
      * @return array
      */
     public function getFolderFileNames(string $path): array
@@ -116,10 +125,19 @@ class Disk
         if (is_dir($dir)) {
             $files = array_diff(scandir($dir), array('.','..'));
             foreach ($files as $file) {
-                (is_dir("$dir/$file")) ? $this->deleteDirectory("$dir/$file") : unlink("$dir/$file");
+                (is_dir("$dir/$file")) ? $this->deleteDirectoryAndFiles("$dir/$file") : unlink("$dir/$file");
             }
             return rmdir($dir);
         }
+    }
+
+    /**
+     * @param string $path
+     * @return boolean
+     */
+    public function deleteFile(string $path): bool
+    {
+        return unlink($path);
     }
 
     /**
