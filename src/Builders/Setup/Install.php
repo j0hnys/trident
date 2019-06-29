@@ -9,9 +9,12 @@ class Install
     private $storage_disk;
     private $mustache;
 
-    public function __construct()
+    public function __construct(Disk $storage_disk = null)
     {
         $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
         $this->mustache = new \Mustache_Engine;
     }
     
@@ -45,7 +48,7 @@ class Install
         $this->storage_disk->writeFile($trident_event_service_provider_path, $stub);
 
         //route provider
-        $trident_route_service_provider_path = base_path().'/app/Providers/TridentRouteServiceProvider.php';
+        $trident_route_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentRouteServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Providers/TridentRouteServiceProvider.stub');
         $this->storage_disk->writeFile($trident_route_service_provider_path, $stub);
 

@@ -24,6 +24,15 @@ class Disk
 
     /**
      * @param string $path
+     * @return void
+     */
+    public function setBasePath(string $path): void
+    {
+        $this->base_path = $path;
+    }
+
+    /**
+     * @param string $path
      * @param array $options
      * @return string
      */

@@ -42,7 +42,7 @@ class TridentServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configPath = __DIR__.'/config/trident.php';
+        $configPath = __DIR__.'/../config/trident.php';
         $this->publishes([
             $configPath => config_path('trident.php'),
         ], 'trident');
