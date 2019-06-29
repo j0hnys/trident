@@ -145,7 +145,7 @@ class DIBinds
             $ast = $parser->parse($code);
         } catch (Error $error) {
             echo "Parse error: {$error->getMessage()}\n";
-            return;
+            return [];
         }
 
         $analysis_result = (object)[

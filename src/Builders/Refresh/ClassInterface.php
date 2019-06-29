@@ -76,7 +76,7 @@ class ClassInterface
             $ast = $parser->parse($code);
         } catch (Error $error) {
             echo "Parse error: {$error->getMessage()}\n";
-            return;
+            return (object)[];
         }
 
         $analysis_result = (object)[
