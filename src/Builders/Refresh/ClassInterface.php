@@ -25,7 +25,7 @@ class ClassInterface
      * @param string $name
      * @throws \Exception
      */
-    public function make($name, $relative_input_path, $relative_output_path)
+    public function run($name, $relative_input_path, $relative_output_path)
     {
         $input_path = $this->storage_disk->getBasePath().'/'.$relative_input_path;
         $output_path = $this->storage_disk->getBasePath().'/'.$relative_output_path;

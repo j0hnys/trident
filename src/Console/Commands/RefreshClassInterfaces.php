@@ -42,7 +42,7 @@ class RefreshClassInterfaces extends Command
             $td_entity_type = $this->argument('td_entity_type');
             
 
-            $crud = $this->refresh_class_interfaces->make(
+            $crud = $this->refresh_class_interfaces->run(
                 $this,
                 $td_entity_type
             );

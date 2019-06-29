@@ -20,7 +20,7 @@ class Install
      * 
      * @return void
      */
-    public function start()
+    public function run()
     {
         
         $app_path = $this->storage_disk->getBasePath().'/app';

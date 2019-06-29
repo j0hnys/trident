@@ -44,7 +44,7 @@ class RefreshClassInterface extends Command
             $relative_output_path = $this->argument('relative_output_path');
             
 
-            $crud = $this->refresh_class_interface->make(
+            $crud = $this->refresh_class_interface->run(
                 $name,
                 $relative_input_path,
                 $relative_output_path

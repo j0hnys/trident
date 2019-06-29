@@ -28,7 +28,7 @@ class Entity
      * @param string $name
      * @throws \Exception
      */
-    public function start($name = '')
+    public function run($name = '')
     {
 
         $controller_path = $this->storage_disk->getBasePath().'/app/Http/Controllers/Trident/'.($name).'Controller.php';

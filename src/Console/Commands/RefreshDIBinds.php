@@ -40,7 +40,7 @@ class RefreshDIBinds extends Command
     {
         try {            
 
-            $crud = $this->refresh_di_binds->make();            
+            $crud = $this->refresh_di_binds->run();            
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());

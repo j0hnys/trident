@@ -52,18 +52,6 @@ class BuildModels extends Command
         }
     }
 
-
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir(($path))) {
-            mkdir(($path), 0777, true);
-        }
-    }
+    
 
 }

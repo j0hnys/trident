@@ -31,7 +31,7 @@ class DIBinds
      * @param string $name
      * @throws \Exception
      */
-    public function make($name = 'TEST')
+    public function run($name = 'TEST')
     {
 
         $Td_entities_workflows = $this->storage_trident->getCurrentWorkflows();

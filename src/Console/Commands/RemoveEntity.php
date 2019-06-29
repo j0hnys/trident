@@ -42,7 +42,7 @@ class RemoveEntity extends Command
             $td_entity_name = $this->argument('td_entity_name');
             
 
-            $crud = $this->remove_entity->start($td_entity_name);
+            $crud = $this->remove_entity->run($td_entity_name);
             
 
             $this->info($td_entity_name.' removed successfully');

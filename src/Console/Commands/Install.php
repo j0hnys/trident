@@ -42,7 +42,7 @@ class Install extends Command
         try {
            
 
-            $install = $this->install->start();
+            $install = $this->install->run();
             
 
             $this->info('Trident installed successfully');

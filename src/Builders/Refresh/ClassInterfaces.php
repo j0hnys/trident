@@ -24,7 +24,7 @@ class ClassInterfaces
      * @param string $name
      * @throws \Exception
      */
-    public function make($command, $type)
+    public function run($command, $type)
     {
 
         if ($type == $this->declarations::ENTITIES['WORKFLOW']['name']) {
