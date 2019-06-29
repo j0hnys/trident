@@ -17,11 +17,11 @@ class Exception
     }
 
     /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param string $td_entity_type
+     * @param string $td_entity_name
+     * @return void
      */
-    public function generate($td_entity_type, $td_entity_name)
+    public function generate(string $td_entity_type, string $td_entity_name): void
     {
         
         $td_entity_name = ucfirst($td_entity_name);

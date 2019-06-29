@@ -21,6 +21,9 @@ class ExportModel extends Command
      */
     protected $description = 'export a models schema';
     
+    /**
+     * @var Export\Model
+     */
     private $model;
 
     public function __construct()

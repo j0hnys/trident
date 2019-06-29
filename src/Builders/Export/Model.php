@@ -16,6 +16,11 @@ class Model
         $this->app = new App();
     }
 
+    /**
+     * @param string $td_entity_name
+     * @param string|null $output_path
+     * @return void
+     */
     public function generate(string $td_entity_name, ?string $output_path): void
     {   
         $td_entity_name = ucfirst($td_entity_name);
@@ -42,7 +47,11 @@ class Model
 
     }
 
-    
+    /**
+     * @param string $column_name
+     * @param string $column_type
+     * @return array
+     */
     protected function schemaItem(string $column_name = '', string $column_type = ''): array
     {
         $item = [

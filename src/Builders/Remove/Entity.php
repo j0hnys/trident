@@ -24,11 +24,10 @@ class Entity
     }
     
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @return void
      */
-    public function run($name = '')
+    public function run(string $name = ''): void
     {
 
         $controller_path = $this->storage_disk->getBasePath().'/app/Http/Controllers/Trident/'.($name).'Controller.php';

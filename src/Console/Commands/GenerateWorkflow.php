@@ -21,6 +21,9 @@ class GenerateWorkflow extends Command
      */
     protected $description = 'Create a workflow';
 
+    /**
+     * @var Builders\Workflow
+     */
     private $workflow;
 
     public function __construct()

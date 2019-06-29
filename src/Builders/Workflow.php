@@ -19,11 +19,10 @@ class Workflow
     }
     
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @return void
      */
-    public function generate($name = 'TEST')
+    public function generate(string $name = 'TEST'): void
     {        
         //
         //workflow logic generation
@@ -135,10 +134,12 @@ class Workflow
      /**
      * make the appropriate file for the class if necessary.
      *
-     * @param  string $path
+     * @param string $name
+     * @param string $fullpath_to_create
+     * @param string $stub_fullpath
      * @return void
      */
-    protected function makeFile(string $name, string $fullpath_to_create, string $stub_fullpath)
+     protected function makeFile(string $name, string $fullpath_to_create, string $stub_fullpath): void
     {
         
         if ($this->storage_disk->fileExists($fullpath_to_create)) {

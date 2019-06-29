@@ -27,11 +27,10 @@ class DIBinds
     }
     
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @return void
      */
-    public function run($name = 'TEST')
+    public function run(string $name = 'TEST'): void
     {
 
         $Td_entities_workflows = $this->storage_trident->getCurrentWorkflows();
@@ -135,8 +134,11 @@ class DIBinds
 
     }
 
-
-    public function getDIInterfaces(string $code)
+    /**
+     * @param string $code
+     * @return array
+     */
+    public function getDIInterfaces(string $code): array
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         try {

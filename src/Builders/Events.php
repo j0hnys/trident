@@ -21,7 +21,13 @@ class Events
         $this->declarations = new Declarations();
     }
     
-    public function generate($td_entity_type, $event_type, $td_entity_name)
+    /**
+     * @param string $td_entity_type
+     * @param string $event_type
+     * @param string $td_entity_name
+     * @return void
+     */
+    public function generate(string $td_entity_type, string $event_type, string $td_entity_name): void
     {
         
         $td_entity_type = strtolower($td_entity_type);

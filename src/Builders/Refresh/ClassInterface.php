@@ -21,11 +21,12 @@ class ClassInterface
     }
     
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @param string $relative_input_path
+     * @param string $relative_output_path
+     * @return void
      */
-    public function run($name, $relative_input_path, $relative_output_path)
+    public function run(string $name, string $relative_input_path, string $relative_output_path): void
     {
         $input_path = $this->storage_disk->getBasePath().'/'.$relative_input_path;
         $output_path = $this->storage_disk->getBasePath().'/'.$relative_output_path;
@@ -64,8 +65,11 @@ class ClassInterface
         $this->storage_disk->writeFile($output_path.'/'.$name.'Interface.php', $stub);
     }
 
-
-    public function getClassFunctionSignatures(string $code)
+    /**
+     * @param string $code
+     * @return Object
+     */
+    public function getClassFunctionSignatures(string $code): Object
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         try {

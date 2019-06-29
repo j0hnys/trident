@@ -21,6 +21,9 @@ class RefreshDIBinds extends Command
      */
     protected $description = 'Refreshes DI containers binds';
     
+    /**
+     * @var Refresh\DIBinds
+     */
     private $refresh_di_binds;
 
     public function __construct()

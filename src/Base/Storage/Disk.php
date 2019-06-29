@@ -62,7 +62,12 @@ class Disk
         }
     }
 
-
+    /**
+     * @param string $path
+     * @param array $lines
+     * @param array $options
+     * @return void
+     */
     public function writeFileArray(string $path, array $lines, array $options = [])
     {
         $fp = fopen($path, 'w'); 
@@ -94,7 +99,12 @@ class Disk
      */
     public function getFolderFileNames(string $path): array
     {
-        $files = scandir($path);
+        $files = [];
+        if (is_dir($path)) {
+            $files = scandir($path);
+        } else {
+            dump("folder: ".$path.' does not exist');
+        }
 
         $filenames = [];
         foreach ($files as $file) {
@@ -212,7 +222,12 @@ class Disk
      */
     public function getFolderFiles(string $absolute_folder_path): array
     {
-        $files = scandir($absolute_folder_path);
+        $files = [];
+        if (is_dir($absolute_folder_path)) {
+            $files = scandir($absolute_folder_path);
+        } else {
+            dump("folder: ".$absolute_folder_path.' does not exist');
+        }
 
         $filenames = [];
         foreach ($files as $file) {

@@ -21,6 +21,9 @@ class BuildMigrations extends Command
      */
     protected $description = 'Create all migrations from current database connection';
     
+    /**
+     * @var Migrations
+     */
     private $migrations;
 
     public function __construct()

@@ -21,6 +21,9 @@ class GenerateResource extends Command
      */
     protected $description = 'Create a resource';
 
+    /**
+     * @var Builders\Resources
+     */
     private $resources;
 
     public function __construct()

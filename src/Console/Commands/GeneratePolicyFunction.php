@@ -21,6 +21,9 @@ class GeneratePolicyFunction extends Command
      */
     protected $description = 'Create a policy function';
 
+    /**
+     * @var Crud\PolicyFunction
+     */
     private $policy_function;
 
     public function __construct()

@@ -27,7 +27,7 @@ class WorkflowRestfulCrud
      * @param Command $command
      * @return void
      */
-    public function generate($name = 'TEST', Command $command): void
+    public function generate(string $name = 'TEST', Command $command): void
     {
         $this->generateCrud($name, $command);
 
@@ -169,10 +169,13 @@ class WorkflowRestfulCrud
 
         $this->storage_disk->writeFile($trident_event_service_provider_path, $stub);
     }
+
      /**
      * make the appropriate file for the class if necessary.
      *
-     * @param  string $path
+     * @param string $name
+     * @param string $fullpath_to_create
+     * @param string $stub_fullpath
      * @return void
      */
     protected function makeFile(string $name, string $fullpath_to_create, string $stub_fullpath): void
@@ -193,7 +196,11 @@ class WorkflowRestfulCrud
         $this->storage_disk->writeFile($fullpath_to_create, $stub);
     }
     
-
+    /**
+     * @param string $name
+     * @param Command $command
+     * @return void
+     */
     public function generateOther(string $name, Command $command): void
     {
         //new model factory

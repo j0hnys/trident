@@ -21,6 +21,9 @@ class GenerateWorkflowTests extends Command
      */
     protected $description = 'Create workflow tests';
 
+    /**
+     * @var Tests\Workflow
+     */
     private $workflow;
 
     public function __construct()

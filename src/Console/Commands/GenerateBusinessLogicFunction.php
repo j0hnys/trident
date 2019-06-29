@@ -21,6 +21,9 @@ class GenerateBusinessLogicFunction extends Command
      */
     protected $description = 'Create a business logic function';
     
+    /**
+     * @var Builders\BusinessLogicFunction
+     */
     private $business_logic_function;
 
     public function __construct()

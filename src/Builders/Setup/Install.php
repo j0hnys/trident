@@ -16,8 +16,6 @@ class Install
     }
     
     /**
-     * Install constructor.
-     * 
      * @return void
      */
     public function run()

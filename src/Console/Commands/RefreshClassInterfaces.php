@@ -21,6 +21,9 @@ class RefreshClassInterfaces extends Command
      */
     protected $description = 'Refreshes all the interfaces from the classes of a specific type/folder';
     
+    /**
+     * @var Refresh\ClassInterfaces
+     */
     private $refresh_class_interfaces;
 
     public function __construct()

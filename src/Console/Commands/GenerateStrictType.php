@@ -21,6 +21,9 @@ class GenerateStrictType extends Command
      */
     protected $description = 'Create a strict type';
 
+    /**
+     * @var Builders\StrictType
+     */
     private $strict_type;
 
     public function __construct()

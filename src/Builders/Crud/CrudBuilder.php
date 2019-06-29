@@ -18,7 +18,11 @@ class CrudBuilder
         $this->mustache = new \Mustache_Engine;
     }
     
-    public function generate($name = 'TEST')
+    /**
+     * @param string $name
+     * @return void
+     */
+    public function generate(string $name = 'TEST'): void
     {
         
 

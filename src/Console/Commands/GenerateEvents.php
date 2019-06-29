@@ -21,6 +21,9 @@ class GenerateEvents extends Command
      */
     protected $description = 'Create an event';
     
+    /**
+     * @var Builders\Events
+     */
     private $events;
 
     public function __construct()

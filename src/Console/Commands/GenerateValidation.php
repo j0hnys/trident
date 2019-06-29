@@ -21,6 +21,9 @@ class GenerateValidation extends Command
      */
     protected $description = 'Create a validation';
 
+    /**
+     * @var Builders\Validation
+     */
     private $validation;
 
     public function __construct()

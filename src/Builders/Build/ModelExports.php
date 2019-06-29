@@ -14,7 +14,7 @@ class ModelExports
         $this->storage_disk = new Disk();
     }
 
-    public function generate($data = [], Command $command)
+    public function generate($data = [], Command $command): void
     {
         $input_path = !empty($data['output_path']) ? $data['output_path'] : $this->storage_disk->getBasePath().'/app/Models/';
         $output_path = !empty($data['output_path']) ? $data['output_path'] : $this->storage_disk->getBasePath().'/database/generated_model_exports/';

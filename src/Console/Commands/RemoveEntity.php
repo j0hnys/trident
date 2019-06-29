@@ -21,6 +21,9 @@ class RemoveEntity extends Command
      */
     protected $description = 'Removes trident entity completely or a part.';
 
+    /**
+     * @var Remove\Entity
+     */
     private $remove_entity;
 
     public function __construct()

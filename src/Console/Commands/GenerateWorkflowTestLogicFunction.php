@@ -21,6 +21,9 @@ class GenerateWorkflowTestLogicFunction extends Command
      */
     protected $description = 'Create workflow test logic function';
     
+    /**
+     * @var Tests\WorkflowLogicFunction
+     */
     private $workflow_logic_function;
 
     public function __construct()

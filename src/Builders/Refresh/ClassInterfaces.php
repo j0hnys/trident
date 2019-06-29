@@ -2,6 +2,8 @@
 
 namespace j0hnys\Trident\Builders\Refresh;
 
+use Illuminate\Console\Command;
+
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Base\Constants\Declarations;
@@ -20,11 +22,11 @@ class ClassInterfaces
     }
 
     /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param Command $command
+     * @param string $type
+     * @return void
      */
-    public function run($command, $type)
+    public function run(Command $command, string $type): void
     {
 
         if ($type == $this->declarations::ENTITIES['WORKFLOW']['name']) {

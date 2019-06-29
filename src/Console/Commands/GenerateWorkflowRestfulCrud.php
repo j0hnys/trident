@@ -23,6 +23,9 @@ class GenerateWorkflowRestfulCrud extends Command
      */
     protected $description = 'Create a workflow with the accompanied restful crud';
     
+    /**
+     * @var Builders\WorkflowRestfulCrud
+     */
     private $crud_workflow_builder;
 
     public function __construct()

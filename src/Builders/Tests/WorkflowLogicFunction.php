@@ -14,11 +14,11 @@ class WorkflowLogicFunction
     }
 
     /**
-     *  constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @return void
      */
-    public function generate(string $td_entity_name, string $function_name)
+    public function generate(string $td_entity_name, string $function_name): void
     {
         if (empty($td_entity_name)) {
             throw new \Exception("entity name cannot be empty!!", 1);

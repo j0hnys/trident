@@ -22,8 +22,12 @@ class CrudWorkflowBuilder
         $this->storage_trident = new Trident();
     }
 
-
-    public function generate($name = 'TEST', Command $command)
+    /**
+     * @param string $name
+     * @param Command $command
+     * @return void
+     */
+    public function generate(string $name = 'TEST', Command $command): void
     {        
         //
         //controller generation

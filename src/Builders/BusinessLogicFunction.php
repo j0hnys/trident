@@ -13,7 +13,12 @@ class BusinessLogicFunction
         $this->storage_disk = new Disk();
     }
 
-    public function generate($td_entity_name, $function_name)
+    /**
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @return void
+     */
+    public function generate(string $td_entity_name, string $function_name): void
     {
         
         $name = ucfirst($td_entity_name).ucfirst($function_name);

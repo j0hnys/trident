@@ -22,6 +22,9 @@ class Install extends Command
      */
     protected $description = 'Trident installer';
 
+    /**
+     * @var Setup\Install
+     */
     private $install;
 
     public function __construct()

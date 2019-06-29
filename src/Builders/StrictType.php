@@ -19,11 +19,13 @@ class StrictType
     }
 
     /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
-     */
-    public function generate(string $strict_type_name, string $function_name, string $td_entity_name, string $domain)
+     * @param string $strict_type_name
+     * @param string $function_name
+     * @param string $td_entity_name
+     * @param string $domain
+     * @return void
+     */    
+    public function generate(string $strict_type_name, string $function_name, string $td_entity_name, string $domain): void
     {
 
         if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT']['name']) {

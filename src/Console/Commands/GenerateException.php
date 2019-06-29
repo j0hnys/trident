@@ -21,6 +21,9 @@ class GenerateException extends Command
      */
     protected $description = 'Create an exception';
 
+    /**
+     * @var Builders\Exception
+     */
     private $exception;
 
     public function __construct()

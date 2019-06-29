@@ -22,6 +22,9 @@ class SetupTests extends Command
      */
     protected $description = 'Trident test setup ';
 
+    /**
+     * @var Setup\Tests
+     */
     private $setup_tests;
 
     public function __construct()

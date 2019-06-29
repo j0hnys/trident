@@ -24,11 +24,11 @@ class EntityFunction
     }
     
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @param string $function_name
+     * @return void
      */
-    public function run($name, $function_name)
+    public function run(string $name, string $function_name): void
     {        
         //
         //
@@ -120,8 +120,12 @@ class EntityFunction
 
     }
 
-
-    public function getClassFunctionSignature(string $code, string $function_name)
+    /**
+     * @param string $code
+     * @param string $function_name
+     * @return object
+     */
+    public function getClassFunctionSignature(string $code, string $function_name): object
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         try {

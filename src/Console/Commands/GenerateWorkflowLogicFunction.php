@@ -21,6 +21,9 @@ class GenerateWorkflowLogicFunction extends Command
      */
     protected $description = 'Create a workflow logic function';
 
+    /**
+     * @var Builders\WorkflowLogicFunction
+     */
     private $workflow_logic_function;
 
     public function __construct()

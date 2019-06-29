@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\ClassLoader\ClassMapGenerator;
+use Illuminate\Database\Eloquent\Model;
 
 use j0hnys\Trident\Base\Storage\Disk;
 
@@ -31,13 +32,12 @@ class Factory
         $this->mustache = new \Mustache_Engine;
     }
 
-
     /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param mixed $laravel
+     * @param string $model
+     * @return void
      */
-    public function generate($laravel, string $model = '')
+    public function generate($laravel, string $model = ''): void
     {
         $this->laravel = $laravel;
 
@@ -94,9 +94,10 @@ class Factory
     /**
      * Load the properties from the database table.
      *
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param Model $model
+     * @return array
      */
-    private function getPropertiesFromTable($model)
+    private function getPropertiesFromTable(Model $model): array
     {
         $table = $model->getConnection()->getTablePrefix() . $model->getTable();
         $schema = $model->getConnection()->getDoctrineSchemaManager($table);
@@ -141,11 +142,11 @@ class Factory
         return $properties;
     }
 
-
-     /**
-     * @param \Illuminate\Database\Eloquent\Model $model
+    /**
+     * @param Model $model
+     * @return array
      */
-    protected function getPropertiesFromMethods($model)
+    protected function getPropertiesFromMethods(Model $model): array
     {
         $methods = get_class_methods($model);
 
@@ -191,13 +192,13 @@ class Factory
 
         return $properties;
     }
-
-
+    
     /**
      * @param string $name
-     * @param string|null $type
+     * @param string $type
+     * @return array
      */
-    private function setProperty($name, $type = null)
+    private function setProperty(string $name, string $type = null): array
     {
 
         $property = [];

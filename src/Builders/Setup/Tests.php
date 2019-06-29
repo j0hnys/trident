@@ -14,8 +14,6 @@ class Tests
     }
     
     /**
-     * Tests constructor.
-     * 
      * @return void
      */
     public function run()

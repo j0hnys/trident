@@ -21,6 +21,9 @@ class RemoveEntityFunction extends Command
      */
     protected $description = 'Removes trident entity\'s function with the structures connected to it.';
     
+    /**
+     * @var Remove\EntityFunction
+     */
     private $remove_entity_function;
 
     public function __construct()

@@ -23,11 +23,12 @@ class WorkflowLogicFunction
     }
     
     /**
-     *  constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @param Command $command
+     * @return void
      */
-    public function generate($td_entity_name, $function_name, Command $command)
+    public function generate(string $td_entity_name, string $function_name, Command $command): void
     {
 
         $this->generateLogicFunction($td_entity_name, $function_name);
@@ -36,7 +37,12 @@ class WorkflowLogicFunction
 
     }
 
-    public function generateLogicFunction($td_entity_name, $function_name)
+    /**
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @return void
+     */
+    public function generateLogicFunction(string $td_entity_name, string $function_name): void
     {
         $name = ucfirst($td_entity_name).ucfirst($function_name);
         
@@ -63,8 +69,13 @@ class WorkflowLogicFunction
         
     }
 
-
-    public function generateOther($td_entity_name, $function_name, Command $command)
+    /**
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @param Command $command
+     * @return void
+     */
+    public function generateOther(string $td_entity_name, string $function_name, Command $command): void
     {
         //
         //sto workflow tha ftiaxnw taytoxrona k ola ta alla functions/domes

@@ -21,6 +21,9 @@ class GenerateFactory extends Command
      */
     protected $description = 'Create a factory for a model';
 
+    /**
+     * @var Factories\Factory
+     */
     private $factory;
 
     public function __construct()

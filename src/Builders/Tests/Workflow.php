@@ -16,11 +16,10 @@ class Workflow
     }
 
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @return void
      */
-    public function generate($name = 'TEST')
+    public function generate(string $name = 'TEST'): void
     {
         
         //

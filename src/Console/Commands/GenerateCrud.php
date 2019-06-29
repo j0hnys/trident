@@ -21,6 +21,9 @@ class GenerateCrud extends Command
      */
     protected $description = 'Create a RESTFUL CRUD';
     
+    /**
+     * @var Crud\CrudBuilder
+     */
     private $crud_builder;
 
     public function __construct()

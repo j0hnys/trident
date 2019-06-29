@@ -15,11 +15,12 @@ class Resources
     }
     
     /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param string $entity_name
+     * @param boolean $is_collection
+     * @param string $domain
+     * @return void
      */
-    public function generate(string $entity_name, bool $is_collection, string $domain)
+    public function generate(string $entity_name, bool $is_collection, string $domain): void
     {
         //Resource logic generation
         $resource_type = $is_collection?'ResourceCollection':'Resource';

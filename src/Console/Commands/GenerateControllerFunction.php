@@ -21,6 +21,9 @@ class GenerateControllerFunction extends Command
      */
     protected $description = 'Create a controller function';
     
+    /**
+     * @var Crud\ControllerFunction
+     */
     private $controller_function;
 
     public function __construct()

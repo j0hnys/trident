@@ -21,6 +21,9 @@ class BuildModels extends Command
      */
     protected $description = 'Create all models from current database connection';
     
+    /**
+     * @var Build\Models
+     */
     private $models;
 
     public function __construct()

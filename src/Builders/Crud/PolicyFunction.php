@@ -14,11 +14,11 @@ class PolicyFunction
     }
     
     /**
-     *  constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @return void
      */
-    public function generate($td_entity_name, $function_name)
+    public function generate(string $td_entity_name, string $function_name): void
     {
         
         $name = ucfirst($td_entity_name).ucfirst($function_name);

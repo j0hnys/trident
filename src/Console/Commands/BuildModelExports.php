@@ -21,6 +21,9 @@ class BuildModelExports extends Command
      */
     protected $description = 'Create all model exports from current models';
     
+    /**
+     * @var Build\ModelExports
+     */
     private $model_exports;
 
     public function __construct()
