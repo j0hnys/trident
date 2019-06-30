@@ -148,6 +148,7 @@ class Disk
             }
             return rmdir($dir);
         }
+        return false;
     }
 
     /**
@@ -166,7 +167,7 @@ class Disk
      */
     public function copyFolderStructure(string $source, string $destination): void
     {
-        mkdir($destination, 0755);
+        mkdir($destination, 0777);
         foreach (
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($source, \RecursiveDirectoryIterator::SKIP_DOTS),

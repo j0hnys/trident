@@ -12,7 +12,9 @@
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/trident/Unit</directory>
         </testsuite>
-
+        <testsuite name="Integration">
+            <directory suffix="Test.php">./tests/trident/Integration</directory>
+        </testsuite>
         <testsuite name="Functional">
             <directory suffix="Test.php">./tests/trident/Functional</directory>
         </testsuite>
