@@ -14,12 +14,18 @@ class WorkflowRestfulCrud
     private $storage_trident;
     private $crud_builder;
     
-    public function __construct()
+    public function __construct(Disk $storage_disk = null, Trident $storage_trident = null)
     {
         $this->mustache = new \Mustache_Engine;
         $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
         $this->storage_trident = new Trident();
-        $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder();
+        if (!empty($storage_trident)) {
+            $this->storage_trident = $storage_trident;
+        }
+        $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder($storage_disk, $storage_trident);
     }
 
     /**

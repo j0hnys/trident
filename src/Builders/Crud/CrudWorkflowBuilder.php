@@ -15,11 +15,17 @@ class CrudWorkflowBuilder
     private $storage_disk;
     private $storage_trident;
 
-    public function __construct()
+    public function __construct(Disk $storage_disk = null, Trident $storage_trident = null)
     {
         $this->mustache = new \Mustache_Engine;
         $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
         $this->storage_trident = new Trident();
+        if (!empty($storage_trident)) {
+            $this->storage_trident = $storage_trident;
+        }
     }
 
     /**

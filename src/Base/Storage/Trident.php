@@ -15,6 +15,15 @@ class Trident
     }
 
     /**
+     * @param string $path
+     * @return void
+     */
+    public function setBasePath(string $path): void
+    {
+        $this->base_path = $path;
+    }
+
+    /**
      * @return array
      */    
     public function getCurrentControllers(): array
