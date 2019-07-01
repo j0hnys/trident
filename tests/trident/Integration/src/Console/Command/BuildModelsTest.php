@@ -19,6 +19,11 @@ class BuildModelsTest extends TestCase
         $install = new Install($this->storage_disk);
         $install->run();
 
+        $base_path = $this->storage_disk->getBasePath();    //<--
+        $base_path = str_replace('C:\\','/',$base_path);    //<-- t krlove thelei t full path na arxizei apo `/` (dld linux!!) 
+        
+        $this->storage_disk->setBasePath($base_path);
+
         $this->build_models = new Models($this->storage_disk);
     }
 
@@ -36,37 +41,31 @@ class BuildModelsTest extends TestCase
 
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
-        $method_command = '';
+        $method_command = [];
         $method_parameters = [];
 
         $mock_command->method('call')
             ->with(
                 $this->callback(function($parameter) use (&$method_command) {
-                    $method_command = $parameter;
+                    $method_command []= $parameter;
                     return true;
                 }),
                 $this->callback(function($parameter) use (&$method_parameters) {
-                    $method_parameters = $parameter;
+                    $method_parameters []= $parameter;
                     return true;
                 })
             )
             ->willReturn(true);
 
+        //act
         $this->build_models->generate($data, $mock_command);
 
-        $this->artisan('list');
-        
-        dump([
-            '$method_command' => $method_command,
-            '$method_parameters' => $method_parameters,
-        ]);
-
-        // $this->storage_disk->makeDirectory($method_parameters['--output-path'].'');
-
-        $this->artisan($method_command, $method_parameters);
+        foreach ($method_command as $i => $method_command_) {
+            $this->artisan($method_command[$i], $method_parameters[$i]);
+        }
 
 
-
+        //assert
         $this->assertTrue(true);
     }
 }

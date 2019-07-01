@@ -23,8 +23,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         $this->storage_disk = new Disk();
         $this->storage_disk->setBasePath($this->base_path);
 
-        $this->storage_disk->deleteDirectoryAndFiles($this->base_path.'/app');
-        $this->storage_disk->deleteDirectoryAndFiles($this->base_path.'/routes');
+        $this->storage_disk->deleteDirectoryAndFiles($this->base_path.'/');
 
         $this->storage_disk->makeDirectory($this->base_path.'/app/.');
         $this->storage_disk->makeDirectory($this->base_path.'/app/Providers/.');
@@ -74,9 +73,9 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'root' => '127.0.0.1',
         ]);
 
-        $app->bind('path.public', function() {
-            return __DIR__;
-        });
+        // $app->bind('path.public', function() {
+        //     return __DIR__;
+        // });
         
         // dd($app['config']);
     }
