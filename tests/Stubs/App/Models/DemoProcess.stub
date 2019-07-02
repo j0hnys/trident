@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @property int $id
+ * @property string $name
+ * @property int $value
+ * @property string $created_at
+ * @property string $updated_at
+ */
+class DemoProcess extends Model
+{
+    /**
+     * The table associated with the model.
+     * 
+     * @var string
+     */
+    protected $table = 'demo_process';
+
+    /**
+     * @var array
+     */
+    protected $fillable = ['name', 'value', 'created_at', 'updated_at'];
+
+}

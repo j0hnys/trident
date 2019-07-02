@@ -18,6 +18,13 @@ class ExportModelTest extends TestCase
         $install = new Install($this->storage_disk);
         $install->run();
 
+        $this->storage_disk->makeDirectory($this->base_path.'/app/Models/.');
+
+        $stub = $this->storage_disk->readFile($this->base_path.'/../Stubs/App/Models/DemoProcess.stub');
+        $this->storage_disk->writeFile($this->base_path.'/app/Models/DemoProcess.php', $stub);
+
+        exec('composer dump-autoload');
+
         $this->export_model = new Model($this->storage_disk);
     }
 
@@ -26,7 +33,7 @@ class ExportModelTest extends TestCase
     {
         $td_entity_name = 'DemoProcess';
         $output_path = '';
-
+        
         $this->export_model->generate($td_entity_name, $output_path);
 
         $this->assertTrue(true);

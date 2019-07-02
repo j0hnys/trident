@@ -9,9 +9,12 @@ class ModelExports
 {
     private $storage_disk;
 
-    public function __construct()
+    public function __construct(Disk $storage_disk = null)
     {
         $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
     }
 
     public function generate($data = [], Command $command): void
@@ -22,7 +25,7 @@ class ModelExports
         $this->storage_disk->makeDirectory($output_path);
         
         $files = $this->storage_disk->getFolderFileNames($input_path);
-        
+
         foreach ($files as $file) {
             $file_name = str_replace('.php', '', $file);
             
