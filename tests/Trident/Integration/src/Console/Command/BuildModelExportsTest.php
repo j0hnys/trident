@@ -22,7 +22,6 @@ class BuildModelExportsTest extends TestCase
 
         $stub = $this->storage_disk->readFile($this->base_path.'/../Stubs/App/Models/DemoProcess.stub');
         $this->storage_disk->writeFile($this->base_path.'/app/Models/DemoProcess.php', $stub);
-
         exec('composer dump-autoload');
 
         $this->model_exports = new ModelExports($this->storage_disk);

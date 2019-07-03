@@ -26,9 +26,12 @@ class Factory
 
     private $storage_disk;
 
-    public function __construct()
+    public function __construct(Disk $storage_disk = null)
     {
         $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
         $this->mustache = new \Mustache_Engine;
     }
 
