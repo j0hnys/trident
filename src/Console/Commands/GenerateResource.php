@@ -44,11 +44,11 @@ class GenerateResource extends Command
         try {
             $entity_name = $this->argument('entity_name');
             $is_collection = $this->option('collection');
-            $domain = $this->option('workflow')?'Workflows':'Business';
+            $domain = $this->option('workflow') ? 'Workflows' : 'Business';
             
             $crud = $this->resources->generate($entity_name, $is_collection, $domain);
             
-            $collection_message = $is_collection?' Collection':'';
+            $collection_message = $is_collection ? ' Collection' : '';
             $this->info($entity_name.' Resource'.$collection_message.' successfully created for '.$domain);
             
         } catch (\Exception $ex) {

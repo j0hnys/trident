@@ -45,7 +45,7 @@ class GenerateStrictType extends Command
             $strict_type_name = $this->argument('strict_type_name');
             $function_name = $this->argument('function_name');
             $entity_name = $this->argument('entity_name');
-            $domain = $this->option('workflow')?'Workflows':'Business';
+            $domain = $this->option('workflow') ? 'Workflows' : 'Business';
             
             $this->strict_type->generate($strict_type_name, $function_name, $entity_name, $domain);
 

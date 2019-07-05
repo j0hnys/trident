@@ -8,9 +8,12 @@ class Resources
 {
     private $storage_disk;
 
-    public function __construct()
+    public function __construct(Disk $storage_disk = null)
     {
         $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
         $this->mustache = new \Mustache_Engine;
     }
     
@@ -23,7 +26,7 @@ class Resources
     public function generate(string $entity_name, bool $is_collection, string $domain): void
     {
         //Resource logic generation
-        $resource_type = $is_collection?'ResourceCollection':'Resource';
+        $resource_type = $is_collection ? 'ResourceCollection' : 'Resource';
         $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($entity_name).'/Resources/'.ucfirst($entity_name).$resource_type.'.php';
         
         if ($this->storage_disk->fileExists($struct_path)) {
