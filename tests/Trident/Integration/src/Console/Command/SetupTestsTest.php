@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
 use j0hnys\Trident\Builders\Setup\Tests;
+use j0hnys\Trident\Console\Commands\SetupTests;
 
 class SetupTestsTest extends TestCase
 {
@@ -38,6 +39,26 @@ class SetupTestsTest extends TestCase
         $this->storage_disk->makeDirectory($this->base_path.'/tests/.');
         $this->setup_tests = new Tests($this->storage_disk);
 
+        //command behavioural test
+        $this->mock_setup_tests = $this->createMock(Tests::class);
+        $this->mock_command_setup_tests = $this->getMockBuilder(SetupTests::class)
+            ->setConstructorArgs([$this->mock_setup_tests])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+            
+        $this->mock_command_setup_tests->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_setup_tests->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

@@ -26,12 +26,14 @@ class GenerateWorkflowTests extends Command
      */
     private $workflow;
 
-    public function __construct()
+    public function __construct(Tests\Workflow $workflow = null)
     {
         parent::__construct();
 
         $this->workflow = new Tests\Workflow();
-        
+        if (!empty($workflow)) {
+            $this->workflow = $workflow;
+        }
     }
     
     /**

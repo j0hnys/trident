@@ -26,12 +26,14 @@ class GenerateWorkflow extends Command
      */
     private $workflow;
 
-    public function __construct()
+    public function __construct(Builders\Workflow $workflow = null)
     {
         parent::__construct();
 
         $this->workflow = new Builders\Workflow();
-
+        if (!empty($workflow)) {
+            $this->workflow = $workflow;
+        }
     }
     
     /**

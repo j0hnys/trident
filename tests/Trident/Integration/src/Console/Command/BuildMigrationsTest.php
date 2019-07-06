@@ -23,6 +23,7 @@ class BuildMigrationsTest extends TestCase
 
         $this->build_migrations = new Migrations($this->storage_disk);
 
+        //command behavioural test
         $this->mock_build_migrations = $this->createMock(Migrations::class);
         $this->mock_command_build_migrations = $this->getMockBuilder(BuildMigrations::class)
             ->setConstructorArgs([$this->mock_build_migrations])

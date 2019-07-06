@@ -5,6 +5,7 @@ namespace j0hnys\Trident\Tests\Integration;
 use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\Factories\Factory;
+use j0hnys\Trident\Console\Commands\GenerateFactory;
 
 class GenerateFactoryTest extends TestCase
 {
@@ -29,6 +30,31 @@ class GenerateFactoryTest extends TestCase
 
         $this->factory = new Factory($this->storage_disk);
 
+        //command behavioural test
+        $this->mock_factory = $this->createMock(Factory::class);
+        $this->mock_command_factory = $this->getMockBuilder(GenerateFactory::class)
+            ->setConstructorArgs([$this->mock_factory])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $model = '';
+
+        $this->mock_command_factory->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($model);
+
+        $this->mock_command_factory->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_factory->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

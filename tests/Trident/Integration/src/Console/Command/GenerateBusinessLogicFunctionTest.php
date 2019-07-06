@@ -7,6 +7,7 @@ use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
 use j0hnys\Trident\Builders\BusinessLogicFunction;
+use j0hnys\Trident\Console\Commands\GenerateBusinessLogicFunction;
 
 class GenerateBusinessLogicFunctionTest extends TestCase
 {
@@ -37,8 +38,36 @@ class GenerateBusinessLogicFunctionTest extends TestCase
 
         $this->business_logic_function = new BusinessLogicFunction($this->storage_disk);
 
+        //command behavioural test
+        $this->mock_business_logic_function = $this->createMock(BusinessLogicFunction::class);
+        $this->mock_command_business_logic_function = $this->getMockBuilder(GenerateBusinessLogicFunction::class)
+            ->setConstructorArgs([$this->mock_business_logic_function])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
     }
 
+    public function testHandle()
+    {
+        $entity_name = '';
+        $function_name = '';
+
+        $this->mock_command_business_logic_function->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($entity_name);
+
+        $this->mock_command_business_logic_function->expects($this->at(1))
+            ->method('argument')
+            ->willReturn($function_name);
+
+        $this->mock_command_business_logic_function->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_business_logic_function->handle();
+
+        //assert
+        $this->assertTrue(true);
+    }
 
     public function testGenerate()
     {

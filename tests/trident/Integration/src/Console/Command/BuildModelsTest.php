@@ -5,6 +5,7 @@ namespace j0hnys\Trident\Tests\Integration;
 use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\Build\Models;
+use j0hnys\Trident\Console\Commands\BuildModels;
 
 class BuildModelsTest extends TestCase
 {
@@ -23,6 +24,28 @@ class BuildModelsTest extends TestCase
         $this->storage_disk->setBasePath($base_path);
 
         $this->build_models = new Models($this->storage_disk);
+
+        //command behavioural test
+        $this->mock_build_models = $this->createMock(Models::class);
+        $this->mock_command_build_models = $this->getMockBuilder(BuildModels::class)
+            ->setConstructorArgs([$this->mock_build_models])
+            ->setMethods(['option'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $output_path = '';
+
+        $this->mock_command_build_models->expects($this->at(0))
+            ->method('option')
+            ->willReturn($output_path);
+
+        $this->mock_command_build_models->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
     

@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
 use j0hnys\Trident\Builders\Refresh\ClassInterface;
+use j0hnys\Trident\Console\Commands\RefreshClassInterface;
 
 class RefreshClassInterfaceTest extends TestCase
 {
@@ -37,6 +38,41 @@ class RefreshClassInterfaceTest extends TestCase
         //refresh class interface
         $this->refresh_class_interface = new ClassInterface($this->storage_disk);
 
+        //command behavioural test
+        $this->mock_refresh_class_interface = $this->createMock(ClassInterface::class);
+        $this->mock_command_refresh_class_interface = $this->getMockBuilder(RefreshClassInterface::class)
+            ->setConstructorArgs([$this->mock_refresh_class_interface])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $name = '';
+        $relative_input_path = '';
+        $relative_output_path = '';
+
+        $this->mock_command_refresh_class_interface->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($name);
+
+        $this->mock_command_refresh_class_interface->expects($this->at(1))
+            ->method('argument')
+            ->willReturn($relative_input_path);
+
+        $this->mock_command_refresh_class_interface->expects($this->at(2))
+            ->method('argument')
+            ->willReturn($relative_output_path);
+            
+        $this->mock_command_refresh_class_interface->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_refresh_class_interface->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

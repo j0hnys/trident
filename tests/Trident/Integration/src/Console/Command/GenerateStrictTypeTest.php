@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
 use j0hnys\Trident\Builders\StrictType;
+use j0hnys\Trident\Console\Commands\GenerateStrictType;
 
 class GenerateStrictTypeTest extends TestCase
 {
@@ -37,6 +38,46 @@ class GenerateStrictTypeTest extends TestCase
         //policy function
         $this->strict_type = new StrictType($this->storage_disk);
 
+        //command behavioural test
+        $this->mock_strict_type = $this->createMock(StrictType::class);
+        $this->mock_command_strict_type = $this->getMockBuilder(GenerateStrictType::class)
+            ->setConstructorArgs([$this->mock_strict_type])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $strict_type_name = '';
+        $function_name = '';
+        $entity_name = '';
+        $domain = '';
+
+        $this->mock_command_strict_type->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($strict_type_name);
+
+        $this->mock_command_strict_type->expects($this->at(1))
+            ->method('argument')
+            ->willReturn($function_name);
+
+        $this->mock_command_strict_type->expects($this->at(2))
+            ->method('argument')
+            ->willReturn($entity_name);
+
+        $this->mock_command_strict_type->expects($this->at(0))
+            ->method('option')
+            ->willReturn($domain);
+
+        $this->mock_command_strict_type->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_strict_type->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

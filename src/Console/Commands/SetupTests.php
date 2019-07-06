@@ -27,12 +27,14 @@ class SetupTests extends Command
      */
     private $setup_tests;
 
-    public function __construct()
+    public function __construct(Setup\Tests $setup_tests = null)
     {
         parent::__construct();
 
         $this->setup_tests = new Setup\Tests();
-        
+        if (!empty($setup_tests)) {
+            $this->setup_tests = $setup_tests;
+        }
     }
 
 

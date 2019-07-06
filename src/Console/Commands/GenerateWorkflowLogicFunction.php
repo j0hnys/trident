@@ -26,12 +26,14 @@ class GenerateWorkflowLogicFunction extends Command
      */
     private $workflow_logic_function;
 
-    public function __construct()
+    public function __construct(Builders\WorkflowLogicFunction $workflow_logic_function = null)
     {
         parent::__construct();
 
         $this->workflow_logic_function = new Builders\WorkflowLogicFunction();
-
+        if (!empty($workflow_logic_function)) {
+            $this->workflow_logic_function = $workflow_logic_function;
+        }
     }
     
     /**

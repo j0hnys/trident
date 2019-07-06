@@ -26,12 +26,14 @@ class GenerateBusinessLogicFunction extends Command
      */
     private $business_logic_function;
 
-    public function __construct()
+    public function __construct(Builders\BusinessLogicFunction $business_logic_function = null)
     {
         parent::__construct();
 
         $this->business_logic_function = new Builders\BusinessLogicFunction();
-
+        if (!empty($business_logic_function)) {
+            $this->business_logic_function = $business_logic_function;
+        }
     }
 
     /**

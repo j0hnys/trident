@@ -26,12 +26,14 @@ class GenerateStrictType extends Command
      */
     private $strict_type;
 
-    public function __construct()
+    public function __construct(Builders\StrictType $strict_type = null)
     {
         parent::__construct();
 
         $this->strict_type = new Builders\StrictType();
-
+        if (!empty($strict_type)) {
+            $this->strict_type = $strict_type;
+        }
     }
     
     /**

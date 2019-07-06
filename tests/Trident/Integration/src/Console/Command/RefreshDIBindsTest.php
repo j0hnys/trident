@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
 use j0hnys\Trident\Builders\Refresh\DIBinds;
+use j0hnys\Trident\Console\Commands\RefreshDIBinds;
 
 class RefreshDIBindsTest extends TestCase
 {
@@ -37,6 +38,22 @@ class RefreshDIBindsTest extends TestCase
         //refresh class interface
         $this->refresh_di_binds = new DIBinds($this->storage_disk, $this->storage_trident);
 
+        //command behavioural test
+        $this->mock_refresh_di_binds = $this->createMock(DIBinds::class);
+        $this->mock_command_refresh_di_binds = $this->getMockBuilder(RefreshDIBinds::class)
+            ->setConstructorArgs([$this->mock_refresh_di_binds])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        
+        $this->mock_command_refresh_di_binds->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

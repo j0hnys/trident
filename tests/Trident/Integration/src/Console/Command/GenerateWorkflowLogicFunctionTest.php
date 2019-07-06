@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\Workflow;
 use j0hnys\Trident\Builders\WorkflowLogicFunction;
+use j0hnys\Trident\Console\Commands\GenerateWorkflowLogicFunction;
 
 class GenerateWorkflowLogicFunctionTest extends TestCase
 {
@@ -31,6 +32,36 @@ class GenerateWorkflowLogicFunctionTest extends TestCase
         //workflow logic function
         $this->workflow_logic_function = new WorkflowLogicFunction($this->storage_disk);
 
+        //command behavioural test
+        $this->mock_workflow_logic_function = $this->createMock(WorkflowLogicFunction::class);
+        $this->mock_command_workflow_logic_function = $this->getMockBuilder(GenerateWorkflowLogicFunction::class)
+            ->setConstructorArgs([$this->mock_workflow_logic_function])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $entity_name = '';
+        $function_name = '';
+
+        $this->mock_command_workflow_logic_function->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($entity_name);
+
+        $this->mock_command_workflow_logic_function->expects($this->at(1))
+            ->method('argument')
+            ->willReturn($function_name);
+            
+        $this->mock_command_workflow_logic_function->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_workflow_logic_function->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

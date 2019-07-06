@@ -26,12 +26,14 @@ class ExportModel extends Command
      */
     private $model;
 
-    public function __construct()
+    public function __construct(Export\Model $model = null)
     {
         parent::__construct();
 
         $this->model = new Export\Model();
-
+        if (!empty($model)) {
+            $this->model = $model;
+        }
     }
 
     /**

@@ -26,12 +26,14 @@ class GenerateWorkflowTestLogicFunction extends Command
      */
     private $workflow_logic_function;
 
-    public function __construct()
+    public function __construct(Tests\WorkflowLogicFunction $workflow_logic_function = null)
     {
         parent::__construct();
 
         $this->workflow_logic_function = new Tests\WorkflowLogicFunction();
-        
+        if (!empty($workflow_logic_function)) {
+            $this->workflow_logic_function = $workflow_logic_function;
+        }
     }
 
     /**

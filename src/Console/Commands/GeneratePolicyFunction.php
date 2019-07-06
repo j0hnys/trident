@@ -26,12 +26,14 @@ class GeneratePolicyFunction extends Command
      */
     private $policy_function;
 
-    public function __construct()
+    public function __construct(Crud\PolicyFunction $policy_function = null)
     {
         parent::__construct();
 
         $this->policy_function = new Crud\PolicyFunction();
-
+        if (!empty($policy_function)) {
+            $this->policy_function = $policy_function;
+        }
     }
     
     /**

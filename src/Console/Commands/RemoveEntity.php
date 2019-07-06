@@ -26,12 +26,14 @@ class RemoveEntity extends Command
      */
     private $remove_entity;
 
-    public function __construct()
+    public function __construct(Remove\Entity $remove_entity = null)
     {
         parent::__construct();
 
         $this->remove_entity = new Remove\Entity();
-        
+        if (!empty($remove_entity)) {
+            $this->remove_entity = $remove_entity;
+        }
     }
     
     /**

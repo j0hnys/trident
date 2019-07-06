@@ -28,7 +28,7 @@ class GenerateWorkflowRestfulCrud extends Command
      */
     private $crud_workflow_builder;
 
-    public function __construct()
+    public function __construct(Builders\WorkflowRestfulCrud $crud_workflow_builder = null)
     {
         parent::__construct();
 
@@ -36,7 +36,9 @@ class GenerateWorkflowRestfulCrud extends Command
         $Declarations->get();
 
         $this->crud_workflow_builder = new Builders\WorkflowRestfulCrud();
-        
+        if (!empty($crud_workflow_builder)) {
+            $this->crud_workflow_builder = $crud_workflow_builder;
+        }
     }
 
     /**

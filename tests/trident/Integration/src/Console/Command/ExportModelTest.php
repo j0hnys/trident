@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\Export\Model;
+use j0hnys\Trident\Console\Commands\ExportModel;
 
 class ExportModelTest extends TestCase
 {
@@ -26,6 +27,37 @@ class ExportModelTest extends TestCase
         exec('composer dump-autoload');
 
         $this->export_model = new Model($this->storage_disk);
+
+        //command behavioural test
+        $this->mock_export_model = $this->createMock(Model::class);
+        $this->mock_command_export_model = $this->getMockBuilder(ExportModel::class)
+            ->setConstructorArgs([$this->mock_export_model])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $entity_name = '';
+        $output_path = '';
+
+        $this->mock_command_export_model->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($entity_name);
+
+        $this->mock_command_export_model->expects($this->at(0))
+            ->method('option')
+            ->willReturn($output_path);
+
+        $this->mock_command_export_model->expects($this->at(0))
+            ->method('info')
+            ->willReturn($output_path);
+
+        $this->mock_command_export_model->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
     

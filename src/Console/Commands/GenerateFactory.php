@@ -26,12 +26,14 @@ class GenerateFactory extends Command
      */
     private $factory;
 
-    public function __construct()
+    public function __construct(Factories\Factory $factory = null)
     {
         parent::__construct();
 
         $this->factory = new Factories\Factory();
-
+        if (!empty($factory)) {
+            $this->factory = $factory;
+        }
     }
     
     /**

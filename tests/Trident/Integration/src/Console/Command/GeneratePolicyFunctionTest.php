@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
 use j0hnys\Trident\Builders\Crud\PolicyFunction;
+use j0hnys\Trident\Console\Commands\GeneratePolicyFunction;
 
 class GeneratePolicyFunctionTest extends TestCase
 {
@@ -37,6 +38,36 @@ class GeneratePolicyFunctionTest extends TestCase
         //policy function
         $this->policy_function = new PolicyFunction($this->storage_disk);
 
+        //command behavioural test
+        $this->mock_policy_function = $this->createMock(PolicyFunction::class);
+        $this->mock_command_policy_function = $this->getMockBuilder(GeneratePolicyFunction::class)
+            ->setConstructorArgs([$this->mock_policy_function])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $entity_name = '';
+        $function_name = '';
+
+        $this->mock_command_policy_function->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($entity_name);
+
+        $this->mock_command_policy_function->expects($this->at(1))
+            ->method('argument')
+            ->willReturn($function_name);
+
+        $this->mock_command_policy_function->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_policy_function->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

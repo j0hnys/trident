@@ -26,12 +26,14 @@ class BuildModels extends Command
      */
     private $models;
 
-    public function __construct()
+    public function __construct(Build\Models $models = null)
     {
         parent::__construct();
 
         $this->models = new Build\Models();
-
+        if (!empty($models)) {
+            $this->models = $models;
+        }
     }
 
     /**

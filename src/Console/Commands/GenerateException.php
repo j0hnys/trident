@@ -26,12 +26,14 @@ class GenerateException extends Command
      */
     private $exception;
 
-    public function __construct()
+    public function __construct(Builders\Exception $exception = null)
     {
         parent::__construct();
 
         $this->exception = new Builders\Exception();
-
+        if (!empty($exception)) {
+            $this->exception = $exception;
+        }
     }
     
     /**

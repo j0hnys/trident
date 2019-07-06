@@ -26,12 +26,14 @@ class BuildModelExports extends Command
      */
     private $model_exports;
 
-    public function __construct()
+    public function __construct(Build\ModelExports $model_exports = null)
     {
         parent::__construct();
 
         $this->model_exports = new Build\ModelExports;
-
+        if (!empty($model_exports)) {
+            $this->model_exports = $model_exports;
+        }
     }
 
     /**

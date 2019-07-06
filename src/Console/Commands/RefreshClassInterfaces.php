@@ -26,12 +26,14 @@ class RefreshClassInterfaces extends Command
      */
     private $refresh_class_interfaces;
 
-    public function __construct()
+    public function __construct(Refresh\ClassInterfaces $refresh_class_interfaces = null)
     {
         parent::__construct();
 
         $this->refresh_class_interfaces = new Refresh\ClassInterfaces();
-        
+        if (!empty($refresh_class_interfaces)) {
+            $this->refresh_class_interfaces = $refresh_class_interfaces;
+        }
     }
 
     /**

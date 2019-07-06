@@ -27,12 +27,14 @@ class Install extends Command
      */
     private $install;
 
-    public function __construct()
+    public function __construct(Setup\Install $install = null)
     {
         parent::__construct();
 
         $this->install = new Setup\Install();
-        
+        if (!empty($install)) {
+            $this->install = $install;
+        }
     }
 
     /**

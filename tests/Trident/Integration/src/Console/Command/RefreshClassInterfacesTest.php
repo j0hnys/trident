@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
 use j0hnys\Trident\Builders\Refresh\ClassInterfaces;
+use j0hnys\Trident\Console\Commands\RefreshClassInterfaces;
 
 class RefreshClassInterfacesTest extends TestCase
 {
@@ -37,6 +38,31 @@ class RefreshClassInterfacesTest extends TestCase
         //refresh class interface
         $this->refresh_class_interfaces = new ClassInterfaces($this->storage_disk, $this->storage_trident);
 
+        //command behavioural test
+        $this->mock_refresh_class_interfaces = $this->createMock(ClassInterfaces::class);
+        $this->mock_command_refresh_class_interfaces = $this->getMockBuilder(RefreshClassInterfaces::class)
+            ->setConstructorArgs([$this->mock_refresh_class_interfaces])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $td_entity_type = '';
+
+        $this->mock_command_refresh_class_interfaces->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($td_entity_type);
+            
+        $this->mock_command_refresh_class_interfaces->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_refresh_class_interfaces->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

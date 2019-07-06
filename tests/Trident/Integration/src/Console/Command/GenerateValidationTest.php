@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
 use j0hnys\Trident\Builders\Validation;
+use j0hnys\Trident\Console\Commands\GenerateValidation;
 
 class GenerateValidationTest extends TestCase
 {
@@ -37,6 +38,36 @@ class GenerateValidationTest extends TestCase
         //policy function
         $this->validation = new Validation($this->storage_disk);
 
+        //command behavioural test
+        $this->mock_validation = $this->createMock(Validation::class);
+        $this->mock_command_validation = $this->getMockBuilder(GenerateValidation::class)
+            ->setConstructorArgs([$this->mock_validation])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $entity_name = '';
+        $function_name = '';
+
+        $this->mock_command_validation->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($entity_name);
+
+        $this->mock_command_validation->expects($this->at(1))
+            ->method('argument')
+            ->willReturn($function_name);
+            
+        $this->mock_command_validation->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_validation->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

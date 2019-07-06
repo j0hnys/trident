@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
+use j0hnys\Trident\Console\Commands\GenerateWorkflowRestfulCrud;
 
 class GenerateWorkflowRestfulCrudTest extends TestCase
 {
@@ -25,6 +26,32 @@ class GenerateWorkflowRestfulCrudTest extends TestCase
         exec('composer dump-autoload');
 
         $this->workflow_restful_crud = new WorkflowRestfulCrud($this->storage_disk, $this->storage_trident);
+
+        //command behavioural test
+        $this->mock_workflow_restful_crud = $this->createMock(WorkflowRestfulCrud::class);
+        $this->mock_command_workflow_restful_crud = $this->getMockBuilder(GenerateWorkflowRestfulCrud::class)
+            ->setConstructorArgs([$this->mock_workflow_restful_crud])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $name = '';
+
+        $this->mock_command_workflow_restful_crud->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($name);
+            
+        $this->mock_command_workflow_restful_crud->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_workflow_restful_crud->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

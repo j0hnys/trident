@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\Workflow;
 use j0hnys\Trident\Builders\Tests\Workflow as WorkFlowTests;
+use j0hnys\Trident\Console\Commands\GenerateWorkflowTests;
 
 class GenerateWorkflowTestsTest extends TestCase
 {
@@ -31,6 +32,31 @@ class GenerateWorkflowTestsTest extends TestCase
         //workflow tests
         $this->workflow_tests = new WorkFlowTests($this->storage_disk);
 
+        //command behavioural test
+        $this->mock_workflow_tests = $this->createMock(WorkFlowTests::class);
+        $this->mock_command_workflow_tests = $this->getMockBuilder(GenerateWorkflowTests::class)
+            ->setConstructorArgs([$this->mock_workflow_tests])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $name = '';
+
+        $this->mock_command_workflow_tests->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($name);
+            
+        $this->mock_command_workflow_tests->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_workflow_tests->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

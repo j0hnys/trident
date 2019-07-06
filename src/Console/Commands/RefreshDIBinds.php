@@ -26,12 +26,14 @@ class RefreshDIBinds extends Command
      */
     private $refresh_di_binds;
 
-    public function __construct()
+    public function __construct(Refresh\DIBinds $refresh_di_binds = null)
     {
         parent::__construct();
 
         $this->refresh_di_binds = new Refresh\DIBinds();
-        
+        if (!empty($refresh_di_binds)) {
+            $this->refresh_di_binds = $refresh_di_binds;
+        }
     }
 
     /**

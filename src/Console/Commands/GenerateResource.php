@@ -26,12 +26,14 @@ class GenerateResource extends Command
      */
     private $resources;
 
-    public function __construct()
+    public function __construct(Builders\Resources $resources = null)
     {
         parent::__construct();
 
         $this->resources = new Builders\Resources();
-
+        if (!empty($resources)) {
+            $this->resources = $resources;
+        }
     }
     
     /**

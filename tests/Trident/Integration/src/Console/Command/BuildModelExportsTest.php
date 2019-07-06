@@ -5,6 +5,7 @@ namespace j0hnys\Trident\Tests\Integration;
 use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\Build\ModelExports;
+use j0hnys\Trident\Console\Commands\BuildModelExports;
 
 class BuildModelExportsTest extends TestCase
 {
@@ -25,6 +26,33 @@ class BuildModelExportsTest extends TestCase
         exec('composer dump-autoload');
 
         $this->model_exports = new ModelExports($this->storage_disk);
+
+        //command behavioural test
+        $this->mock_model_exports = $this->createMock(ModelExports::class);
+        $this->mock_command_model_exports = $this->getMockBuilder(BuildModelExports::class)
+            ->setConstructorArgs([$this->mock_model_exports])
+            ->setMethods(['option'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $input_path = '';
+        $output_path = '';
+
+        $this->mock_command_model_exports->expects($this->at(0))
+            ->method('option')
+            ->willReturn($input_path);
+
+        $this->mock_command_model_exports->expects($this->at(1))
+            ->method('option')
+            ->willReturn($output_path);
+
+        $this->mock_command_model_exports->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
     

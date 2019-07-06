@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
 use j0hnys\Trident\Builders\Remove\Entity;
+use j0hnys\Trident\Console\Commands\RemoveEntity;
 
 class RemoveEntityTest extends TestCase
 {
@@ -37,6 +38,31 @@ class RemoveEntityTest extends TestCase
         //refresh class interface
         $this->remove_entity = new Entity($this->storage_disk, $this->storage_trident);
 
+        //command behavioural test
+        $this->mock_remove_entity = $this->createMock(Entity::class);
+        $this->mock_command_remove_entity = $this->getMockBuilder(RemoveEntity::class)
+            ->setConstructorArgs([$this->mock_remove_entity])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $td_entity_name = '';
+
+        $this->mock_command_remove_entity->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($td_entity_name);
+            
+        $this->mock_command_remove_entity->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_remove_entity->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

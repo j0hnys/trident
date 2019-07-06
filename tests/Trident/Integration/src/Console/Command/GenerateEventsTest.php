@@ -6,6 +6,7 @@ use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\Events;
+use j0hnys\Trident\Console\Commands\GenerateEvents;
 
 class GenerateEventsTest extends TestCase
 {
@@ -30,6 +31,41 @@ class GenerateEventsTest extends TestCase
 
         $this->events = new Events($this->storage_disk, $this->storage_trident);
 
+        //command behavioural test
+        $this->mock_events = $this->createMock(Events::class);
+        $this->mock_command_events = $this->getMockBuilder(GenerateEvents::class)
+            ->setConstructorArgs([$this->mock_events])
+            ->setMethods(['argument','option','info'])
+            ->getMock();
+    }
+
+
+    public function testHandle()
+    {
+        $td_entity_type = '';
+        $event_type = '';
+        $td_entity_name = '';
+
+        $this->mock_command_events->expects($this->at(0))
+            ->method('argument')
+            ->willReturn($td_entity_type);
+        
+        $this->mock_command_events->expects($this->at(1))
+            ->method('argument')
+            ->willReturn($event_type);
+
+        $this->mock_command_events->expects($this->at(2))
+            ->method('argument')
+            ->willReturn($td_entity_name);
+
+        $this->mock_command_events->expects($this->at(0))
+            ->method('info')
+            ->willReturn(null);
+
+        $this->mock_command_events->handle();
+
+        //assert
+        $this->assertTrue(true);
     }
 
 

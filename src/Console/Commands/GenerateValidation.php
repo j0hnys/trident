@@ -26,12 +26,14 @@ class GenerateValidation extends Command
      */
     private $validation;
 
-    public function __construct()
+    public function __construct(Builders\Validation $validation = null)
     {
         parent::__construct();
 
         $this->validation = new Builders\Validation();
-
+        if (!empty($validation)) {
+            $this->validation = $validation;
+        }
     }
     
     /**

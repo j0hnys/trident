@@ -26,12 +26,14 @@ class GenerateCrud extends Command
      */
     private $crud_builder;
 
-    public function __construct()
+    public function __construct(Crud\CrudBuilder $crud_builder = null)
     {
         parent::__construct();
 
         $this->crud_builder = new Crud\CrudBuilder();
-
+        if (!empty($crud_builder)) {
+            $this->crud_builder = $crud_builder;
+        }
     }
 
     /**

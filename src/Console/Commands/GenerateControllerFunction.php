@@ -26,12 +26,14 @@ class GenerateControllerFunction extends Command
      */
     private $controller_function;
 
-    public function __construct()
+    public function __construct(Crud\ControllerFunction $controller_function = null)
     {
         parent::__construct();
 
         $this->controller_function = new Crud\ControllerFunction();
-
+        if (!empty($controller_function)) {
+            $this->controller_function = $controller_function;
+        }
     }
 
     /**

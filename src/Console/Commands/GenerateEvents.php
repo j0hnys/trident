@@ -26,12 +26,14 @@ class GenerateEvents extends Command
      */
     private $events;
 
-    public function __construct()
+    public function __construct(Builders\Events $events = null)
     {
         parent::__construct();
 
         $this->events = new Builders\Events();
-
+        if (!empty($events)) {
+            $this->events = $events;
+        }
     }
 
     /**
