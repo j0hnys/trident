@@ -5,6 +5,8 @@ namespace j0hnys\Trident\Tests\Base;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 
+use Illuminate\Database\Schema\Blueprint;
+
 class TestCase extends \Orchestra\Testbench\TestCase
 {
     protected $base_path;
@@ -50,36 +52,41 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function getEnvironmentSetUp($app)
     {
         // // Setup default database to use sqlite :memory:
-        // $app['config']->set('database.default', 'testbench');
-        // $app['config']->set('database.connections.testbench', [
-        //     'driver'   => 'sqlite',
-        //     'database' => ':memory:',
-        //     'prefix'   => '',
-        // ]);
+        $app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ]);
+        
+        //demo data for sqlite
+        \Schema::create('demo_process', function(Blueprint $table)
+		{
+			$table->increments('id');
+            $table->string('name', 191);
+            $table->string('surname', 191);
+			$table->integer('value');
+			$table->timestamps();
+		});
 
         
         // Setup default database to use sqlite :memory:
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver' => 'mysql',
-            'host' => '127.0.0.1',
-            'port' => '3306',
-            'database' => 'laravel_test',
-            'username' => 'root',
-            'password' => '',
-        ]);
+        // $app['config']->set('database.default', 'testbench');
+        // $app['config']->set('database.connections.testbench', [
+        //     'driver' => 'mysql',
+        //     'host' => '127.0.0.1',
+        //     'port' => '3306',
+        //     'database' => 'laravel_test',
+        //     'username' => 'root',
+        //     'password' => '',
+        // ]);
 
         $app['config']->set('filesystems.default', 'testbench');
         $app['config']->set('filesystems.disks.testbench', [
             'driver' => 'local',
             'root' => '127.0.0.1',
         ]);
-
-        // $app->bind('path.public', function() {
-        //     return __DIR__;
-        // });
         
-        // dd($app['config']);
     }
 
 
