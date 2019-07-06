@@ -26,11 +26,14 @@ class BuildMigrations extends Command
      */
     private $migrations;
 
-    public function __construct()
+    public function __construct(Migrations $migrations = null)
     {
         parent::__construct();
 
         $this->migrations = new Migrations();
+        if (!empty($migrations)) {
+            $this->migrations = $migrations;
+        }
     }
 
     /**
