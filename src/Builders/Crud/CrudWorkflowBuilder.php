@@ -80,7 +80,7 @@ class CrudWorkflowBuilder
             ]);
         } else {
             if (!$this->storage_disk->fileExists($model_path)) {
-                $this->makeDirectory($model_path);
+                $this->storage_disk->makeDirectory($model_path);
 
                 $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/Crud/Model.stub');
 
