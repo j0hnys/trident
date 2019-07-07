@@ -7,28 +7,35 @@ use PhpParser\NodeDumper;
 use PhpParser\ParserFactory;
 use PhpParser\{Node, NodeFinder};
 
+use j0hnys\Trident\Base\Storage\Disk;
+
 class ClassInterface
 {
+    private $storage_disk;
+    private $mustache;
+
+    public function __construct(Disk $storage_disk = null)
+    {
+        $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
+        $this->mustache = new \Mustache_Engine;
+    }
     
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @param string $relative_input_path
+     * @param string $relative_output_path
+     * @return void
      */
-    public function __construct($name, $relative_input_path, $relative_output_path)
+    public function run(string $name, string $relative_input_path, string $relative_output_path): void
     {
-        // $name = 'DemoProcess';
-        // $input_path = base_path().'/'.'app/Trident/Workflows/Logic';
-        // $output_path = base_path().'/'.'app/Trident/Interfaces/Workflows/Logic';
+        $input_path = $this->storage_disk->getBasePath().'/'.$relative_input_path;
+        $output_path = $this->storage_disk->getBasePath().'/'.$relative_output_path;
+                
 
-        $input_path = base_path().'/'.$relative_input_path;
-        $output_path = base_path().'/'.$relative_output_path;
-        
-
-        $mustache = new \Mustache_Engine;
-        
-
-        $code = file_get_contents( $input_path.'/'.$name.'.php' );
+        $code = $this->storage_disk->readFile( $input_path.'/'.$name.'.php' );
         $result = $this->getClassFunctionSignatures($code);
 
 
@@ -49,8 +56,8 @@ class ClassInterface
         },$result->strings->function_signatures);
 
 
-        $stub = file_get_contents(__DIR__.'/../../../src/Stubs/PHP/Interface.stub');
-        $stub = $mustache->render($stub, [
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../../src/Stubs/PHP/Interface.stub');
+        $stub = $this->mustache->render($stub, [
             'namespace' => $namespace,
             'used_namespaces' => $used_namespaces,
             'class_name' => $class_name,
@@ -58,24 +65,22 @@ class ClassInterface
         ]);
                 
 
-        file_put_contents($output_path.'/'.$name.'Interface.php', $stub);
+        $this->storage_disk->writeFile($output_path.'/'.$name.'Interface.php', $stub);
     }
 
-
-    public function getClassFunctionSignatures(string $code)
+    /**
+     * @param string $code
+     * @return Object
+     */
+    public function getClassFunctionSignatures(string $code): Object
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         try {
             $ast = $parser->parse($code);
         } catch (Error $error) {
             echo "Parse error: {$error->getMessage()}\n";
-            return;
+            return (object)[];
         }
-
-        // $dumper = new NodeDumper;
-        // // dump($ast[0]->exprs);
-        // echo $dumper->dump($ast) . "\n"; exit;
-        
 
         $analysis_result = (object)[
             'class_namespace' => null,
@@ -93,9 +98,7 @@ class ClassInterface
 
 
             if ($node instanceof Node\Stmt\Use_) {
-
                 $analysis_result->used_namespaces []= $node->uses[0];
-
             }
 
             if ($node instanceof Node\Stmt\Class_) {
@@ -243,16 +246,7 @@ class ClassInterface
 
             $used_namespaces_strings []= $used_namespaces_string;
         }
-
-
-        // dump([
-        //     // '$analysis_result' => $analysis_result,
-        //     // '$analysis_result->used_namespaces' => $analysis_result->used_namespaces,
-        //     // '$analysis_result->functions_signature' => $analysis_result->functions_signature,
-        //     // '$used_namespaces_indexes' => $used_namespaces_indexes,
-        //     '$used_namespaces_strings' => $used_namespaces_strings,
-        //     '$function_signature_strings' => $function_signature_strings,
-        // ]);
+        
 
         return (object)[
             'strings' => (object)[
@@ -263,83 +257,6 @@ class ClassInterface
                 'function_signatures' => $function_signature_strings,
             ]
         ];
-    }
-
-    
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory(string $path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
-
-     /**
-     * make the appropriate file for the class if necessary.
-     *
-     * @param  string $path
-     * @return void
-     */
-    protected function makeFile(string $name, string $fullpath_to_create, string $stub_fullpath)
-    {
-        
-        if (file_exists($fullpath_to_create)) {
-            // throw new \Exception($fullpath_to_create . ' already exists!');
-            return;
-        }
-
-        $this->makeDirectory($fullpath_to_create);
-
-        $stub = file_get_contents($stub_fullpath);
-
-        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-        $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-        
-        file_put_contents($fullpath_to_create, $stub);
-    }
-    
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentWorkflows()
-    {
-        $files = scandir(base_path().'/app/Trident/Workflows/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentBusinesses()
-    {
-        $files = scandir(base_path().'/app/Trident/Business/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
     }
 
 

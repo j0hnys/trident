@@ -4,30 +4,41 @@ namespace j0hnys\Trident\Builders;
 
 use function GuzzleHttp\json_decode;
 
+use j0hnys\Trident\Base\Storage\Disk;
+
 class Validation
 {
+    private $storage_disk;
+    private $mustache;
+
+    public function __construct(Disk $storage_disk = null)
+    {
+        $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
+        $this->mustache = new \Mustache_Engine;
+    }
     
     /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @return void
      */
-    public function __construct($td_entity_name, $function_name)
+    public function generate(string $td_entity_name, string $function_name): void
     {
         $name = ucfirst($td_entity_name).ucfirst($function_name);
-
-        $mustache = new \Mustache_Engine;
 
 
         $schema = [];
         $configuration = config('trident');
         if (!empty($configuration)) {
             if (isset($configuration['solution']['schemas']['folder'])) {
-                $tmp_schemas = $this->getFolderFiles($configuration['solution']['schemas']['folder']);
+                $tmp_schemas = $this->storage_disk->getFolderFiles($configuration['solution']['schemas']['folder']);
 
                 foreach ($tmp_schemas as $tmp_schema) {
                     if ($tmp_schema == $td_entity_name.'.json') {
-                        $schema = json_decode(file_get_contents( $configuration['solution']['schemas']['folder'].'/'.$tmp_schema ),true);
+                        $schema = json_decode($this->storage_disk->readFile( $configuration['solution']['schemas']['folder'].'/'.$tmp_schema ),true);
                     }
                 }
             }
@@ -54,58 +65,28 @@ class Validation
 
         //
         //workflow logic generation
-        $workflow_validation_path = base_path().'/app/Trident/Workflows/Validations/'.$name.'Request.php';
+        $workflow_validation_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Validations/'.$name.'Request.php';
         
-        if (file_exists($workflow_validation_path)) {
+        if ($this->storage_disk->fileExists($workflow_validation_path)) {
             throw new \Exception(ucfirst($name) . ' validation already exists!');
         }
 
-        $this->makeDirectory($workflow_validation_path);
+        $this->storage_disk->makeDirectory($workflow_validation_path);
 
 
-        $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/Workflows/LogicRequestValidation.stub');
-        $stub = $mustache->render($stub, [
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/Workflows/LogicRequestValidation.stub');
+        $stub = $this->mustache->render($stub, [
             'td_entity' => lcfirst($name),
             'Td_entity' => ucfirst($name),
             'rules' => $rules,
             'messages' => $messages,
         ]);
         
-        file_put_contents($workflow_validation_path, $stub);
+        $this->storage_disk->writeFile($workflow_validation_path, $stub);
         
 
     }
+
+
     
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
-    
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getFolderFiles($absolute_folder_path)
-    {
-        $files = scandir($absolute_folder_path);
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
 }

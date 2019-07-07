@@ -3,24 +3,29 @@
 namespace j0hnys\Trident\Builders\Build;
 
 use Illuminate\Console\Command;
+use j0hnys\Trident\Base\Storage\Disk;
 
 class Models
 {
-    
-    /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
-     */
-    public function __construct($data = [], Command $command)
+    private $storage_disk;
+
+    public function __construct(Disk $storage_disk = null)
     {
-        $output_path = $data['output_path'];
+        $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
+    }
+
+    public function generate($data = [], Command $command): void
+    {
+        $output_path = !empty($data['output_path']) ? $data['output_path'] : $this->storage_disk->getBasePath().'/database/generated_models/';
+
+        $this->storage_disk->makeDirectory($output_path);
         
         $table_names = \DB::connection()->getDoctrineSchemaManager()->listTableNames();
         
         foreach ($table_names as $table_name) {
-            //new validation class
-
             $camel_case_table_name = str_replace(' ', '', ucwords(str_replace('_', ' ', $table_name)));
             $camel_case_table_name[0] = strtoupper($camel_case_table_name[0]);
 

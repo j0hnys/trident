@@ -20,6 +20,21 @@ class GenerateException extends Command
      * @var string
      */
     protected $description = 'Create an exception';
+
+    /**
+     * @var Builders\Exception
+     */
+    private $exception;
+
+    public function __construct(Builders\Exception $exception = null)
+    {
+        parent::__construct();
+
+        $this->exception = new Builders\Exception();
+        if (!empty($exception)) {
+            $this->exception = $exception;
+        }
+    }
     
     /**
      * Execute the console command.
@@ -33,9 +48,8 @@ class GenerateException extends Command
             $td_entity_name = $this->argument('td_entity_name');
             
 
-            $crud = new Builders\Exception($td_entity_type, $td_entity_name);
-            // $controllerCrud->save();
-
+            $crud = $this->exception->generate($td_entity_type, $td_entity_name);
+            
 
             $this->info($td_entity_type.' '.$td_entity_name.' exception successfully created');
             

@@ -2,32 +2,49 @@
 
 namespace j0hnys\Trident\Builders\Crud;
 
+use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Storage\Trident;
+
 class CrudBuilder
 {
+    private $storage_disk;
+    private $storage_trident;
+    private $mustache;
+
+    public function __construct(Disk $storage_disk = null, Trident $storage_trident = null)
+    {
+        $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
+        $this->storage_trident = new Trident();
+        if (!empty($storage_trident)) {
+            $this->storage_trident = $storage_trident;
+        }
+        $this->mustache = new \Mustache_Engine;
+    }
     
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @return void
      */
-    public function __construct($name = 'TEST')
+    public function generate(string $name = 'TEST'): void
     {
         
-        $mustache = new \Mustache_Engine;
 
         //
         //controller generation
-        $controller_path = base_path().'/app/Http/Controllers/Trident/'.ucfirst(strtolower($name)).'Controller.php';
+        $controller_path = $this->storage_disk->getBasePath().'/app/Http/Controllers/Trident/'.ucfirst(strtolower($name)).'Controller.php';
         
-        if (!file_exists($controller_path)) {
-            $this->makeDirectory($controller_path);
+        if (!$this->storage_disk->fileExists($controller_path)) {
+            $this->storage_disk->makeDirectory($controller_path);
 
-            $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/Controller.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Crud/Controller.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             
-            file_put_contents($controller_path, $stub);
+            $this->storage_disk->writeFile($controller_path, $stub);
         }
 
         //
@@ -36,22 +53,22 @@ class CrudBuilder
 
         //
         //model generation
-        $model_path = base_path().'/app/Models/'.ucfirst($name).'.php';
+        $model_path = $this->storage_disk->getBasePath().'/app/Models/'.ucfirst($name).'.php';
         
-        if (!file_exists($model_path)) {
-            $this->makeDirectory($model_path);
+        if (!$this->storage_disk->fileExists($model_path)) {
+            $this->storage_disk->makeDirectory($model_path);
 
-            $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/Model.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Crud/Model.stub');
 
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             
-            file_put_contents($model_path, $stub);
+            $this->storage_disk->writeFile($model_path, $stub);
         }
 
         //
         //update resource routes
-        $Td_entities_workflows = $this->getCurrentControllers();
+        $Td_entities_workflows = $this->storage_trident->getCurrentControllers();
         
         $workflows = array_map(function($element){
             return [
@@ -60,72 +77,38 @@ class CrudBuilder
             ];
         },$Td_entities_workflows);
 
-        $trident_resource_routes_path = base_path().'/routes/trident.php';
-        $stub = file_get_contents(__DIR__.'/../../Stubs/routes/trident.stub');
-        $stub = $mustache->render($stub, [
+        $trident_resource_routes_path = $this->storage_disk->getBasePath().'/routes/trident.php';
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/routes/trident.stub');
+        $stub = $this->mustache->render($stub, [
             'register_resource_routes' => $workflows,
         ]);
 
-        file_put_contents($trident_resource_routes_path, $stub);
+        $this->storage_disk->writeFile($trident_resource_routes_path, $stub);
 
         //
         //update trident auth provider
-        $trident_auth_provider_path = base_path().'/app/Providers/TridentAuthServiceProvider.php';
-        $stub = file_get_contents(__DIR__.'/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
-        $stub = $mustache->render($stub, [
+        $trident_auth_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentAuthServiceProvider.php';
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
+        $stub = $this->mustache->render($stub, [
             'register_workflow_policies' => $workflows,
         ]);
         
-        file_put_contents($trident_auth_provider_path, $stub);
+        $this->storage_disk->writeFile($trident_auth_provider_path, $stub);
 
         //
         //policy generation
-        $trident_policy_path = base_path().'/app/Policies/Trident/'.ucfirst($name).'Policy.php';
+        $trident_policy_path = $this->storage_disk->getBasePath().'/app/Policies/Trident/'.ucfirst($name).'Policy.php';
         if (!file_exists($trident_policy_path)) {
-            $this->makeDirectory($trident_policy_path);
+            $this->storage_disk->makeDirectory($trident_policy_path);
             
-            $stub = file_get_contents(__DIR__.'/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
             
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             
-            file_put_contents($trident_policy_path, $stub);
+            $this->storage_disk->writeFile($trident_policy_path, $stub);
         }
             
-    }
-    
-
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
-
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentControllers()
-    {
-        $files = scandir(base_path().'/app/Http/Controllers/Trident/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('Controller.php','',$file);
-            }
-        }
-
-        return $filenames;
     }
 
     

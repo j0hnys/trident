@@ -2,15 +2,26 @@
 
 namespace j0hnys\Trident\Builders\Crud;
 
+use j0hnys\Trident\Base\Storage\Disk;
+
 class PolicyFunction
 {
+    private $storage_disk;
+
+    public function __construct(Disk $storage_disk = null)
+    {
+        $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
+    }
     
     /**
-     *  constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @return void
      */
-    public function __construct($td_entity_name, $function_name)
+    public function generate(string $td_entity_name, string $function_name): void
     {
         
         $name = ucfirst($td_entity_name).ucfirst($function_name);
@@ -18,44 +29,23 @@ class PolicyFunction
 
         //
         //policy function generation
-        $policy_path = base_path().'/app/Policies/Trident/'.ucfirst($td_entity_name).'Policy.php';
+        $policy_path = $this->storage_disk->getBasePath().'/app/Policies/Trident/'.ucfirst($td_entity_name).'Policy.php';
         
-        $lines = file($policy_path); 
+        $lines = $this->storage_disk->readFileArray($policy_path); 
         $last = sizeof($lines) - 1; 
         unset($lines[$last]); 
 
-        $fp = fopen($policy_path, 'w'); 
-        fwrite($fp, implode('', $lines)); 
-        fclose($fp); 
+        $this->storage_disk->writeFileArray($policy_path, $lines);
 
-
-        $stub = file_get_contents(__DIR__.'/../../Stubs/Crud/PolicyFunction.stub');
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Crud/PolicyFunction.stub');
 
         $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         
-        file_put_contents($policy_path, $stub, FILE_APPEND);
-        
-
-        // $this->call('email:send', [
-        //     'user' => 1, '--queue' => 'default'
-        // ]);
-
-
-    }
-    
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
+        $this->storage_disk->writeFile($policy_path, $stub, [
+            'append_file' => true
+        ]);
     }
     
 

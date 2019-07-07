@@ -20,6 +20,21 @@ class RemoveEntity extends Command
      * @var string
      */
     protected $description = 'Removes trident entity completely or a part.';
+
+    /**
+     * @var Remove\Entity
+     */
+    private $remove_entity;
+
+    public function __construct(Remove\Entity $remove_entity = null)
+    {
+        parent::__construct();
+
+        $this->remove_entity = new Remove\Entity();
+        if (!empty($remove_entity)) {
+            $this->remove_entity = $remove_entity;
+        }
+    }
     
     /**
      * Execute the console command.
@@ -32,7 +47,7 @@ class RemoveEntity extends Command
             $td_entity_name = $this->argument('td_entity_name');
             
 
-            $crud = new Remove\Entity($td_entity_name);
+            $crud = $this->remove_entity->run($td_entity_name);
             
 
             $this->info($td_entity_name.' removed successfully');

@@ -22,6 +22,21 @@ class GenerateWorkflowTestLogicFunction extends Command
     protected $description = 'Create workflow test logic function';
     
     /**
+     * @var Tests\WorkflowLogicFunction
+     */
+    private $workflow_logic_function;
+
+    public function __construct(Tests\WorkflowLogicFunction $workflow_logic_function = null)
+    {
+        parent::__construct();
+
+        $this->workflow_logic_function = new Tests\WorkflowLogicFunction();
+        if (!empty($workflow_logic_function)) {
+            $this->workflow_logic_function = $workflow_logic_function;
+        }
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -33,9 +48,8 @@ class GenerateWorkflowTestLogicFunction extends Command
             $function_name = $this->argument('function_name');
             
 
-            $crud = new Tests\WorkflowLogicFunction($entity_name, $function_name);
-            // $controllerCrud->save();
-
+            $crud = $this->workflow_logic_function->generate($entity_name, $function_name);
+            
 
             $this->info('function "'. $function_name.'" successfully created');
             

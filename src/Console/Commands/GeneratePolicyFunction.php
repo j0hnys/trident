@@ -20,6 +20,21 @@ class GeneratePolicyFunction extends Command
      * @var string
      */
     protected $description = 'Create a policy function';
+
+    /**
+     * @var Crud\PolicyFunction
+     */
+    private $policy_function;
+
+    public function __construct(Crud\PolicyFunction $policy_function = null)
+    {
+        parent::__construct();
+
+        $this->policy_function = new Crud\PolicyFunction();
+        if (!empty($policy_function)) {
+            $this->policy_function = $policy_function;
+        }
+    }
     
     /**
      * Execute the console command.
@@ -33,7 +48,7 @@ class GeneratePolicyFunction extends Command
             $function_name = $this->argument('function_name');
             
 
-            $crud = new Crud\PolicyFunction($entity_name, $function_name);
+            $crud = $this->policy_function->generate($entity_name, $function_name);
             
 
             $this->info($entity_name.' '.$function_name.' policy function successfully created');

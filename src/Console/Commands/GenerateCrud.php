@@ -22,6 +22,21 @@ class GenerateCrud extends Command
     protected $description = 'Create a RESTFUL CRUD';
     
     /**
+     * @var Crud\CrudBuilder
+     */
+    private $crud_builder;
+
+    public function __construct(Crud\CrudBuilder $crud_builder = null)
+    {
+        parent::__construct();
+
+        $this->crud_builder = new Crud\CrudBuilder();
+        if (!empty($crud_builder)) {
+            $this->crud_builder = $crud_builder;
+        }
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -32,9 +47,8 @@ class GenerateCrud extends Command
             $name = $this->argument('name');
             
 
-            $crud = new Crud\CrudBuilder($name);
-            // $controllerCrud->save();
-
+            $crud = $this->crud_builder->generate($name);
+            
 
             $this->info($name.' RESTFUL CRUD successfully created');
             

@@ -2,24 +2,38 @@
 
 namespace j0hnys\Trident\Builders;
 
+use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Declarations;
+
 class Exception
 {
-    
+    private $storage_disk;
+    private $declarations;
+
+    public function __construct(Disk $storage_disk = null)
+    {
+        $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
+        $this->declarations = new Declarations();
+    }
+
     /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param string $td_entity_type
+     * @param string $td_entity_name
+     * @return void
      */
-    public function __construct($td_entity_type, $td_entity_name)
+    public function generate(string $td_entity_type, string $td_entity_name): void
     {
         
         $td_entity_name = ucfirst($td_entity_name);
         $td_entity_type = strtolower($td_entity_type);
 
         $type = '';
-        if ($td_entity_type == 'workflow') {
+        if ($td_entity_type == $this->declarations::ENTITIES['WORKFLOW']['name']) {
             $type = 'Workflows';
-        } else if ($td_entity_type == 'business') {
+        } else if ($td_entity_type == $this->declarations::ENTITIES['BUSINESS']['name']) {
             $type = 'Business';
         } else {
             throw new \Exception('entity type '.$type.' does not exists!');
@@ -27,45 +41,21 @@ class Exception
 
         //
         //workflow logic generation
-        $workflow_exception_path = base_path().'/app/Trident/'.$type.'/Exceptions/'.$td_entity_name.'Exception.php';
+        $workflow_exception_path = $this->storage_disk->getBasePath().'/app/Trident/'.$type.'/Exceptions/'.$td_entity_name.'Exception.php';
         
         if (file_exists($workflow_exception_path)) {
             throw new \Exception(ucfirst($td_entity_name) . ' exception already exists!');
         }
 
-        $this->makeDirectory($workflow_exception_path);
+        $this->storage_disk->makeDirectory($workflow_exception_path);
 
-        $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$type.'/LogicException.stub');
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$type.'/LogicException.stub');
 
         $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         
-        file_put_contents($workflow_exception_path, $stub);
-        
-
+        $this->storage_disk->writeFile($workflow_exception_path, $stub);
     }
     
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
-    
-    /**
-     * Get code and save to disk
-     * @return mixed
-     * @throws \Exception
-     */
-    public function save()
-    {
-        //
-    }
 
 }

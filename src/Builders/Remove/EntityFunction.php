@@ -7,26 +7,41 @@ use PhpParser\NodeDumper;
 use PhpParser\ParserFactory;
 use PhpParser\{Node, NodeFinder};
 
+use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Storage\Trident;
+
 class EntityFunction
 {
+    private $storage_disk;
+    private $storage_trident;
+    private $mustache;
+
+    public function __construct(Disk $storage_disk = null, Trident $storage_trident = null)
+    {
+        $this->storage_disk = new Disk();        
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
+        $this->storage_trident = new Trident();
+        if (!empty($storage_trident)) {
+            $this->storage_trident = $storage_trident;
+        }
+        $this->mustache = new \Mustache_Engine;
+    }
     
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @param string $function_name
+     * @return void
      */
-    public function __construct($name, $function_name)
-    {
-        // $name = 'DemoProcess';
-        // $function_name = 'update';
-
-        
+    public function run(string $name, string $function_name): void
+    {        
         //
         //
         //workflow
-        $workflow_input_path = base_path().'/'.'app/Trident/Workflows/Logic';
-        $code = file_get_contents( $workflow_input_path.'/'.$name.'.php' );
-        $workflow_file = file( $workflow_input_path.'/'.$name.'.php' );
+        $workflow_input_path = $this->storage_disk->getBasePath().'/'.'app/Trident/Workflows/Logic';
+        $code = $this->storage_disk->readFile( $workflow_input_path.'/'.$name.'.php' );
+        $workflow_file = $this->storage_disk->readFileArray( $workflow_input_path.'/'.$name.'.php' );
         $workflow_result = $this->getClassFunctionSignature($code, $function_name);
 
         //remove connected files
@@ -36,10 +51,10 @@ class EntityFunction
                 $used_namespace = $workflow_result->used_namespaces[$used_namespaces_index]->name->parts;
                 array_shift($used_namespace);
     
-                $used_namespace_paths []= base_path().'/'.'app/'.implode('/',$used_namespace).'.php'; 
+                $used_namespace_paths []= $this->storage_disk->getBasePath().'/'.'app/'.implode('/',$used_namespace).'.php'; 
             }
             foreach ($used_namespace_paths as $used_namespace_path) {
-                is_file($used_namespace_path) ? unlink($used_namespace_path) : '';
+                $this->storage_disk->isFile($used_namespace_path) ? $this->storage_disk->deleteFile($used_namespace_path) : '';
             }
         }
 
@@ -58,7 +73,7 @@ class EntityFunction
             $output_file_path = $workflow_input_path.'/'.$name.'.php';
     
             // Write back to file
-            file_put_contents($output_file_path, $output);
+            $this->storage_disk->writeFile($output_file_path, $output);
         }
         //
         //
@@ -69,9 +84,9 @@ class EntityFunction
         //
         //
         //controller
-        $controller_input_path = base_path().'/'.'app/Http/Controllers/Trident';
-        $code = file_get_contents( $controller_input_path.'/'.$name.'Controller.php' );
-        $controller_file = file( $controller_input_path.'/'.$name.'Controller.php' );
+        $controller_input_path = $this->storage_disk->getBasePath().'/'.'app/Http/Controllers/Trident';
+        $code = $this->storage_disk->readFile( $controller_input_path.'/'.$name.'Controller.php' );
+        $controller_file = $this->storage_disk->readFileArray( $controller_input_path.'/'.$name.'Controller.php' );
         $controller_result = $this->getClassFunctionSignature($code, $function_name);
 
         //remove connected files
@@ -81,10 +96,10 @@ class EntityFunction
                 $used_namespace = $controller_result->used_namespaces[$used_namespaces_index]->name->parts;
                 array_shift($used_namespace);
     
-                $used_namespace_paths []= base_path().'/'.'app/'.implode('/',$used_namespace).'.php'; 
+                $used_namespace_paths []= $this->storage_disk->getBasePath().'/'.'app/'.implode('/',$used_namespace).'.php'; 
             }
             foreach ($used_namespace_paths as $used_namespace_path) {
-                is_file($used_namespace_path) ? unlink($used_namespace_path) : '';
+                $this->storage_disk->isFile($used_namespace_path) ? $this->storage_disk->deleteFile($used_namespace_path) : '';
             }
         } 
 
@@ -103,47 +118,28 @@ class EntityFunction
             $output_file_path = $controller_input_path.'/'.$name.'Controller.php';
     
             // Write back to file
-            file_put_contents($output_file_path, $output);
+            $this->storage_disk->writeFile($output_file_path, $output);
         }
         //
         //
-        //
+        //   
 
-
-
-
-        // dump([
-        //     // '$used_namespace_paths' => $used_namespace_paths,
-        //     '$workflow_result' => $workflow_result,
-        // ]);
-
-        
-        
-
-
-
-
-        return true;
-
-
-        
     }
 
-
-    public function getClassFunctionSignature(string $code, string $function_name)
+    /**
+     * @param string $code
+     * @param string $function_name
+     * @return object
+     */
+    public function getClassFunctionSignature(string $code, string $function_name): object
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         try {
             $ast = $parser->parse($code);
         } catch (Error $error) {
             echo "Parse error: {$error->getMessage()}\n";
-            return;
+            return (object)[];
         }
-
-        // $dumper = new NodeDumper;
-        // // dump($ast[0]->exprs);
-        // echo $dumper->dump($ast) . "\n"; exit;
-        
 
         $analysis_result = (object)[
             'class_namespace' => null,
@@ -171,12 +167,6 @@ class EntityFunction
             if ($node instanceof Node\Stmt\ClassMethod) {
 
                 if ($node->name == $function_name) {
-                    // dd([
-                    //     // '$node' => $node,
-                    //     '$node->returnType' => $node->returnType,
-                    //     // '$node->getAttributes()' => $node->getAttributes()['comments'][0]->getLine(),
-                    // ]);
-
                     $tmp_function = (object)[
                         'flags' => $node->flags,  //dld public (1), protected (2), private (4), e.t.c.
                         'name' => $node->name,
@@ -219,9 +209,6 @@ class EntityFunction
 
         });
 
-        // dd([
-        //     '$analysis_result' => $analysis_result,
-        // ]);
 
         $class_namespace_string = '';
         if (isset($analysis_result->class_namespace)) {
@@ -250,9 +237,6 @@ class EntityFunction
             $class_implemented_interfaces_namespaces_strings []= implode('\\', $tmp_used_namespace->name->parts );
         }
 
-        // dd([
-        //     '$analysis_result->function_signature_' => $analysis_result->function_signature_,
-        // ]);
 
         //gia t interface
         $used_namespaces_indexes = [];
@@ -311,8 +295,7 @@ class EntityFunction
                 }
             }   
              
-        }
-        
+        }        
 
         //sort $used_namespaces_indexes ascending order
         sort($used_namespaces_indexes);
@@ -322,94 +305,7 @@ class EntityFunction
         }
 
 
-
-        // dump([
-        //     '$analysis_result' => $analysis_result,
-        //     // '$analysis_result->used_namespaces' => $analysis_result->used_namespaces,
-        //     // '$analysis_result->functions_signature' => $analysis_result->functions_signature,
-        //     // '$used_namespaces_indexes' => $used_namespaces_indexes,
-        //     // '$used_namespaces_strings' => $used_namespaces_strings,
-        //     // '$function_signature_strings' => $function_signature_strings,
-        // ]);
-
         return $analysis_result;
-    }
-
-
-    /**
-     * removes directory deleting child folders and files
-     *
-     * @param [type] $dir
-     * @return void
-     */
-    public function deleteDirectory($dir) {
-        if (is_dir($dir)) {
-            $files = array_diff(scandir($dir), array('.','..'));
-            foreach ($files as $file) {
-                (is_dir("$dir/$file")) ? $this->deleteDirectory("$dir/$file") : unlink("$dir/$file");
-            }
-            return rmdir($dir);
-        }
-    } 
-
-
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentControllers()
-    {
-        $files = scandir(base_path() . '/app/Http/Controllers/Trident/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames[] = str_replace('Controller.php', '', $file);
-            }
-        }
-
-        return $filenames;
-    }
-
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentWorkflows()
-    {
-        $files = scandir(base_path().'/app/Trident/Workflows/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentBusinesses()
-    {
-        $files = scandir(base_path().'/app/Trident/Business/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
     }
 
 

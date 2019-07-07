@@ -7,55 +7,71 @@ use PhpParser\NodeDumper;
 use PhpParser\ParserFactory;
 use PhpParser\{Node, NodeFinder};
 
+use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Storage\Trident;
+
 class Entity
 {
+    private $storage_disk;
+    private $storage_trident;
+    private $mustache;
+
+    public function __construct(Disk $storage_disk = null, Trident $storage_trident = null)
+    {
+        $this->storage_disk = new Disk();    
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }    
+        $this->storage_trident = new Trident();
+        if (!empty($storage_trident)) {
+            $this->storage_trident = $storage_trident;
+        }
+        $this->mustache = new \Mustache_Engine;
+    }
     
     /**
-     * Crud constructor.
      * @param string $name
-     * @throws \Exception
+     * @return void
      */
-    public function __construct($name = '')
+    public function run(string $name = ''): void
     {
-        
-        $mustache = new \Mustache_Engine;
 
-        $controller_path = base_path().'/app/Http/Controllers/Trident/'.($name).'Controller.php';
-        $model_path = base_path().'/app/Models/'.($name).'.php';
-        $policies_path = base_path().'/app/Policies/Trident/'.($name).'Policy.php';
-        $business_exception_path = base_path().'/app/Trident/Business/Exceptions/'.($name).'Exception.php';
-        $business_logic_path = base_path().'/app/Trident/Business/Logic/'.($name).'.php';
-        $interfaces_business_logic_path = base_path().'/app/Trident/Interfaces/Business/Logic/'.($name).'Interface.php';
-        $interfaces_workflow_logic_path = base_path().'/app/Trident/Interfaces/Workflows/Logic/'.($name).'Interface.php';
-        $interfaces_repositories_path = base_path().'/app/Trident/Interfaces/Workflows/Repositories/'.($name).'RepositoryInterface.php';
-        $workflow_exception_path = base_path().'/app/Trident/Workflows/Exceptions/'.($name).'Exception.php';
-        $workflow_logic_path = base_path().'/app/Trident/Workflows/Logic/'.($name).'.php';
-        $workflow_repository_path = base_path().'/app/Trident/Workflows/Repositories/'.($name).'Repository.php';
-        $this->deleteDirectory(base_path().'/app/Trident/Workflows/Schemas/Logic/');
-        $workflow_validations_path = glob(base_path().'/app/Trident/Workflows/Validations/'.($name).'*.php');
-        $database_factory_logic_path = base_path().'/database/factories/Models/'.($name).'.php';
+        $controller_path = $this->storage_disk->getBasePath().'/app/Http/Controllers/Trident/'.($name).'Controller.php';
+        $model_path = $this->storage_disk->getBasePath().'/app/Models/'.($name).'.php';
+        $policies_path = $this->storage_disk->getBasePath().'/app/Policies/Trident/'.($name).'Policy.php';
+        $business_exception_path = $this->storage_disk->getBasePath().'/app/Trident/Business/Exceptions/'.($name).'Exception.php';
+        $business_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Business/Logic/'.($name).'.php';
+        $interfaces_business_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Interfaces/Business/Logic/'.($name).'Interface.php';
+        $interfaces_workflow_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Interfaces/Workflows/Logic/'.($name).'Interface.php';
+        $interfaces_repositories_path = $this->storage_disk->getBasePath().'/app/Trident/Interfaces/Workflows/Repositories/'.($name).'RepositoryInterface.php';
+        $workflow_exception_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Exceptions/'.($name).'Exception.php';
+        $workflow_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.($name).'.php';
+        $workflow_repository_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Repositories/'.($name).'Repository.php';
+        $this->storage_disk->deleteDirectoryAndFiles($this->storage_disk->getBasePath().'/app/Trident/Workflows/Schemas/Logic/');
+        $workflow_validations_path = glob($this->storage_disk->getBasePath().'/app/Trident/Workflows/Validations/'.($name).'*.php');
+        $database_factory_logic_path = $this->storage_disk->getBasePath().'/database/factories/Models/'.($name).'.php';
                
-        (is_file($controller_path)) ? unlink($controller_path) : null;
-        (is_file($model_path)) ? unlink($model_path) : null;
-        (is_file($policies_path)) ? unlink($policies_path) : null;
-        (is_file($business_exception_path)) ? unlink($business_exception_path) : null;
-        (is_file($business_logic_path)) ? unlink($business_logic_path) : null;
-        (is_file($interfaces_business_logic_path)) ? unlink($interfaces_business_logic_path) : null;
-        (is_file($interfaces_workflow_logic_path)) ? unlink($interfaces_workflow_logic_path) : null;
-        (is_file($interfaces_repositories_path)) ? unlink($interfaces_repositories_path) : null;
-        (is_file($workflow_exception_path)) ? unlink($workflow_exception_path) : null;
-        (is_file($workflow_logic_path)) ? unlink($workflow_logic_path) : null;
-        (is_file($workflow_repository_path)) ? unlink($workflow_repository_path) : null;
+        ($this->storage_disk->isFile($controller_path)) ? $this->storage_disk->deleteFile($controller_path) : null;
+        ($this->storage_disk->isFile($model_path)) ? $this->storage_disk->deleteFile($model_path) : null;
+        ($this->storage_disk->isFile($policies_path)) ? $this->storage_disk->deleteFile($policies_path) : null;
+        ($this->storage_disk->isFile($business_exception_path)) ? $this->storage_disk->deleteFile($business_exception_path) : null;
+        ($this->storage_disk->isFile($business_logic_path)) ? $this->storage_disk->deleteFile($business_logic_path) : null;
+        ($this->storage_disk->isFile($interfaces_business_logic_path)) ? $this->storage_disk->deleteFile($interfaces_business_logic_path) : null;
+        ($this->storage_disk->isFile($interfaces_workflow_logic_path)) ? $this->storage_disk->deleteFile($interfaces_workflow_logic_path) : null;
+        ($this->storage_disk->isFile($interfaces_repositories_path)) ? $this->storage_disk->deleteFile($interfaces_repositories_path) : null;
+        ($this->storage_disk->isFile($workflow_exception_path)) ? $this->storage_disk->deleteFile($workflow_exception_path) : null;
+        ($this->storage_disk->isFile($workflow_logic_path)) ? $this->storage_disk->deleteFile($workflow_logic_path) : null;
+        ($this->storage_disk->isFile($workflow_repository_path)) ? $this->storage_disk->deleteFile($workflow_repository_path) : null;
         array_map(function($element){
-            (is_file($element)) ? unlink($element) : null;
+            ($this->storage_disk->isFile($element)) ? $this->storage_disk->deleteFile($element) : null;
         },$workflow_validations_path);
-        (is_file($database_factory_logic_path)) ? unlink($database_factory_logic_path) : null;
+        ($this->storage_disk->isFile($database_factory_logic_path)) ? $this->storage_disk->deleteFile($database_factory_logic_path) : null;
 
 
 
         //
         //update resource routes
-        $Td_entities_workflows = $this->getCurrentControllers();
+        $Td_entities_workflows = $this->storage_trident->getCurrentControllers();
 
         $workflows = array_map(function ($element) {
             return [
@@ -64,29 +80,29 @@ class Entity
             ];
         }, $Td_entities_workflows);
 
-        $trident_resource_routes_path = base_path() . '/routes/trident.php';
-        $stub = file_get_contents(__DIR__ . '/../../Stubs/routes/trident.stub');
-        $stub = $mustache->render($stub, [
+        $trident_resource_routes_path = $this->storage_disk->getBasePath() . '/routes/trident.php';
+        $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/routes/trident.stub');
+        $stub = $this->mustache->render($stub, [
             'register_resource_routes' => $workflows,
         ]);
 
-        file_put_contents($trident_resource_routes_path, $stub);
+        $this->storage_disk->writeFile($trident_resource_routes_path, $stub);
 
         //
         //update trident auth provider
-        $trident_auth_provider_path = base_path() . '/app/Providers/TridentAuthServiceProvider.php';
-        $stub = file_get_contents(__DIR__ . '/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
-        $stub = $mustache->render($stub, [
+        $trident_auth_provider_path = $this->storage_disk->getBasePath() . '/app/Providers/TridentAuthServiceProvider.php';
+        $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
+        $stub = $this->mustache->render($stub, [
             'register_workflow_policies' => $workflows,
         ]);
 
-        file_put_contents($trident_auth_provider_path, $stub);
+        $this->storage_disk->writeFile($trident_auth_provider_path, $stub);
 
 
         //
         //update TridentServiceProvider
-        $Td_entities_workflows = $this->getCurrentWorkflows();
-        $Td_entities_businesses = $this->getCurrentBusinesses();
+        $Td_entities_workflows = $this->storage_trident->getCurrentWorkflows();
+        $Td_entities_businesses = $this->storage_trident->getCurrentBusinesses();
 
         $workflows = array_map(function($element){
             return [
@@ -101,95 +117,17 @@ class Entity
         },$Td_entities_businesses);
 
 
-        $trident_event_service_provider_path = base_path().'/app/Providers/TridentServiceProvider.php';
-        $stub = file_get_contents(__DIR__.'/../../Stubs/app/Providers/TridentServiceProvider.stub');
-        $stub = $mustache->render($stub, [
+        $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentServiceProvider.php';
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Providers/TridentServiceProvider.stub');
+        $stub = $this->mustache->render($stub, [
             'register_workflows' => $workflows,
             'register_business' => $businesses,
         ]);
 
-        file_put_contents($trident_event_service_provider_path, $stub);
+        $this->storage_disk->writeFile($trident_event_service_provider_path, $stub);
 
 
     }
-
-
-    /**
-     * removes directory deleting child folders and files
-     *
-     * @param [type] $dir
-     * @return void
-     */
-    public function deleteDirectory($dir) {
-        if (is_dir($dir)) {
-            $files = array_diff(scandir($dir), array('.','..'));
-            foreach ($files as $file) {
-                (is_dir("$dir/$file")) ? $this->deleteDirectory("$dir/$file") : unlink("$dir/$file");
-            }
-            return rmdir($dir);
-        }
-    } 
-
-
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentControllers()
-    {
-        $files = scandir(base_path() . '/app/Http/Controllers/Trident/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames[] = str_replace('Controller.php', '', $file);
-            }
-        }
-
-        return $filenames;
-    }
-
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentWorkflows()
-    {
-        $files = scandir(base_path().'/app/Trident/Workflows/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentBusinesses()
-    {
-        $files = scandir(base_path().'/app/Trident/Business/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
 
 
 }

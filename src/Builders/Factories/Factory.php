@@ -12,6 +12,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\ClassLoader\ClassMapGenerator;
+use Illuminate\Database\Eloquent\Model;
+
+use j0hnys\Trident\Base\Storage\Disk;
 
 class Factory
 {
@@ -21,24 +24,29 @@ class Factory
      */
     protected $laravel;
 
+    private $storage_disk;
+
+    public function __construct(Disk $storage_disk = null)
+    {
+        $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
+        $this->mustache = new \Mustache_Engine;
+    }
 
     /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
+     * @param mixed $laravel
+     * @param string $model
+     * @return void
      */
-    public function __construct($laravel, string $model = '')
+    public function generate($laravel, string $model = ''): void
     {
-        
-        $mustache = new \Mustache_Engine;
         $this->laravel = $laravel;
-
 
         if (empty($model)) {
             throw new \Exception("model name cannot be empty", 1);
         }
-
-
 
         //
         //
@@ -53,19 +61,14 @@ class Factory
         if (file_exists($fullpath_to_create)) {
             throw new \Exception($fullpath_to_create . ' already exists!');
         }
-        
-
-        // $this->comment("Loading model '$model'");
-        
 
         if (!$reflectionClass->IsInstantiable()) {
             // ignore abstract class or interface
             throw new \Exception($fullpath_to_create . ' cannot be instantiated');
         }
 
-        $model_instance = $this->laravel->make($model);
 
-        // dd($model_instance);
+        $model_instance = $this->laravel->make($model);
 
         $properties = [];
 
@@ -75,34 +78,29 @@ class Factory
 
         $properties = array_values(array_merge($properties_from_table, $methods));
 
-        // $output = $this->createFactory($model);
-            
-
-        // dd($properties);
-
-
-        $factory_path = base_path().'/database/factories/Models/'.$reflectionClass->getShortName().'.php';
-        $stub = file_get_contents(__DIR__.'/../../Stubs/database/factories/Factory.stub');
-        $stub = $mustache->render($stub, [
+        $factory_path = $this->storage_disk->getBasePath().'/database/factories/Models/'.$reflectionClass->getShortName().'.php';
+        $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/database/factories/Factory.stub');
+        $stub = $this->mustache->render($stub, [
             'class_name' => get_class($model_instance),
             'properties' => $properties,
         ]);
 
-        if (file_exists($factory_path)) {
+        if ($this->storage_disk->fileExists($factory_path)) {
             throw new \Exception($factory_path . ' already exists!');
         }
-        $this->makeDirectory($factory_path);
+        $this->storage_disk->makeDirectory($factory_path);
 
-        file_put_contents($factory_path, $stub);
+        $this->storage_disk->writeFile($factory_path, $stub);
     }
 
 
     /**
      * Load the properties from the database table.
      *
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param Model $model
+     * @return array
      */
-    private function getPropertiesFromTable($model)
+    private function getPropertiesFromTable(Model $model): array
     {
         $table = $model->getConnection()->getTablePrefix() . $model->getTable();
         $schema = $model->getConnection()->getDoctrineSchemaManager($table);
@@ -147,11 +145,11 @@ class Factory
         return $properties;
     }
 
-
-     /**
-     * @param \Illuminate\Database\Eloquent\Model $model
+    /**
+     * @param Model $model
+     * @return array
      */
-    protected function getPropertiesFromMethods($model)
+    protected function getPropertiesFromMethods(Model $model): array
     {
         $methods = get_class_methods($model);
 
@@ -197,13 +195,13 @@ class Factory
 
         return $properties;
     }
-
-
+    
     /**
      * @param string $name
-     * @param string|null $type
+     * @param string $type
+     * @return array
      */
-    private function setProperty($name, $type = null)
+    private function setProperty(string $name, string $type = null): array
     {
 
         $property = [];
@@ -277,92 +275,5 @@ class Factory
         return $property;
     }
 
-
-    
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    private function makeDirectory(string $path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
-
-     /**
-     * make the appropriate file for the class if necessary.
-     *
-     * @param  string $path
-     * @return void
-     */
-    private function makeFile(string $name, string $fullpath_to_create, string $stub_fullpath)
-    {
-        
-        if (file_exists($fullpath_to_create)) {
-            throw new \Exception($fullpath_to_create . ' already exists!');
-        }
-
-        $this->makeDirectory($fullpath_to_create);
-
-        $stub = file_get_contents($stub_fullpath);
-
-        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-        $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
-        
-        file_put_contents($fullpath_to_create, $stub);
-    }
-    
-
-    /**
-     * return the names of all events from trigger folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentWorkflows()
-    {
-        $files = scandir(base_path().'/app/Trident/Workflows/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getCurrentBusinesses()
-    {
-        $files = scandir(base_path().'/app/Trident/Business/Logic/');
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
-
-
-    /**
-     * Get code and save to disk
-     * @return mixed
-     * @throws \Exception
-     */
-    public function save()
-    {
-        //
-    }
 
 }

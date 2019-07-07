@@ -22,6 +22,21 @@ class GenerateControllerFunction extends Command
     protected $description = 'Create a controller function';
     
     /**
+     * @var Crud\ControllerFunction
+     */
+    private $controller_function;
+
+    public function __construct(Crud\ControllerFunction $controller_function = null)
+    {
+        parent::__construct();
+
+        $this->controller_function = new Crud\ControllerFunction();
+        if (!empty($controller_function)) {
+            $this->controller_function = $controller_function;
+        }
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -33,7 +48,7 @@ class GenerateControllerFunction extends Command
             $function_name = $this->argument('function_name');
             
 
-            $crud = new Crud\ControllerFunction($entity_name, $function_name);
+            $crud = $this->controller_function->generate($entity_name, $function_name);
             
 
             $this->info($entity_name.' '.$function_name.' controller function successfully created');

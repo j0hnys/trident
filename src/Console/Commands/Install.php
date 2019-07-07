@@ -23,6 +23,21 @@ class Install extends Command
     protected $description = 'Trident installer';
 
     /**
+     * @var Setup\Install
+     */
+    private $install;
+
+    public function __construct(Setup\Install $install = null)
+    {
+        parent::__construct();
+
+        $this->install = new Setup\Install();
+        if (!empty($install)) {
+            $this->install = $install;
+        }
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -32,7 +47,7 @@ class Install extends Command
         try {
            
 
-            $install = new Setup\Install();
+            $install = $this->install->run();
             
 
             $this->info('Trident installed successfully');

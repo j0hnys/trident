@@ -18,10 +18,27 @@
         "xethron/migrations-generator": "2.0.2",
         "nikic/php-parser": "4.2.1"
     },
+    "require-dev": {
+        "beyondcode/laravel-dump-server": "^1.0",
+        "filp/whoops": "^2.0",
+        "fzaninotto/faker": "^1.4",
+        "mockery/mockery": "^1.0",
+        "nunomaduro/collision": "^2.0",
+        "phpunit/phpunit": "^7.0",
+        "orchestra/testbench": "^3.8"
+    },
     "autoload": {
         "psr-4": {
-            "j0hnys\\Trident\\": "./"
+            "j0hnys\\Trident\\": "./src"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "j0hnys\\Trident\\Tests\\": "tests/"
+        },
+        "classmap": [
+            "tests/sandbox"
+        ]
     },
     "extra": {
         "laravel": {

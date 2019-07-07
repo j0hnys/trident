@@ -2,88 +2,101 @@
 
 namespace j0hnys\Trident\Builders;
 
+use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Declarations;
+
 class StrictType
 {
-    
-    /**
-     * Crud constructor.
-     * @param string $name
-     * @throws \Exception
-     */
-    public function __construct(string $strict_type_name, string $function_name, string $td_entity_name, string $domain)
+    private $storage_disk;
+    private $mustache;
+    private $declarations;
+
+    public function __construct(Disk $storage_disk = null)
     {
-        
-        if (strtolower($strict_type_name == 'struct')) {
+        $this->storage_disk = new Disk();
+        if (!empty($storage_disk)) {
+            $this->storage_disk = $storage_disk;
+        }
+        $this->mustache = new \Mustache_Engine;
+        $this->declarations = new Declarations();
+    }
+
+    /**
+     * @param string $strict_type_name
+     * @param string $function_name
+     * @param string $td_entity_name
+     * @param string $domain
+     * @return void
+     */    
+    public function generate(string $strict_type_name, string $function_name, string $td_entity_name, string $domain): void
+    {
+
+        if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT']['name']) {
             //
             //struct logic generation
-            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
+            $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
             
-            if (file_exists($struct_path)) {
+            if ($this->storage_disk->fileExists($struct_path)) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
             }
 
-            $this->makeDirectory($struct_path);
+            $this->storage_disk->makeDirectory($struct_path);
 
-            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStruct.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStruct.stub');
 
-        } else if (strtolower($strict_type_name == 'collection_struct')) {
+        } else if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['COLLECTION_STRUCT']['name']) {
             //
             //struct logic generation
-            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'CollectionStruct'.ucfirst($function_name).'.php';
+            $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'CollectionStruct'.ucfirst($function_name).'.php';
             
-            if (file_exists($struct_path)) {
+            if ($this->storage_disk->fileExists($struct_path)) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
             }
 
-            $this->makeDirectory($struct_path);
+            $this->storage_disk->makeDirectory($struct_path);
 
-            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicCollectionStruct.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicCollectionStruct.stub');
 
-        } else if (strtolower($strict_type_name == 'map_struct')) {
+        } else if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['MAP_STRUCT']['name']) {
             //
             //struct logic generation
-            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'MapStruct'.ucfirst($function_name).'.php';
+            $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'MapStruct'.ucfirst($function_name).'.php';
             
-            if (file_exists($struct_path)) {
+            if ($this->storage_disk->fileExists($struct_path)) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
             }
 
-            $this->makeDirectory($struct_path);
+            $this->storage_disk->makeDirectory($struct_path);
 
-            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicMapStruct.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicMapStruct.stub');
 
-        } if (strtolower($strict_type_name == 'struct_optional')) {
+        } else if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT_OPTIONAL']['name']) {
             //
             //struct logic generation
-            $struct_path = base_path().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name). ucfirst($td_entity_name).'.php';
+            $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name). ucfirst($td_entity_name).'.php';
             
-            if (file_exists($struct_path)) {
+            if ($this->storage_disk->fileExists($struct_path)) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ucfirst($td_entity_name) . ' struct already exists!');
             }
 
-            $this->makeDirectory($struct_path);
+            $this->storage_disk->makeDirectory($struct_path);
 
-            $stub = file_get_contents(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStructOptional.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStructOptional.stub');
 
         } else {
-            throw new \Exception("unknown strict type", 1);
-            
+            throw new \Exception("unknown strict type", 1);            
         }
-
-
-
-        $mustache = new \Mustache_Engine;
 
 
         $schema = [];
         $configuration = config('trident');
         if (!empty($configuration)) {
             if (isset($configuration['solution']['schemas']['folder'])) {
-                $tmp_schemas = $this->getFolderFiles($configuration['solution']['schemas']['folder']);
+                $tmp_schemas = $this->storage_disk->getFolderFiles($configuration['solution']['schemas']['folder']);
 
                 foreach ($tmp_schemas as $tmp_schema) {
                     if ($tmp_schema == $td_entity_name.'.json') {
-                        $schema = json_decode(file_get_contents( $configuration['solution']['schemas']['folder'].'/'.$tmp_schema ),true);
+                        $schema = json_decode($this->storage_disk->readFile( $configuration['solution']['schemas']['folder'].'/'.$tmp_schema ),true);
                     }
                 }
             }
@@ -102,48 +115,17 @@ class StrictType
         }
 
 
-        $stub = $mustache->render($stub, [
+        $stub = $this->mustache->render($stub, [
             'td_entity' => lcfirst($td_entity_name),
             'Td_entity' => ucfirst($td_entity_name),
             'function_name' => lcfirst($function_name),
             'types' => $types,
         ]);
         
-        file_put_contents($struct_path, $stub);
+
+
+        $this->storage_disk->writeFile($struct_path, $stub);
+    }
         
-
-    }
-    
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0777, true);
-        }
-    }
-    
-    /**
-     * return the names of all events from subscriber folder. (assumes that the namespace conventions are applied)
-     *
-     * @return array
-     */
-    public function getFolderFiles($absolute_folder_path)
-    {
-        $files = scandir($absolute_folder_path);
-
-        $filenames = [];
-        foreach ($files as $file) {
-            if ($file != '.' && $file != '..') {
-                $filenames []= str_replace('.php','',$file);
-            }
-        }
-
-        return $filenames;
-    }
 
 }

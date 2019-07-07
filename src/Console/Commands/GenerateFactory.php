@@ -20,6 +20,21 @@ class GenerateFactory extends Command
      * @var string
      */
     protected $description = 'Create a factory for a model';
+
+    /**
+     * @var Factories\Factory
+     */
+    private $factory;
+
+    public function __construct(Factories\Factory $factory = null)
+    {
+        parent::__construct();
+
+        $this->factory = new Factories\Factory();
+        if (!empty($factory)) {
+            $this->factory = $factory;
+        }
+    }
     
     /**
      * Execute the console command.
@@ -31,9 +46,9 @@ class GenerateFactory extends Command
         try {
             $model = $this->argument('model');
             
-            $crud = new Factories\Factory($this->laravel,$model);
-            // $controllerCrud->save();
-
+            
+            $crud = $this->factory->generate($this->laravel,$model);
+            
 
             $this->info($model.' factory successfully created');
             

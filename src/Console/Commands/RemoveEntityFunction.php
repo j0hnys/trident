@@ -22,6 +22,21 @@ class RemoveEntityFunction extends Command
     protected $description = 'Removes trident entity\'s function with the structures connected to it.';
     
     /**
+     * @var Remove\EntityFunction
+     */
+    private $remove_entity_function;
+
+    public function __construct(Remove\EntityFunction $remove_entity_function = null)
+    {
+        parent::__construct();
+
+        $this->remove_entity_function = new Remove\EntityFunction();
+        if (!empty($remove_entity_function)) {
+            $this->remove_entity_function = $remove_entity_function;
+        }
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -33,7 +48,7 @@ class RemoveEntityFunction extends Command
             $function_name = $this->argument('function_name');
             
 
-            $crud = new Remove\EntityFunction($entity_name, $function_name);
+            $crud = $this->remove_entity_function->run($entity_name, $function_name);
             
 
             $this->info($entity_name.': '.$function_name.' removed successfully');

@@ -22,6 +22,21 @@ class BuildModels extends Command
     protected $description = 'Create all models from current database connection';
     
     /**
+     * @var Build\Models
+     */
+    private $models;
+
+    public function __construct(Build\Models $models = null)
+    {
+        parent::__construct();
+
+        $this->models = new Build\Models();
+        if (!empty($models)) {
+            $this->models = $models;
+        }
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -29,38 +44,19 @@ class BuildModels extends Command
     public function handle()
     {
         try {
-            // $entity_name = $this->argument('entity_name');
-            // $function_name = $this->argument('function_name');
-            // $model = $this->argument('model');
-            $output_path = !empty($this->option('output-path')) ? $this->option('output-path') : base_path().'/database/generated_models/';
-            
-            $this->makeDirectory($output_path);
-            
+            $output_path = $this->option('output-path');
+                        
 
-            $crud = new Build\Models([
+            $crud = $this->models->generate([
                 'output_path' => $output_path,
             ], $this);
 
-            
-            // $this->info("\n".'nice! now add "use App\Trident\Workflows\Validations\\'.$validation_class_name.'Request;" on top of your "'.$controller_class_name.'" and you are ready to go.');
             
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
         }
     }
 
-
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir(($path))) {
-            mkdir(($path), 0777, true);
-        }
-    }
+    
 
 }

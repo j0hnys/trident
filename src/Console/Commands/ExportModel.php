@@ -22,6 +22,21 @@ class ExportModel extends Command
     protected $description = 'export a models schema';
     
     /**
+     * @var Export\Model
+     */
+    private $model;
+
+    public function __construct(Export\Model $model = null)
+    {
+        parent::__construct();
+
+        $this->model = new Export\Model();
+        if (!empty($model)) {
+            $this->model = $model;
+        }
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -30,37 +45,13 @@ class ExportModel extends Command
     {
         try {
             $entity_name = $this->argument('entity_name');
-            $output_path = !empty($this->option('output-path')) ? $this->option('output-path') : base_path().'/app/Models/Schemas/Exports/';
-
-            $this->makeDirectory($output_path);
+            $output_path = $this->option('output-path');
             
-            $builders = new Export\Model($entity_name, $output_path);
+            $builders = $this->model->generate($entity_name, $output_path);
 
-            $this->info($entity_name.' model\'s export successful!');
-
-            
-            // //new validation class
-            // $this->call('trident:generate:validation', [
-            //     'entity_name' => $entity_name,
-            //     'function_name' => $function_name,
-            // ]);
-
-            
+            $this->info($entity_name.' model\'s export successful!');            
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
-        }
-    }
-
-     /**
-     * Build the directory for the class if necessary.
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function makeDirectory($path)
-    {
-        if (!is_dir(($path))) {
-            mkdir(($path), 0777, true);
         }
     }
 
