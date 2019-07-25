@@ -43,7 +43,8 @@ class Cascade {
         $workflow_registry = new WorkflowRegistry($workflow_logic_function_name);
 
         $default_marking = new DefaultMarking();
-        $default_marking->td_entity_namespace = $td_entity_namespace;
+        $default_marking->td_entity_name = $td_entity_namespace;
+        $default_marking->td_entity_workflow_function_name = $workflow_logic_function_name;
         $default_marking->marking = 'draft';
 
         $workflow = $workflow_registry->get($default_marking);
@@ -54,15 +55,15 @@ class Cascade {
 
 
 
-        dump([
-            // '$configutation' => $configutation,
-            // '$workflow_configuration' => $workflow_configuration,
-            // '$workflow_registry' => $workflow_registry,
-            '$default_marking' => $default_marking,
-            '$workflow' => $workflow,
-            '$workflow->can($default_marking, publish)' => $workflow->can($default_marking, 'publish'),
-            '$workflow->can($default_marking, to_review)' => $workflow->can($default_marking, 'to_review'),
-        ]);
+        // dump([
+        //     // '$configutation' => $configutation,
+        //     // '$workflow_configuration' => $workflow_configuration,
+        //     // '$workflow_registry' => $workflow_registry,
+        //     '$default_marking' => $default_marking,
+        //     '$workflow' => $workflow,
+        //     '$workflow->can($default_marking, publish)' => $workflow->can($default_marking, 'publish'),
+        //     '$workflow->can($default_marking, to_review)' => $workflow->can($default_marking, 'to_review'),
+        // ]);
 
 
     }
