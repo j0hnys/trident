@@ -5,7 +5,9 @@ namespace App\Trident\Base\Processes\Subscribers;
 use App\Trident\Base\Processes\Models\DefaultMarking;
 use Symfony\Component\Finder\Finder;
 
-class CascadeSubscriber { 
+use App\Trident\Base\Processes\CascadeMachine;
+
+class CascadeSubscriber {
 
     /**
      * Handle workflow guard events.
@@ -25,59 +27,17 @@ class CascadeSubscriber {
      * Handle workflow transition event.
      */
     public function onTransition($event) {
-        $originalEvent = $event->getOriginalEvent();
         
-        $transition = $originalEvent->getTransition();
-        $transition_name = $transition->getName();
+        $cascade_machine = CascadeMachine::getInstance();
 
-        $subject = $originalEvent->getSubject();
-        $subject_name = get_class($subject);
-        $workflow_function_name = '';
-        if ($subject instanceof DefaultMarking) {
-            $subject_name = $subject->td_entity_name;
-            $workflow_function_name = $subject->td_entity_workflow_function_name;
-        }
+        $cascade_machine->handleTransition($event);
 
-        if (empty($workflow_function_name)) {
-            throw new Exception('no $workflow_function_name given', 1);
-        }
+        $process_step_data = $cascade_machine->getProcessStepData();
 
-        $td_entity_name = (pathinfo($subject_name))['basename'];
-
-        //
-        //
-        $configPath = base_path().'/app/Trident/Workflows/Schemas/Processes/'.$td_entity_name;
-
-        $configutations = [];
-        foreach (Finder::create()->in($configPath)->name('*.php') as $file) {
-            $configutation_name = 'trident.workflows.schemas.processes.'.$td_entity_name.'.'.basename($file->getRealPath(), '.php');
-
-            $configutations[ basename($file->getRealPath(),'.php') ] = config($configutation_name);
-        }
-
-        $transition_configuration = $configutations['cascade_process'];
-        //
-        //
-
-        $callback_uri = $transition_configuration[ $workflow_function_name ]['transitions'][ $transition_name ];
-
-        $callback = explode('@',$callback_uri);
-        $callback_class_namespace = $callback[0];
-        $callback_fuction = $callback[1];
-
-        $callback_class = app()->make($callback_class_namespace);
-        $result = $callback_class->{$callback_fuction}(['osdmckldsmcsl']);
-
-        dump([
-            'message' => 'onTransition',
-            '$originalEvent' => $originalEvent,
-            '$transition_name' => $transition_name,
-            '$subject' => $subject,
-            '$subject_name' => $subject_name,
-            '$transition_configuration' => $transition_configuration,
-            '$callback' => $callback,
-            '$result' => $result,
-        ]);
+        // dump([
+        //     'message' => 'onTransition',
+        //     '$process_step_data' => $process_step_data,
+        // ]);
     }
 
     /**

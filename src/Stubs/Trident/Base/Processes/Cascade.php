@@ -47,18 +47,23 @@ class Cascade {
         $default_marking->td_entity_workflow_function_name = $workflow_logic_function_name;
         $default_marking->marking = 'draft';
 
+        $cascade_machine = CascadeMachine::getInstance();
+        $cascade_machine->setProcessStartStepData(['aspdoiaspodiaspodaidpoadsi']);
+
         $workflow = $workflow_registry->get($default_marking);
 
         $workflow->can($default_marking, 'publish'); 
 
         $workflow->apply($default_marking, 'to_review');
 
+        $workflow->apply($default_marking, 'publish');
 
 
         // dump([
         //     // '$configutation' => $configutation,
         //     // '$workflow_configuration' => $workflow_configuration,
         //     // '$workflow_registry' => $workflow_registry,
+        //     '$workflow_logic_function_name' => $workflow_logic_function_name,
         //     '$default_marking' => $default_marking,
         //     '$workflow' => $workflow,
         //     '$workflow->can($default_marking, publish)' => $workflow->can($default_marking, 'publish'),
