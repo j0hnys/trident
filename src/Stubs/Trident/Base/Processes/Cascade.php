@@ -10,7 +10,10 @@ use Symfony\Component\Finder\Finder;
  
 class Cascade {
 
-    public function __construct(string $td_entity_namespace, string $workflow_logic_function_name) 
+    private $default_marking;
+    private $workflow;
+
+    public function initialize(string $td_entity_namespace, string $workflow_logic_function_name, $start_data) 
     {
 
         $workflow_configuration = app()->make('J0hnys\TridentWorkflow\PackageProviders\Configuration');
@@ -19,14 +22,6 @@ class Cascade {
 
         $configPath = base_path().'/app/Trident/Workflows/Schemas/Processes/'.$td_entity_name;
 
-
-
-        // dd([
-        //     '$td_entity_namespace' => $td_entity_namespace,
-        //     '$td_entity_name' => $td_entity_name,
-        //     '$workflow_logic_function_name' => $workflow_logic_function_name,
-        //     'pathinfo($td_entity_namespace)' => pathinfo($td_entity_namespace),
-        // ]);
 
         $configutations = [];
         foreach (Finder::create()->in($configPath)->name('*.php') as $file) {
@@ -42,35 +37,26 @@ class Cascade {
 
         $workflow_registry = new WorkflowRegistry($workflow_logic_function_name);
 
-        $default_marking = new DefaultMarking();
-        $default_marking->td_entity_name = $td_entity_namespace;
-        $default_marking->td_entity_workflow_function_name = $workflow_logic_function_name;
-        $default_marking->marking = 'draft';
+        $this->default_marking = new DefaultMarking();
+        $this->default_marking->td_entity_name = $td_entity_namespace;
+        $this->default_marking->td_entity_workflow_function_name = $workflow_logic_function_name;
+        $this->default_marking->marking = 'draft';
 
         $cascade_machine = CascadeMachine::getInstance();
-        $cascade_machine->setProcessStartStepData(['aspdoiaspodiaspodaidpoadsi']);
+        $cascade_machine->setProcessStartStepData($start_data);
 
-        $workflow = $workflow_registry->get($default_marking);
+        $this->workflow = $workflow_registry->get($this->default_marking);
+    }
 
-        $workflow->can($default_marking, 'publish'); 
+    public function run(): void
+    {
+        $this->workflow->can($this->default_marking, 'publish'); 
 
-        $workflow->apply($default_marking, 'to_review');
+        $this->workflow->apply($this->default_marking, 'to_review');
 
-        $workflow->apply($default_marking, 'publish');
+        $this->workflow->apply($this->default_marking, 'publish');
 
-
-        // dump([
-        //     // '$configutation' => $configutation,
-        //     // '$workflow_configuration' => $workflow_configuration,
-        //     // '$workflow_registry' => $workflow_registry,
-        //     '$workflow_logic_function_name' => $workflow_logic_function_name,
-        //     '$default_marking' => $default_marking,
-        //     '$workflow' => $workflow,
-        //     '$workflow->can($default_marking, publish)' => $workflow->can($default_marking, 'publish'),
-        //     '$workflow->can($default_marking, to_review)' => $workflow->can($default_marking, 'to_review'),
-        // ]);
-
-
+        $this->workflow->apply($this->default_marking, 'reject_published');
     }
 
 

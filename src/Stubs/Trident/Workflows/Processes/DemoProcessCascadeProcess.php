@@ -15,6 +15,10 @@ class DemoProcessCascadeProcess //<-- PROSOXH!! na ginei kai interface edw!!!
     public function step_1(array $data): array 
     {
         // code  
+
+        dump([
+            'step_1'
+        ]);
         
         return ['ena'];
     }
@@ -22,6 +26,10 @@ class DemoProcessCascadeProcess //<-- PROSOXH!! na ginei kai interface edw!!!
     public function step_2(array $data): array
     {
         // code 
+
+        dump([
+            'step_2'
+        ]);
         
         return ['dyo'];
     }
@@ -29,6 +37,10 @@ class DemoProcessCascadeProcess //<-- PROSOXH!! na ginei kai interface edw!!!
     public function step_3(array $data): array
     {
         // code
+
+        dump([
+            'step_3'
+        ]);
 
         return ['tria'];
     }

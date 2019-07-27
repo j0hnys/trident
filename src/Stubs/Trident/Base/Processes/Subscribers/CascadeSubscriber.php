@@ -26,18 +26,12 @@ class CascadeSubscriber {
     /**
      * Handle workflow transition event.
      */
-    public function onTransition($event) {
-        
+    public function onTransition($event) {        
         $cascade_machine = CascadeMachine::getInstance();
 
         $cascade_machine->handleTransition($event);
 
         $process_step_data = $cascade_machine->getProcessStepData();
-
-        // dump([
-        //     'message' => 'onTransition',
-        //     '$process_step_data' => $process_step_data,
-        // ]);
     }
 
     /**
@@ -54,12 +48,6 @@ class CascadeSubscriber {
         $originalEvent = $event->getOriginalEvent();
 
         $subject = $originalEvent->getSubject();
-
-        // dump([
-        //     'message' => 'onEntered',
-        //     // '$originalEvent' => $originalEvent,
-        //     '$subject' => $subject,
-        // ]);
     }
 
     /**

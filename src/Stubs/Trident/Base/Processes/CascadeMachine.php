@@ -82,6 +82,10 @@ class CascadeMachine {
 
         $edges = $this->findEdges($original_event->getWorkflow()->getDefinition());
 
+        // dd([
+        //     '$edges' => $edges,
+        // ]);
+
         $step_data_transition = null;
 
         foreach ($edges as $i => $edge) {
@@ -89,7 +93,12 @@ class CascadeMachine {
                 break;
             }
             if ($transition->getFroms()[0] == $edge['from'] && $edge['transition_number'] != 0) {
-                $step_data_transition = $edges[$i-1]['from'];
+                for ($j=($i-1); $j>=0; $j--) { 
+                    if ($edges[$j]['to'] == $transition->getFroms()[0]) {
+                        $step_data_transition = $edges[$j]['from'];
+                    }
+                }
+
                 break;
             }
         }
@@ -105,14 +114,6 @@ class CascadeMachine {
         $transition = $originalEvent->getTransition();
         $transition_name = $transition->getName();
 
-        
-
-        // dd([
-        //     '$transition' => $transition,
-        //     '$transition->getFroms()' => $transition->getFroms(),
-        //     '$originalEvent->getWorkflow()->getDefinition()' => $originalEvent->getWorkflow()->getDefinition(),
-        //     '$edges' => $edges,
-        // ]);
 
         $subject = $originalEvent->getSubject();
         $subject_name = get_class($subject);
@@ -161,29 +162,13 @@ class CascadeMachine {
 
             $step_data = $steps_datas[$previous_callback_uri];
         }
-
-        dump([
-            '$previous_step_data_transition' => $previous_step_data_transition,
-            '$step_data' => $step_data,
-        ]);
+        
 
         $callback_class = app()->make($callback_class_namespace);
         $result = $callback_class->{$callback_fuction}($step_data);
 
 
         $this->setProcessStepData($callback_uri, $result);
-
-        
-        // dump([
-        //     '$originalEvent' => $originalEvent,
-        //     '$transition_name' => $transition_name,
-        //     // '$subject' => $subject,
-        //     // '$subject_name' => $subject_name,
-        //     // '$transition_configuration' => $transition_configuration,
-        //     // '$callback' => $callback,
-        //     // '$result' => $result,
-        // ]);
-
 
     }
 
