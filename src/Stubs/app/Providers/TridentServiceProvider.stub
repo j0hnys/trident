@@ -15,13 +15,7 @@ class TridentServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configPath = __DIR__.'/../Trident/Workflows/Schemas/Processes';
-
-        foreach (Finder::create()->in($configPath)->name('*.php') as $file) {
-            $td_entity_name = (pathinfo( $file->getRelativePath() ))['basename'];
-
-            $this->mergeConfigFrom( $file->getRealPath() , 'trident.workflows.schemas.processes.'.$td_entity_name.'.'.basename($file->getRealPath(), '.php') );
-        }
+        //
     }
 
     /**

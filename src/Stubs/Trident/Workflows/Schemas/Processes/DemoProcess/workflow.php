@@ -14,10 +14,6 @@ return [
                 'from' => 'review',
                 'to'   => 'published'
             ],
-            'reject' => [
-                'from' => 'review',
-                'to'   => 'rejected'
-            ],
             'reject_published' => [
                 'from' => 'published',
                 'to'   => 'rejected'

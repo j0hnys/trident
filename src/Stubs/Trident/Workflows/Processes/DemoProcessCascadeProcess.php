@@ -2,7 +2,6 @@
 
 namespace App\Trident\Workflows\Processes;
 
-
 class DemoProcessCascadeProcess //<-- PROSOXH!! na ginei kai interface edw!!!
 {
 
