@@ -4,7 +4,7 @@
         "db_name": "demo_process"
     },
     "workflow": {
-        "type": "cascade",
+        "type": "cascade | cascade_state_machine | state_machine",
         "schema": {
             "initial_state": " . . . ",
             "states": " . . . ",
