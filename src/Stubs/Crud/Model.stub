@@ -9,9 +9,9 @@ class {{Td_entity}} extends Model
 {
     // use WorkflowTrait;
         
-    protected $table = '{{td_entity}}';
+    protected $table = '{{db_name}}';
 
-    protected $fillable = [];
+    protected $fillable = [{{fillables_comma_separated}}];
 
 
     // public function user()

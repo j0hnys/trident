@@ -12,7 +12,7 @@ class GenerateValidation extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:validation {entity_name} {function_name} ";
+    protected $signature = "trident:generate:validation {entity_name} {function_name} {--schema_path=} ";
 
     /**
      * The console command description.
@@ -46,9 +46,10 @@ class GenerateValidation extends Command
         try {
             $entity_name = $this->argument('entity_name');
             $function_name = $this->argument('function_name');
+            $schema_path = $this->option('schema_path');
             
 
-            $crud = $this->validation->generate($entity_name, $function_name);
+            $crud = $this->validation->generate($entity_name, $function_name, $schema_path);
             
 
             $this->info($entity_name.' '.$function_name.' validation successfully created');

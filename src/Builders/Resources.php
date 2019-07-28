@@ -23,7 +23,7 @@ class Resources
      * @param string $domain
      * @return void
      */
-    public function generate(string $entity_name, bool $is_collection, string $domain): void
+    public function generate(string $entity_name, bool $is_collection, string $domain, string $schema_path = ''): void
     {
         //Resource logic generation
         $resource_type = $is_collection ? 'ResourceCollection' : 'Resource';
@@ -35,25 +35,15 @@ class Resources
 
 
         $schema = [];
-        $configuration = config('trident');
-        if (!empty($configuration)) {
-            if (isset($configuration['solution']['schemas']['folder'])) {
-                $tmp_schemas = $this->storage_disk->getFolderFiles($configuration['solution']['schemas']['folder']);
-
-                foreach ($tmp_schemas as $tmp_schema) {
-                    if ($tmp_schema == $entity_name.'.json') {
-                        $schema = json_decode( $this->storage_disk->readFile( $configuration['solution']['schemas']['folder'].'/'.$tmp_schema ),true);
-                    }
-                }
-            }
+        if (!empty($schema_path)) {
+            $schema = json_decode( $this->storage_disk->readFile( $schema_path ),true);
         }
-
 
         $types = [];
         if (!empty($schema)) {
             foreach ($schema as $key => $data) {
-                if (isset($data['output']['resource'])) {
-                    if ($data['output']['resource']) {
+                if (isset($data['resource'])) {
+                    if ($data['resource']) {
                         $types []= [
                             'type' => '\''.$key.'\' => $this->'.$key.','
                         ];

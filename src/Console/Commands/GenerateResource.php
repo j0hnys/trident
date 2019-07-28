@@ -12,7 +12,7 @@ class GenerateResource extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:resource {entity_name} {--collection} {--workflow} ";
+    protected $signature = "trident:generate:resource {entity_name} {--collection} {--workflow} {--schema_path=} ";
 
     /**
      * The console command description.
@@ -47,8 +47,9 @@ class GenerateResource extends Command
             $entity_name = $this->argument('entity_name');
             $is_collection = $this->option('collection');
             $domain = $this->option('workflow') ? 'Workflows' : 'Business';
+            $schema_path = $this->option('schema_path');
             
-            $crud = $this->resources->generate($entity_name, $is_collection, $domain);
+            $crud = $this->resources->generate($entity_name, $is_collection, $domain, $schema_path);
             
             $collection_message = $is_collection ? ' Collection' : '';
             $this->info($entity_name.' Resource'.$collection_message.' successfully created for '.$domain);

@@ -14,7 +14,7 @@ class GenerateWorkflowRestfulCrud extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:workflow_restful_crud {name} ";
+    protected $signature = "trident:generate:workflow_restful_crud {name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=} ";
 
     /**
      * The console command description.
@@ -49,10 +49,15 @@ class GenerateWorkflowRestfulCrud extends Command
     public function handle()
     {
         try {
+            $options = [];
             $name = $this->argument('name');
+            $options['functionality_schema_path'] = $this->option('functionality_schema_path') ? $this->option('functionality_schema_path') : '';
+            $options['resource_schema_path'] = $this->option('resource_schema_path') ? $this->option('resource_schema_path') : '';
+            $options['validation_schema_path'] = $this->option('validation_schema_path') ? $this->option('validation_schema_path') : '';
+            $options['strict_type_schema_path'] = $this->option('strict_type_schema_path') ? $this->option('strict_type_schema_path') : '';
                         
             //workflow building
-            $crud = $this->crud_workflow_builder->generate($name, $this);
+            $crud = $this->crud_workflow_builder->generate($name, $options, $this);
 
             
             $this->info($name.' workflow restful crud successfully created');

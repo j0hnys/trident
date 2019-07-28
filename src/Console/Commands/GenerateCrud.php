@@ -12,7 +12,7 @@ class GenerateCrud extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:restful_crud {name} ";
+    protected $signature = "trident:generate:restful_crud {name} {--model_db_name=} {--schema_path=} ";
 
     /**
      * The console command description.
@@ -45,9 +45,11 @@ class GenerateCrud extends Command
     {
         try {
             $name = $this->argument('name');
+            $model_db_name = $this->option('model_db_name');
+            $schema_path = $this->option('schema_path');
             
 
-            $crud = $this->crud_builder->generate($name);
+            $crud = $this->crud_builder->generate($name, $model_db_name, $schema_path);
             
 
             $this->info($name.' RESTFUL CRUD successfully created');

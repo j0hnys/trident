@@ -33,13 +33,13 @@ class WorkflowRestfulCrud
      * @param Command $command
      * @return void
      */
-    public function generate(string $name = 'TEST', Command $command): void
+    public function generate(string $name = 'TEST', array $options = [], Command $command): void
     {
-        $this->generateCrud($name, $command);
+        $this->generateCrud($name, $options, $command);
 
         $this->generateWorkflow($name);
 
-        $this->generateOther($name, $command);
+        $this->generateOther($name, $options, $command);
 
     }
 
@@ -48,9 +48,21 @@ class WorkflowRestfulCrud
      * @param Command $command
      * @return void
      */
-    public function generateCrud(string $name, Command $command): void
+    public function generateCrud(string $name, array $options = [], Command $command): void
     {
-        $crud = $this->crud_builder->generate($name, $command);
+        $model_db_name = '';
+        if ($options['functionality_schema_path']) {
+            $schema = [];
+            if (!empty($options['functionality_schema_path'])) {
+                $schema = json_decode( $this->storage_disk->readFile( $options['functionality_schema_path'] ),true);
+            }
+
+            $model_db_name = $schema['model']['db_name'];
+        }
+
+        $schema_path = $options['validation_schema_path'];
+
+        $crud = $this->crud_builder->generate($name, $model_db_name, $schema_path, $command);
     }
 
     /**
@@ -207,7 +219,7 @@ class WorkflowRestfulCrud
      * @param Command $command
      * @return void
      */
-    public function generateOther(string $name, Command $command): void
+    public function generateOther(string $name, array $options = [], Command $command): void
     {
         //new model factory
         $command->call('trident:generate:factory', [
@@ -218,12 +230,14 @@ class WorkflowRestfulCrud
         $command->call('trident:generate:validation', [
             'entity_name' => $name,
             'function_name' => 'store',
+            '--schema_path' => $options['validation_schema_path']
         ]);
 
         //new validation class for restful crud update
         $command->call('trident:generate:validation', [
             'entity_name' => $name,
             'function_name' => 'update',
+            '--schema_path' => $options['validation_schema_path']
         ]);
         
         // Make the basic strict types for crud
@@ -232,18 +246,21 @@ class WorkflowRestfulCrud
             'function_name' => 'store',
             'entity_name' => ucfirst($name),
             '--workflow' => true,
+            '--schema_path' => $options['strict_type_schema_path']
         ]);
         $command->call('trident:generate:strict_type', [
             'strict_type_name' => 'struct_optional',
             'function_name' => 'update',
             'entity_name' => ucfirst($name),
             '--workflow' => true,
+            '--schema_path' => $options['strict_type_schema_path']
         ]);
         $command->call('trident:generate:strict_type', [
             'strict_type_name' => 'struct_optional',
             'function_name' => 'index',
             'entity_name' => ucfirst($name),
             '--workflow' => true,
+            '--schema_path' => $options['strict_type_schema_path']
         ]);
         
         // Make the basic resource and it's collection
@@ -251,11 +268,13 @@ class WorkflowRestfulCrud
             'entity_name' => ucfirst($name),
             '--collection' => false,
             '--workflow' => true,
+            '--schema_path' => $options['resource_schema_path']
         ]);
         $command->call('trident:generate:resource', [
             'entity_name' => ucfirst($name),
             '--collection' => true,
             '--workflow' => true,
+            '--schema_path' => $options['resource_schema_path']
         ]);
     }
 

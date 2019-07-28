@@ -33,7 +33,7 @@ class CrudWorkflowBuilder
      * @param Command $command
      * @return void
      */
-    public function generate(string $name = 'TEST', Command $command): void
+    public function generate(string $name = 'TEST', string $model_db_name = '', string $schema_path = '', Command $command): void
     {        
         //
         //controller generation
@@ -82,9 +82,30 @@ class CrudWorkflowBuilder
             if (!$this->storage_disk->fileExists($model_path)) {
                 $this->storage_disk->makeDirectory($model_path);
 
-                $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/Crud/Model.stub');
+                $schema = [];
+                if (!empty($schema_path)) {
+                    $schema = json_decode( $this->storage_disk->readFile( $schema_path ),true);
+                }
 
-                $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+                $fillables = [];
+                if (!empty($schema)) {
+                    foreach ($schema as $key => $data) {
+                        if (isset($data['fillable'])) {
+                            if ($data['fillable']) {
+                                $fillables []= '\''.$key.'\'';
+                            }
+                        }
+                    }
+                }
+
+                if (empty($model_db_name)) {
+                    $model_db_name = lcfirst($name);
+                }
+
+                $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Crud/Model.stub');
+
+                $stub = str_replace('{{db_name}}', $model_db_name, $stub);
+                $stub = str_replace('{{fillables_comma_separated}}', implode(', ',$fillables), $stub);
                 $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
 
                 $this->storage_disk->writeFile($model_path, $stub);

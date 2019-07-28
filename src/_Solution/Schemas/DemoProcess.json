@@ -1,0 +1,28 @@
+{
+    "name": {
+        "input": {
+            "type": "T::string()",
+            "validation": {
+                "rule": "required | string",
+                "message": "name is required"
+            }
+        },
+        "output": {
+            "fillable": true,
+            "resource": true
+        }
+    },
+    "value": {
+        "input": {
+            "type": "T::integer()",
+            "validation": {
+                "rule": "required | integer",
+                "message": "value is required"
+            }
+        },
+        "output": {
+            "fillable": true,
+            "resource": true
+        }
+    }
+}
