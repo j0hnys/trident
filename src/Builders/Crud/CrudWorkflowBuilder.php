@@ -57,24 +57,17 @@ class CrudWorkflowBuilder
         //
         //model generation
         $model_path = $this->storage_disk->getBasePath() . '/app/Models/' . ucfirst($name) . '.php';
-        $output_path = './Models/';
-        $table_name = Str::plural( Str::snake($name) );
-        $table_name_singular = Str::snake($name);
-        if (Schema::hasTable(lcfirst($table_name))) {
+        $output_path = str_replace('C:\\','/',$this->storage_disk->getBasePath().'/app/Models/');
+        if (empty($model_db_name)) {
+            $model_db_name = lcfirst($name);
+        }
+
+        if (Schema::hasTable($model_db_name)) {
             // Generate model for existing table using plural table name 
             $command->call('krlove:generate:model', [
                 'class-name' => ucfirst($name),
                 '--output-path' => $output_path,
-                '--table-name' => $table_name,
-                '--namespace' => 'App\\Models',
-                '--backup' => $this->storage_disk->fileExists($model_path),
-            ]);
-        } elseif (Schema::hasTable(lcfirst($table_name_singular))) {
-            // Generate model for existing table using singular table name 
-            $command->call('krlove:generate:model', [
-                'class-name' => ucfirst($name),
-                '--output-path' => $output_path,
-                '--table-name' => $table_name_singular,
+                '--table-name' => $model_db_name,
                 '--namespace' => 'App\\Models',
                 '--backup' => $this->storage_disk->fileExists($model_path),
             ]);
@@ -96,10 +89,6 @@ class CrudWorkflowBuilder
                             }
                         }
                     }
-                }
-
-                if (empty($model_db_name)) {
-                    $model_db_name = lcfirst($name);
                 }
 
                 $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Crud/Model.stub');

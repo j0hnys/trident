@@ -1,5 +1,5 @@
 {
-    "endpoint": "/something",
+    "endpoint": "/something (~in resource creation is not relevant~)",
     "model": {
         "db_name": "demo_process"
     },
