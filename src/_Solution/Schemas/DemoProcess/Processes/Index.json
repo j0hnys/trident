@@ -1,0 +1,27 @@
+{
+    "used_interfaces" : [
+        {
+            "interface" : "__interface__\\__interface__\\__interface__"
+        }
+    ],
+    "constructor_parameters" : [
+        {
+            "type": "Type",
+            "name": "parameter"
+        }
+    ],
+    "process_steps" : [
+        {
+            "step_name" : "step",
+            "step_function_parameters" : [
+                {
+                    "type": "Type",
+                    "name": "parameter"
+                }
+            ],
+            "step_returned_type" : "ReturnType",
+            "step_code" :  "",
+            "step_return_value" : "new ReturnType();"
+        }
+    ]
+}

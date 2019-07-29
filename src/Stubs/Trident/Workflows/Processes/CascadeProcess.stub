@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Trident\Workflows\Processes;
+
+{{# used_interfaces }}
+use {{interface}};
+{{/ used_interfaces }}
+
+class {{process_name}} implements {{process_name}}Interface
+{
+
+    public function __construct({{constructor_parameters}})
+    {
+        {{{constructor_body}}}
+    }
+
+    {{# process_steps }}
+    public function {{step_name}}({{step_function_parameters}}): {{step_returned_type}} 
+    {
+        {{{step_code}}}
+
+        return {{{step_return_value}}}
+    }
+    {{/ process_steps }}
+
+}
