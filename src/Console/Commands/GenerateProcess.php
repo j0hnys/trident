@@ -48,7 +48,7 @@ class GenerateProcess extends Command
             $process_name = $this->argument('process_name');
             $schema_path = $this->argument('schema_path');
             
-            $this->process->generate($td_entity_name, $process_name, $schema_path);
+            $this->process->generate($td_entity_name, $process_name, $schema_path, $this);
             
             $this->info('process: "'.$process_name.'" made sucessfully');
 

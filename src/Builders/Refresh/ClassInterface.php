@@ -63,7 +63,8 @@ class ClassInterface
             'class_name' => $class_name,
             'function_signatures' => $function_signatures,
         ]);
-                
+        
+        $this->storage_disk->makeDirectory($output_path.'/'.$name.'Interface.php'); 
 
         $this->storage_disk->writeFile($output_path.'/'.$name.'Interface.php', $stub);
     }
@@ -151,8 +152,12 @@ class ClassInterface
                 }
             }
 
-            array_pop($tmp_used_namespace->name->parts);
-            $class_implemented_interfaces_namespaces_strings []= implode('\\', $tmp_used_namespace->name->parts );
+            if (is_array($tmp_used_namespace)) {
+                array_pop($tmp_used_namespace->name->parts);
+                $class_implemented_interfaces_namespaces_strings []= implode('\\', $tmp_used_namespace->name->parts );
+            } else {
+                $class_implemented_interfaces_namespaces_strings []= $class_namespace_string;
+            }
         }
 
 

@@ -3,6 +3,7 @@
 namespace j0hnys\Trident\Builders;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use Illuminate\Console\Command;
 
 class Process
 {
@@ -16,6 +17,19 @@ class Process
         }
         $this->mustache = new \Mustache_Engine;
     }
+
+
+    public function generate(string $td_entity_name, string $process_name, string $schema_path, Command $command)
+    {
+        $this->generateProcess($td_entity_name, $process_name, $schema_path);
+        $this->generateOther(
+            $process_name,
+            'app/Trident/Workflows/Processes/'.$td_entity_name.'',
+            'app/Trident/Interfaces/Workflows/Processes/'.$td_entity_name.'',
+            $command
+        );
+    }
+
     
     /**
      * @param string $td_entity_name
@@ -23,7 +37,7 @@ class Process
      * @param string $domain
      * @return void
      */
-    public function generate(string $td_entity_name, string $process_name, string $schema_path): void
+    public function generateProcess(string $td_entity_name, string $process_name, string $schema_path): void
     {
         //Resource logic generation
         $process_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Processes/'.$td_entity_name.'/'.$process_name.'.php';
@@ -51,7 +65,7 @@ class Process
             $template_data['constructor_parameters'] = implode(', ', $template_data['constructor_parameters']);
 
             $template_data['constructor_body'] = array_map(function($element) {
-                return '$this->'.$element['name'].' = $'.$element['name'];
+                return '$this->'.$element['name'].' = $'.$element['name'].';';
             },$schema['constructor_parameters']);
             $template_data['constructor_body'] = implode("\r\n        ", $template_data['constructor_body']);
 
@@ -74,6 +88,16 @@ class Process
         $stub = $this->mustache->render($stub, $template_data);
 
         $this->storage_disk->writeFile($process_path, $stub);
+    }
+
+
+    public function generateOther(string $process_name, string $relative_input_path, string $relative_output_path, Command $command)
+    {
+        $command->call('trident:refresh:class_interface', [
+            'name' => $process_name,
+            'relative_input_path' => $relative_input_path,  //'app/Trident/Workflows/Logic',
+            'relative_output_path' => $relative_output_path,    //'app/Trident/Interfaces/Workflows/Logic',
+        ]);
     }
     
 
