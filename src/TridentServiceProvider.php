@@ -9,6 +9,7 @@ use j0hnys\Trident\Console\Commands\GeneratePolicyFunction;
 use j0hnys\Trident\Console\Commands\GenerateBusinessLogicFunction;
 use j0hnys\Trident\Console\Commands\GenerateWorkflowLogicFunction;
 use j0hnys\Trident\Console\Commands\GenerateWorkflow;
+use j0hnys\Trident\Console\Commands\GenerateWorkflowFunctionProcess;
 use j0hnys\Trident\Console\Commands\GenerateWorkflowTests;
 use j0hnys\Trident\Console\Commands\GenerateWorkflowTestLogicFunction;
 use j0hnys\Trident\Console\Commands\GenerateWorkflowRestfulCrud;
@@ -75,6 +76,9 @@ class TridentServiceProvider extends ServiceProvider
         });
         $this->app->singleton('trident:generate_workflow', function ($app) {
             return new GenerateWorkflow();
+        });
+        $this->app->singleton('trident:generate_workflow_function_process', function ($app) {
+            return new GenerateWorkflowFunctionProcess();
         });
         $this->app->singleton('trident:generate_workflow_tests', function ($app) {
             return new GenerateWorkflowTests();
@@ -148,6 +152,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident:generate_business_logic_function',
             'trident:generate_workflow_logic_function',
             'trident:generate_workflow',
+            'trident:generate_workflow_function_process',
             'trident:generate_workflow_tests',
             'trident:generate_workflow_test_logic_function',
             'trident:generate_workflow_restful_crud',

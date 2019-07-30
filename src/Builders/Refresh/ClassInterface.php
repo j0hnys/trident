@@ -123,6 +123,14 @@ class ClassInterface
                     }
                     $tmp_function->parameters []= $tmp;
                 }
+
+                if (isset($node->returnType)) {
+                    if (isset($node->returnType->name)) {
+                        $tmp_function->return_type = $node->returnType->name;
+                    } else if (isset($node->returnType->parts)) {
+                        $tmp_function->return_type = $node->returnType->parts[ count($node->returnType->parts)-1 ];
+                    }
+                }
                 
                 $analysis_result->functions_signature []= $tmp_function;
             }
@@ -225,11 +233,35 @@ class ClassInterface
                     }
                 }
 
-                $function_signature_string .= implode(', ',$function_signature_parameters).');';
+                $function_signature_string .= implode(', ',$function_signature_parameters).')';
             } else {
-                $function_signature_string .= ');';
+                $function_signature_string .= ')';
             }            
 
+            //gia to return type
+            if (isset($function_signature->return_type)) {
+
+                $type_name = $function_signature->return_type;
+
+                //gia na valw t swsta `use` sthn arxh toy arxeioy
+                foreach ($analysis_result->used_namespaces as $index => $used_namespace) {
+                    if (isset($used_namespace->alias)) {
+                        if ($type_name == $used_namespace->alias) {
+                            if (!in_array($index, $used_namespaces_indexes)) {
+                                $used_namespaces_indexes []= $index;
+                            }
+                        }
+                    } else {
+                        if ($type_name == $used_namespace->name->parts[ count($used_namespace->name->parts)-1 ]) {
+                            if (!in_array($index, $used_namespaces_indexes)) {
+                                $used_namespaces_indexes []= $index;
+                            }
+                        }
+                    }
+                }
+
+                $function_signature_string .= ': '.$function_signature->return_type.';';
+            }
 
             $function_signature_strings []= $function_signature_string;
         }
@@ -260,6 +292,9 @@ class ClassInterface
                 'class_name' => $analysis_result->class_name->name,
                 'used_namespaces' => $used_namespaces_strings,
                 'function_signatures' => $function_signature_strings,
+            ],
+            'objects' => (object)[
+                'function_signatures' => $analysis_result->functions_signature,
             ]
         ];
     }
