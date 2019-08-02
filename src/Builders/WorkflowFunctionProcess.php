@@ -10,10 +10,8 @@ use J0hnys\TridentWorkflow\WorkflowRegistry;
 use Symfony\Component\Workflow\Definition;
 use j0hnys\Trident\Builders\Refresh\ClassInterface;
 
-use PhpParser\Node;
+use PhpParser\{Node, NodeFinder};
 use PhpParser\ParserFactory;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitorAbstract;
 
 class WorkflowFunctionProcess
 {
@@ -231,71 +229,102 @@ class WorkflowFunctionProcess
             'functions_signature' => [],
         ];
 
-        $traverser = new NodeTraverser();
-        $traverser->addVisitor(new class($analysis_result) extends NodeVisitorAbstract {
+        $nodeFinder = new NodeFinder;
+        $nodeFinder->find($ast, function(Node $node) use (&$analysis_result){
 
-            private $analysis_result;
-
-            public function __construct($analysis_result) {
-                $this->analysis_result = $analysis_result;
+            if ($node instanceof Node\Stmt\Namespace_) {
+                $analysis_result->class_namespace = $node->name;
             }
 
-            public function enterNode(Node $node) {
 
-                if ($node instanceof Node\Stmt\Namespace_) {
-                    $this->analysis_result->class_namespace = $node->name;
-                }
+            if ($node instanceof Node\Stmt\Use_) {
+                // dump([
+                //     '$node' => $node->uses[0],
+                // ]);
+                $analysis_result->used_namespaces []= $node->uses[0];
+            }
 
+            if ($node instanceof Node\Stmt\Class_) {
 
-                if ($node instanceof Node\Stmt\Use_) {
-                    // dump([
-                    //     '$node' => $node->uses[0],
-                    // ]);
-                    $this->analysis_result->used_namespaces []= $node->uses[0];
-                }
+                $constructor_node = $node->stmts[3];
 
-                if ($node instanceof Node\Stmt\Class_) {
-                    dump([
-                        '$node' => $node->stmts[3],
-                    ]);
-                    $this->analysis_result->class_name = $node->name;
-                    $this->analysis_result->implemented_interfaces []= $node->implements;
-                }
+                $constructor_data = (object)[
+                    'function_signature' => (object)[
+                        'lines' => (object)[
+                            'from' => 0,
+                            'to' => 0
+                        ],
+                        'arguments' => [],
+                    ],
+                    'body' => (object)[
+                        'lines' => (object)[
+                            'from' => 0,
+                            'to' => 0,
+                        ]
+                    ]
+                ];
 
-                if ($node instanceof Node\Stmt\ClassMethod) {
-                    $tmp_function = (object)[
-                        'flags' => $node->flags,  //dld public (1), protected (2), private (4), e.t.c.
-                        'name' => $node->name,
+                foreach ($constructor_node->params as $constructor_arguments) {
+                    $constructor_data->function_signature->arguments []= (object)[
+                        'type' => implode('\\', $constructor_arguments->type->parts),
+                        'name' => $constructor_arguments->var->name
                     ];
 
-                    if (!empty($node->params)) {
-                        $tmp = [];
-                        foreach ($node->params as $parameter) {
-                            $tmp []= (object)[
-                                'type' => $parameter->type,
-                                'var' => $parameter->var,
-                            ];
-                        }
-                        $tmp_function->parameters []= $tmp;
+                    if (empty($constructor_data->function_signature->lines->from)) {
+                        $constructor_data->function_signature->lines->from = $constructor_arguments->var->getAttributes()['startLine'];
+                    } else if ($constructor_data->function_signature->lines->from > $constructor_arguments->var->getAttributes()['startLine']) {
+                        $constructor_data->function_signature->lines->from = $constructor_arguments->var->getAttributes()['startLine'];
                     }
 
-                    if (isset($node->returnType)) {
-                        if (isset($node->returnType->name)) {
-                            $tmp_function->return_type = $node->returnType->name;
-                        } else if (isset($node->returnType->parts)) {
-                            $tmp_function->return_type = $node->returnType->parts[ count($node->returnType->parts)-1 ];
-                        }
+                    if (empty($constructor_data->function_signature->lines->to)) {
+                        $constructor_data->function_signature->lines->to = $constructor_arguments->var->getAttributes()['endLine'];
+                    } else if ($constructor_data->function_signature->lines->to < $constructor_arguments->var->getAttributes()['endLine']) {
+                        $constructor_data->function_signature->lines->to = $constructor_arguments->var->getAttributes()['endLine'];
                     }
-                    
-                    $this->analysis_result->functions_signature []= $tmp_function;
                 }
+
+                $constructor_data->body->lines->from = $constructor_node->getAttributes()['startLine'];
+                $constructor_data->body->lines->to = $constructor_node->getAttributes()['endLine'];
+
+                // dump([
+                //     // '$node' => $constructor_node->getAttributes(),
+                //     '$constructor_data' => $constructor_data,
+                // ]);
+                $analysis_result->class_name = $node->name;
+                $analysis_result->implemented_interfaces []= $node->implements;
             }
 
+            if ($node instanceof Node\Stmt\ClassMethod) {
+                $tmp_function = (object)[
+                    'flags' => $node->flags,  //dld public (1), protected (2), private (4), e.t.c.
+                    'name' => $node->name,
+                ];
+
+                if (!empty($node->params)) {
+                    $tmp = [];
+                    foreach ($node->params as $parameter) {
+                        $tmp []= (object)[
+                            'type' => $parameter->type,
+                            'var' => $parameter->var,
+                        ];
+                    }
+                    $tmp_function->parameters []= $tmp;
+                }
+
+                if (isset($node->returnType)) {
+                    if (isset($node->returnType->name)) {
+                        $tmp_function->return_type = $node->returnType->name;
+                    } else if (isset($node->returnType->parts)) {
+                        $tmp_function->return_type = $node->returnType->parts[ count($node->returnType->parts)-1 ];
+                    }
+                }
+                
+                $analysis_result->functions_signature []= $tmp_function;
+            }
         });
 
-        //vvv PROSOXH!!
-        $ast = $traverser->traverse($ast);
-        //^^^ 
+
+
     }
 
 
