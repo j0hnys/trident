@@ -294,6 +294,7 @@ class ClassInterface
                 'function_signatures' => $function_signature_strings,
             ],
             'objects' => (object)[
+                'used_namespaces' => $analysis_result->used_namespaces,
                 'function_signatures' => $analysis_result->functions_signature,
             ]
         ];
