@@ -231,8 +231,11 @@ class WorkflowFunctionProcess
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
         $code = $this->storage_disk->readFile( $code_filepath );
-        $code_line_array = $this->storage_disk->readFileArray( $code_filepath );       
+        $code_line_array = $this->storage_disk->readFileArray( $code_filepath );     
+        $process_class_name = $process_steps[0]->strings->class_name;
+        $process_name = $this->to_camel_case( $process_steps[0]->strings->class_name );  
 
+        //function
         $workflow_structure = $this->getClassStructure($code);        
         $workflow_function_structure = $this->getClassStructure($code, $function_name);   
         $workflow_function_arguments = $workflow_function_structure->objects->functions_data[0]->function_signature->arguments;     
@@ -240,14 +243,35 @@ class WorkflowFunctionProcess
             return '$'.$element->name;
         }, $workflow_function_arguments));
 
+        //constructor
+        $workflow_constructor_structure = $this->getClassStructure($code, '__construct');   
+        $workflow_constructor_arguments = $workflow_constructor_structure->objects->functions_data[0]->function_signature->arguments;
+        $process_injected_q = false;
+        foreach ($workflow_constructor_arguments as $workflow_constructor_argument) {
+            if ($workflow_constructor_argument->name == $process_name) {
+                $process_injected_q = true;
+                break;
+            }
+        }
+        if (!$process_injected_q) {
+            $workflow_constructor_arguments []= (object)[
+                'type' => $process_class_name,
+                'name' => $process_class_name,
+            ];
+        }
+        $workflow_constructor_arguments_string = implode(', ', array_map(function($element){
+            return $element->type.' $'.$element->name;
+        }, $workflow_constructor_arguments));
+
         dump([
-            // '$workflow_structure' => $workflow_structure->strings,
+            '$workflow_structure' => $workflow_structure->strings,
             // '$workflow_function_structure' => $workflow_function_structure->objects->functions_data[0]->function_signature->arguments,
             // '$workflow_function_arguments_string' => $workflow_function_arguments_string,
             '$code_line_array' => $code_line_array,
         ]);
 
 
+        //
         //prwta vriskw se poies grammes einai t content toy body
         $function_body = (object)[
             'content' => (object)[
@@ -278,8 +302,6 @@ class WorkflowFunctionProcess
         //     '$function_body' => $function_body,
         // ]);
 
-        $process_name = $this->to_camel_case( $process_steps[0]->strings->class_name );
-
         //meta kanw t grafw tn kwdika mesa sthn function
         $code_until_function_signature = array_slice($code_line_array, 0, $function_body->content->lines->from, true);
         $code_in_function_body = array_slice($code_line_array, ($function_body->content->lines->from), ($function_body->content->lines->to - $function_body->content->lines->from - 1), true);
@@ -293,7 +315,7 @@ class WorkflowFunctionProcess
             $next_step_function_name = isset($process_steps[$i+1]) ? $process_steps[$i+1]->objects->function_signatures[0]->name->name : null;
 
             $stmt = "        ".'$'.$this->to_camel_case($this_step_function_name).'_result = '.
-                    '$'.$process_name.'->'.$this_step_function_name.'('.$previous_step_function_name.');'."\n";
+                    '$this->'.$process_name.'->'.$this_step_function_name.'('.$previous_step_function_name.');'."\n";
             
                     
             $new_function_body []= $stmt;
@@ -305,15 +327,79 @@ class WorkflowFunctionProcess
 
         $new_code = array_merge($code_until_function_signature, $new_function_body, $code_after_function_body);
 
+        // dump([
+        //     // '$code_until_function_signature' => $code_until_function_signature,
+        //     // '$code_in_function_body' => $code_in_function_body,
+        //     // '$new_function_body' => $new_function_body,
+        //     // '$code_after_function_body' => $code_after_function_body,
+        //     '$new_code' => $new_code,
+        // ]);
+
+        //
+        //meta ftiaxnw tn constructor (enhmerwsh function signature k meta content)
+        
+        //prwta vriskw se poies grammes einai t content toy body
+        $constructor_body = (object)[
+            'function_signature' => (object)[
+                'lines' => (object)[
+                    'from' => 0,
+                    'to' => 0,
+                ]
+            ],
+            'content' => (object)[
+                'lines' => (object)[
+                    'from' => 0,
+                    'to' => 0,
+                ]
+            ]
+        ]; 
+        foreach ($workflow_structure->objects->function_signatures as $i => $function_signature) {
+
+            if ($function_signature->name->name == '__construct') {
+
+                $function_data = $workflow_structure->objects->functions_data[$i];
+
+                $constructor_body->function_signature = $function_data->function_signature;
+
+                if ($function_data->function_signature->lines->to == $function_data->body->lines->from) {
+                    $constructor_body->content->lines->from = $function_data->body->lines->from + 1;
+                    if ( strpos($code_line_array[$function_data->body->lines->from-1], '{') !== false ) {
+                        $constructor_body->content->lines->from = $function_data->body->lines->from;
+                    }
+                }
+                $constructor_body->content->lines->to = $function_data->body->lines->to;   //<-- thewrontas oti exw mono ena "}" gia na kleisw tn function!!!
+            }
+        }
+
+        //meta kanw t grafw tn kwdika mesa ston constructor
+        $code_until_constructor_signature = array_slice($new_code, 0, $constructor_body->content->lines->from, true);
+        $code_in_constructor_body = array_slice($new_code, ($constructor_body->content->lines->from), ($constructor_body->content->lines->to - $constructor_body->content->lines->from - 1), true);
+        $code_after_constructor_body = array_slice($new_code, $constructor_body->content->lines->to - 1, count($code_line_array) - 1, true);
+
+        $new_constructor_body = [];
+        
+        foreach ($workflow_constructor_arguments as $workflow_constructor_argument) {
+            $stmt = "        ".'$this->'.$this->to_camel_case($workflow_constructor_argument->name).' = $'.$workflow_constructor_argument->name.';'."\n";
+            $new_constructor_body []= $stmt;
+        }
+
+        $new_code = array_merge($code_until_constructor_signature, $new_constructor_body, $code_after_constructor_body);
+
+        //update contrustor signature
+        $stmt = '    '.'public __construct('.$workflow_constructor_arguments_string.')'."\n";
+
+        $new_code[ $constructor_body->function_signature->lines->from-1 ] = $stmt;
+
         dump([
-            // '$code_until_function_signature' => $code_until_function_signature,
-            // '$code_in_function_body' => $code_in_function_body,
-            // '$new_function_body' => $new_function_body,
+            // '$code_until_constructor_signature' => $code_until_constructor_signature,
+            // '$code_in_constructor_body' => $code_in_constructor_body,
+            // '$code_after_constructor_body' => $code_after_constructor_body,
+            // '$workflow_constructor_arguments' => $workflow_constructor_arguments,
+            // '$workflow_constructor_arguments_string' => $workflow_constructor_arguments_string,
+            // '$new_constructor_body' => $new_constructor_body,
             // '$code_after_function_body' => $code_after_function_body,
             '$new_code' => $new_code,
         ]);
-
-        //meta ftiaxnw tn constructor (enhmerwsh function signature k meta content)
 
 
         //telos kanw t namespaces
