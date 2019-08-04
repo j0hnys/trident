@@ -47,5 +47,12 @@ class TridentServiceProvider extends ServiceProvider
             {{interface_class_instantiations}}
         });
         {{/ register_business }}
+        {{# register_process }}
+        \App::bind('{{Td_entity_interface}}',function($app){
+            return new {{Td_entity_class_path}}(  
+                {{interface_class_instantiations}}
+            );
+        });
+        {{/ register_process }}
     }
 }

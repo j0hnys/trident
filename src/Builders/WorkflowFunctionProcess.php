@@ -425,7 +425,13 @@ class WorkflowFunctionProcess
                 $analysis_result->implemented_interfaces []= $node->implements;
 
                 //constructor_data
-                $constructor_node = $node->stmts[3];
+                $constructor_node = null;
+                foreach ($node->stmts as $node_stmt) {
+                    if ($node_stmt->name->name == '__construct') {
+                        $constructor_node = $node_stmt;
+                        break;
+                    }
+                }
 
                 $constructor_data = (object)[
                     'function_signature' => (object)[
@@ -520,7 +526,7 @@ class WorkflowFunctionProcess
 
                     foreach ($function_node->params as $function_arguments) {
                         $function_data->function_signature->arguments []= (object)[
-                            'type' => isset($function_arguments->type) ? implode('\\', $function_arguments->type->parts) : null,
+                            'type' => isset($function_arguments->type->parts) ? implode('\\', $function_arguments->type->parts) : null,
                             'name' => $function_arguments->var->name
                         ];
 
