@@ -56,61 +56,49 @@ class WorkflowFunctionProcess
      */
     public function generateLogicFunction(string $td_entity_name, string $type, string $function_name, string $schema_path): void
     {
-        $name = ucfirst($td_entity_name).ucfirst($function_name);
+        // $td_entity_name = 'DemoProcess';
+        // $function_name = 'index';
+
+        $schema = [];
+        if (!empty($schema_path)) {
+            $schema = json_decode( $this->storage_disk->readFile( $schema_path ), true);
+        }
+
+        $schema_workflow = $schema['workflow']['schema'];
+
+        $schema_workflow['supports'] = [DefaultMarking::class];
+
+        $schema_workflow['places'] = $schema_workflow['states'];
+        unset($schema_workflow['states']);
+
+        $schema_workflow_initial_state = $schema_workflow['initial_state'];
+        unset($schema_workflow['initial_state']);
         
+        $schema_workflow_transition_listeners = $schema_workflow['transition_listeners'];
+        unset($schema_workflow['transition_listeners']);
 
-        // $schema = [];
-        // if (!empty($schema_path)) {
-        //     $schema = json_decode( $this->storage_disk->readFile( $schema_path ), true);
-        // }
+        $schema_workflow_transition_listeners_filepaths = [];
+        foreach ($schema_workflow_transition_listeners as $key => $value) {
+            $callback = explode('@',$value);
+            $callback_class_namespace = $callback[0];
+            $callback_fuction = $callback[1];
 
+            $reflector = new \ReflectionClass($callback_class_namespace);
+            $callback_class_filepath = $reflector->getFileName();
 
-        $tmp_data = [
-            'type' => 'cascade',
-
-            'workflow' => [ //<-- this is going to be generated from schema file
-                'places'        => ['draft', 'review', 'rejected', 'published'],
-                'supports' => [DefaultMarking::class],
-                'transitions'   => [
-                    'to_review' => [
-                        'from' => 'draft',
-                        'to'   => 'review'
-                    ],
-                    'publish' => [
-                        'from' => 'review',
-                        'to'   => 'published'
-                    ],
-                    'reject_published' => [
-                        'from' => 'published',
-                        'to'   => 'rejected'
-                    ]
-                ],
-            ],
-
-            'initial_state' => 'draft',
-            'transition_listeners' => [
-                'to_review' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_1',
-                'publish' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_2',
-                'reject_published' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_3'
-            ],
-
-            'transition_listeners_filepaths' => [
-                'to_review' => 'C:\xampp\htdocs\laravel_test\app\Trident\Workflows\Processes\DemoProcessCascadeProcess.php',
-                'publish' => 'C:\xampp\htdocs\laravel_test\app\Trident\Workflows\Processes\DemoProcessCascadeProcess.php',
-                'reject_published' => 'C:\xampp\htdocs\laravel_test\app\Trident\Workflows\Processes\DemoProcessCascadeProcess.php'
-            ],
-        ];
+            $schema_workflow_transition_listeners_filepaths[$key] = $callback_class_filepath;
+        }
 
 
         $workflow_configuration = app()->make('J0hnys\TridentWorkflow\PackageProviders\Configuration');
-        $workflow_configuration->setWorkflow('$workflow_logic_function_name', $tmp_data['workflow']);
+        $workflow_configuration->setWorkflow('$workflow_logic_function_name', $schema_workflow);
 
         $workflow_registry = new WorkflowRegistry('$workflow_logic_function_name');
 
         $default_marking = new DefaultMarking();
         $default_marking->td_entity_name = '$td_entity_namespace';
         $default_marking->td_entity_workflow_function_name = '$workflow_logic_function_name';
-        $default_marking->marking = $tmp_data['initial_state'];
+        $default_marking->marking = $schema_workflow_initial_state;
 
         $workflow = $workflow_registry->get($default_marking);
 
@@ -130,8 +118,8 @@ class WorkflowFunctionProcess
         foreach ($process_execution_direction as $process_name) {
             
             // analyw tn callback function gia na parw t dependencies
-            $process = $tmp_data['transition_listeners'][ $process_name ];
-            $process_filepath = $tmp_data['transition_listeners_filepaths'][ $process_name ];
+            $process = $schema_workflow_transition_listeners[ $process_name ];
+            $process_filepath = $schema_workflow_transition_listeners_filepaths[ $process_name ];
     
             $callback = explode('@',$process);
             $callback_class_namespace = $callback[0];
@@ -144,49 +132,17 @@ class WorkflowFunctionProcess
         }
 
 
-        //vvv PROSOXH!!!!
-        $function_name = 'index';
-        //^^^
-
         //update workflow function
+        $workflow_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.$td_entity_name.'.php';
 
-        $td_entity_name = 'DemoProcess';
-        // $code = $this->storage_disk->readFile( $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.$td_entity_name.'.php' );
-        // $code = $this->storage_disk->readFileArray( $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.$td_entity_name.'.php' );
-        // $workflow_analysis_result = $class_interface->getClassFunctionSignatures($code);
-
-        $this->updateWorkflowFunction(
-            $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.$td_entity_name.'.php', 
+        $new_code = $this->updateWorkflowFunction(
+            $workflow_logic_path, 
             $function_name, 
             $process_function_execution_workflow
         );
 
-        // dump([
-        //     '$process_execution_direction' => $process_execution_direction,
-        //     '$process_function_execution_workflow' => $process_function_execution_workflow,
-        //     // '$workflow_analysis_result' => $workflow_analysis_result->strings,
-        // ]);
 
-        // //
-        // //workflowLogic function generation
-        // $workflow_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.ucfirst($td_entity_name).'.php';
-        
-        // $lines = $this->storage_disk->readFileArray($workflow_logic_path); 
-        // $last = sizeof($lines) - 1; 
-        // unset($lines[$last]); 
-
-        // $this->storage_disk->writeFileArray($workflow_logic_path, $lines); 
-
-        // $stub = $this->storage_disk->readFile(__DIR__.'/../Stubs/Trident/Workflows/LogicFunction.stub');
-
-        // $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
-        // $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
-        // $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
-        
-        // $this->storage_disk->writeFile($workflow_logic_path, $stub, [
-        //     'append_file' => true
-        // ]);
-        
+        $this->storage_disk->writeFileArray($workflow_logic_path, $new_code);
     }
 
 
@@ -232,8 +188,10 @@ class WorkflowFunctionProcess
 
         $code = $this->storage_disk->readFile( $code_filepath );
         $code_line_array = $this->storage_disk->readFileArray( $code_filepath );     
+        $process_namespace = $process_steps[0]->strings->class_namespace;
         $process_class_name = $process_steps[0]->strings->class_name;
-        $process_name = $this->to_camel_case( $process_steps[0]->strings->class_name );  
+        $process_name = $this->toCamelCase( $process_steps[0]->strings->class_name ); 
+
 
         //function
         $workflow_structure = $this->getClassStructure($code);        
@@ -263,13 +221,7 @@ class WorkflowFunctionProcess
             return $element->type.' $'.$element->name;
         }, $workflow_constructor_arguments));
 
-        dump([
-            '$workflow_structure' => $workflow_structure->strings,
-            // '$workflow_function_structure' => $workflow_function_structure->objects->functions_data[0]->function_signature->arguments,
-            // '$workflow_function_arguments_string' => $workflow_function_arguments_string,
-            '$code_line_array' => $code_line_array,
-        ]);
-
+        
 
         //
         //prwta vriskw se poies grammes einai t content toy body
@@ -298,10 +250,6 @@ class WorkflowFunctionProcess
             }
         }
 
-        // dump([
-        //     '$function_body' => $function_body,
-        // ]);
-
         //meta kanw t grafw tn kwdika mesa sthn function
         $code_until_function_signature = array_slice($code_line_array, 0, $function_body->content->lines->from, true);
         $code_in_function_body = array_slice($code_line_array, ($function_body->content->lines->from), ($function_body->content->lines->to - $function_body->content->lines->from - 1), true);
@@ -310,30 +258,24 @@ class WorkflowFunctionProcess
         $new_function_body = [];
         foreach ($process_steps as $i => $process_step) {
 
-            $previous_step_function_name = isset($process_steps[$i-1]) ? '$'.$this->to_camel_case($process_steps[$i-1]->objects->function_signatures[0]->name->name).'_result' : $workflow_function_arguments_string;
+            $previous_step_function_name = isset($process_steps[$i-1]) ? '$'.$this->toCamelCase($process_steps[$i-1]->objects->function_signatures[0]->name->name).'_result' : $workflow_function_arguments_string;
             $this_step_function_name = $process_step->objects->function_signatures[0]->name->name;
             $next_step_function_name = isset($process_steps[$i+1]) ? $process_steps[$i+1]->objects->function_signatures[0]->name->name : null;
 
-            $stmt = "        ".'$'.$this->to_camel_case($this_step_function_name).'_result = '.
+            $stmt = "        ".'$'.$this->toCamelCase($this_step_function_name).'_result = '.
                     '$this->'.$process_name.'->'.$this_step_function_name.'('.$previous_step_function_name.');'."\n";
             
                     
             $new_function_body []= $stmt;
             
             if ($next_step_function_name === null) {
-                $new_function_body []= "        ".'return '.'$'.$this->to_camel_case($this_step_function_name).'_result;'."\n";
+                $new_function_body []= "        ".'return '.'$'.$this->toCamelCase($this_step_function_name).'_result;'."\n";
             }
         }
 
         $new_code = array_merge($code_until_function_signature, $new_function_body, $code_after_function_body);
 
-        // dump([
-        //     // '$code_until_function_signature' => $code_until_function_signature,
-        //     // '$code_in_function_body' => $code_in_function_body,
-        //     // '$new_function_body' => $new_function_body,
-        //     // '$code_after_function_body' => $code_after_function_body,
-        //     '$new_code' => $new_code,
-        // ]);
+        
 
         //
         //meta ftiaxnw tn constructor (enhmerwsh function signature k meta content)
@@ -379,32 +321,71 @@ class WorkflowFunctionProcess
         $new_constructor_body = [];
         
         foreach ($workflow_constructor_arguments as $workflow_constructor_argument) {
-            $stmt = "        ".'$this->'.$this->to_camel_case($workflow_constructor_argument->name).' = $'.$workflow_constructor_argument->name.';'."\n";
+            $stmt = "        ".'$this->'.$this->toCamelCase($workflow_constructor_argument->name).' = $'.$workflow_constructor_argument->name.';'."\n";
             $new_constructor_body []= $stmt;
         }
 
         $new_code = array_merge($code_until_constructor_signature, $new_constructor_body, $code_after_constructor_body);
 
         //update contrustor signature
-        $stmt = '    '.'public __construct('.$workflow_constructor_arguments_string.')'."\n";
+        $stmt = '    '.'public function __construct('.$workflow_constructor_arguments_string.')'."\n";
 
         $new_code[ $constructor_body->function_signature->lines->from-1 ] = $stmt;
 
-        dump([
-            // '$code_until_constructor_signature' => $code_until_constructor_signature,
-            // '$code_in_constructor_body' => $code_in_constructor_body,
-            // '$code_after_constructor_body' => $code_after_constructor_body,
-            // '$workflow_constructor_arguments' => $workflow_constructor_arguments,
-            // '$workflow_constructor_arguments_string' => $workflow_constructor_arguments_string,
-            // '$new_constructor_body' => $new_constructor_body,
-            // '$code_after_function_body' => $code_after_function_body,
-            '$new_code' => $new_code,
-        ]);
+        
 
-
+        //
         //telos kanw t namespaces
 
+        $namespaces_to_add = [];
+        foreach ($workflow_function_structure->objects->used_namespaces as $workflow_used_namespace) {
+            foreach ($process_steps as $process_step) {
 
+                $namespace_used_in_workflow = true;
+                foreach ($process_step->objects->used_namespaces_indexes_in_code as $process_step_used_namespaces_indexes_in_code) {
+                    foreach ($workflow_used_namespace->name->parts as $i => $workflow_used_namespace_part) {
+                        
+                        $process_step_used_namespace_in_code_part = isset($process_step->objects->used_namespaces[$process_step_used_namespaces_indexes_in_code]->name->parts[$i]) ? $process_step->objects->used_namespaces[$process_step_used_namespaces_indexes_in_code]->name->parts[$i] : null;
+
+                        if (isset($process_step_used_namespace_in_code_part)) {
+                            if ($process_step_used_namespace_in_code_part != $workflow_used_namespace_part) {
+                                $namespace_used_in_workflow = false;
+                                break;
+                            }
+                        } else {
+                            $namespace_used_in_workflow = false;
+                            break;
+                        }
+                    }
+
+                    if (!$namespace_used_in_workflow) {
+                        $namespaces_to_add []= $process_step->objects->used_namespaces[$process_step_used_namespaces_indexes_in_code];
+                    }
+
+                }
+            }
+
+        }
+
+        
+        $namespaces_to_add_string = $this->usedNamespacesToString($namespaces_to_add);
+        //vazw k t namespace toy process mesa
+        $namespaces_to_add_string []= 'use '.$process_namespace.'\\'.$process_class_name.';';
+        $namespaces_to_add_string = array_unique($namespaces_to_add_string);
+
+        $workflow_structure_used_namespaces_last_line = $workflow_structure->objects->used_namespaces[ count($workflow_structure->objects->used_namespaces)-1 ]->getAttributes()['endLine'];
+        
+        $code_until_last_used_namespace = array_slice($new_code, 0, $workflow_structure_used_namespaces_last_line, true);
+        $code_after_last_used_namespace = array_slice($new_code, $workflow_structure_used_namespaces_last_line, count($code_line_array) - 1, true);
+
+        $new_used_namespace_stmts = array_map(function($element){
+            return $element."\n";
+        }, $namespaces_to_add_string);
+
+        $new_code = array_merge($code_until_last_used_namespace, $new_used_namespace_stmts, $code_after_last_used_namespace);
+
+        
+        return $new_code;
     }
 
 
@@ -727,6 +708,7 @@ class WorkflowFunctionProcess
             ],
             'objects' => (object)[
                 'used_namespaces' => $analysis_result->used_namespaces,
+                'used_namespaces_indexes_in_code' => $used_namespaces_indexes,
                 'functions_data' => $analysis_result->functions_data,           //<-- these indexes are correlated to each other!!
                 'function_signatures' => $analysis_result->functions_signature, //<-- these indexes are correlated to each other!!
             ]
@@ -957,13 +939,15 @@ class WorkflowFunctionProcess
             ],
             'objects' => (object)[
                 'used_namespaces' => $analysis_result->used_namespaces,
+                'used_namespaces_indexes_in_code' => $used_namespaces_indexes,
                 'function_signatures' => $analysis_result->functions_signature,
             ]
         ];
     }
 
 
-    function to_camel_case($input) {
+    public function toCamelCase($input) 
+    {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $input));
         // preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
         // $ret = $matches[0];
@@ -971,6 +955,67 @@ class WorkflowFunctionProcess
         //     $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
         // }
         // return implode('_', $ret);
+    }
+
+
+    public function usedNamespacesToString($used_namespaces)
+    {
+        $used_namespaces_strings = [];
+        foreach ($used_namespaces as $used_namespace) {
+            $used_namespaces_string = 'use ';
+            $tmp_used_namespace = $used_namespace;
+
+            $used_namespaces_string .= implode('\\',$tmp_used_namespace->name->parts);
+            if (isset($tmp_used_namespace->alias)) {
+                $used_namespaces_string .= ' as '.$tmp_used_namespace->alias.';';
+            } else {
+                $used_namespaces_string .= ';';
+            }
+
+            $used_namespaces_strings []= $used_namespaces_string;
+        }
+
+        return $used_namespaces_strings;
+    }
+
+
+    public function tmp_data()
+    {
+        $tmp_data = [
+            'type' => 'cascade',
+
+            'workflow' => [ //<-- this is going to be generated from schema file
+                'places'        => ['draft', 'review', 'rejected', 'published'],
+                'supports' => [DefaultMarking::class],
+                'transitions'   => [
+                    'to_review' => [
+                        'from' => 'draft',
+                        'to'   => 'review'
+                    ],
+                    'publish' => [
+                        'from' => 'review',
+                        'to'   => 'published'
+                    ],
+                    'reject_published' => [
+                        'from' => 'published',
+                        'to'   => 'rejected'
+                    ]
+                ],
+            ],
+
+            'initial_state' => 'draft',
+            'transition_listeners' => [
+                'to_review' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_1',
+                'publish' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_2',
+                'reject_published' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_3'
+            ],
+
+            'transition_listeners_filepaths' => [
+                'to_review' => 'C:\xampp\htdocs\laravel_test\app\Trident\Workflows\Processes\DemoProcessCascadeProcess.php',
+                'publish' => 'C:\xampp\htdocs\laravel_test\app\Trident\Workflows\Processes\DemoProcessCascadeProcess.php',
+                'reject_published' => 'C:\xampp\htdocs\laravel_test\app\Trident\Workflows\Processes\DemoProcessCascadeProcess.php'
+            ],
+        ];
     }
 
 
