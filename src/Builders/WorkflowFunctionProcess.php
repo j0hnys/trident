@@ -191,7 +191,11 @@ class WorkflowFunctionProcess
         $process_namespace = $process_steps[0]->strings->class_namespace;
         $process_class_name = $process_steps[0]->strings->class_name;
         $process_name = $this->toCamelCase( $process_steps[0]->strings->class_name ); 
-
+        $process_implemented_interface = array_values(array_filter($process_steps[0]->objects->used_namespaces,function($element) use ($process_class_name){
+            return $element->name->parts[ count($element->name->parts)-1 ] == $process_class_name.'Interface' ? true : false;
+        }))[0];
+        $process_interface_name = $process_implemented_interface->name->parts[ count($process_implemented_interface->name->parts)-1 ];
+        $process_interface_namespace_path = implode('\\', $process_implemented_interface->name->parts);
 
         //function
         $workflow_structure = $this->getClassStructure($code);        
@@ -213,7 +217,7 @@ class WorkflowFunctionProcess
         }
         if (!$process_injected_q) {
             $workflow_constructor_arguments []= (object)[
-                'type' => $process_class_name,
+                'type' => $process_interface_name,
                 'name' => $process_class_name,
             ];
         }
@@ -370,7 +374,7 @@ class WorkflowFunctionProcess
         
         $namespaces_to_add_string = $this->usedNamespacesToString($namespaces_to_add);
         //vazw k t namespace toy process mesa
-        $namespaces_to_add_string []= 'use '.$process_namespace.'\\'.$process_class_name.';';
+        $namespaces_to_add_string []= 'use '.$process_interface_namespace_path.';';
         $namespaces_to_add_string = array_unique($namespaces_to_add_string);
 
         $workflow_structure_used_namespaces_last_line = $workflow_structure->objects->used_namespaces[ count($workflow_structure->objects->used_namespaces)-1 ]->getAttributes()['endLine'];
@@ -427,6 +431,9 @@ class WorkflowFunctionProcess
                 //constructor_data
                 $constructor_node = null;
                 foreach ($node->stmts as $node_stmt) {
+                    if (!isset($node_stmt->name->name)) {
+                        continue;
+                    }
                     if ($node_stmt->name->name == '__construct') {
                         $constructor_node = $node_stmt;
                         break;

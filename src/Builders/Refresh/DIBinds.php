@@ -101,12 +101,8 @@ class DIBinds
                 if (!isset($workflow_logic_interface_class_instantiations[$workflow_logic])) {
                     $workflow_logic_interface_class_instantiations[$workflow_logic] = [];
                 }
-    
-                if (strpos($class_name,'\\Repositories')) {
-                    $workflow_logic_interface_class_instantiations[$workflow_logic] []= 'new \\'.$class_name.'($app)';
-                } else {
-                    $workflow_logic_interface_class_instantiations[$workflow_logic] []= 'new \\'.$class_name;
-                }
+
+                $workflow_logic_interface_class_instantiations[$workflow_logic] []= '$app->make(\''.$di_interface.'\')';
             }
         }
 
@@ -121,12 +117,8 @@ class DIBinds
                 if (!isset($business_logic_interface_class_instantiations[$business_logic])) {
                     $business_logic_interface_class_instantiations[$business_logic] = [];
                 }
-    
-                if (strpos($class_name,'\\Repositories')) {
-                    $business_logic_interface_class_instantiations[$business_logic] []= 'new \\'.$class_name.'($app)';
-                } else {
-                    $business_logic_interface_class_instantiations[$business_logic] []= 'new \\'.$class_name;
-                }
+
+                $business_logic_interface_class_instantiations[$business_logic] []= '$app->make(\''.$di_interface.'\')';
             }
         }
 
@@ -141,12 +133,8 @@ class DIBinds
                 if (!isset($process_interface_class_instantiations[$process])) {
                     $process_interface_class_instantiations[$process] = [];
                 }
-    
-                if (strpos($class_name,'\\Repositories')) {
-                    $process_interface_class_instantiations[$process] []= 'new \\'.$class_name.'($app)';
-                } else {
-                    $process_interface_class_instantiations[$process] []= 'new \\'.$class_name;
-                }
+
+                $process_interface_class_instantiations[$process] []= '$app->make(\''.$di_interface.'\')';
             }
         }
 
@@ -184,7 +172,7 @@ class DIBinds
             $code_analysis_result = $workflow_function_process->getClassStructure($code);
 
             $class_name = $code_analysis_result->strings->class_name;
-            $class_path = $code_analysis_result->strings->class_namespace.$class_name;
+            $class_path = $code_analysis_result->strings->class_namespace.'\\'.$class_name;
 
             $implemented_interface = array_values(array_filter(array_map(function($element) use ($class_name) {
                 return $element->name->parts[ count($element->name->parts)-1 ] == $class_name.'Interface' ? implode('\\',$element->name->parts) : false;
@@ -263,6 +251,12 @@ class DIBinds
                     if (count($constructor_param->type->parts) == 1) {  //dld exw alias
                         if (!empty($used_namespace->alias)) {
                             if ($used_namespace->alias == $constructor_param->type->parts[0]) {
+                                $di_interfaces []= (object)[
+                                    'name' => $used_namespace->name
+                                ];
+                            }
+                        } else {
+                            if ($used_namespace->name->parts[ count($used_namespace->name->parts)-1 ] == $constructor_param->type->parts[0]) {
                                 $di_interfaces []= (object)[
                                     'name' => $used_namespace->name
                                 ];
