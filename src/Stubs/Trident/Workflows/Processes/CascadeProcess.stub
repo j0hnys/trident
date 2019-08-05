@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Trident\Workflows\Processes;
+namespace App\Trident\Workflows\Processes\{{Td_entity_name}};
 
 {{# used_interfaces }}
 use {{interface}};

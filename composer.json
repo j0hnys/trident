@@ -25,8 +25,18 @@
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
         "phpunit/phpunit": "^7.0",
-        "orchestra/testbench": "^3.8"
+        "orchestra/testbench": "^3.8",
+        "j0hnys/trident-workflow": "dev-master"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../trident-workflow",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "autoload": {
         "psr-4": {
             "j0hnys\\Trident\\": "./src"

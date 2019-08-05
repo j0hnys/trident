@@ -995,38 +995,31 @@ class WorkflowFunctionProcess
     public function tmp_data()
     {
         $tmp_data = [
-            'type' => 'cascade',
-
             'workflow' => [ //<-- this is going to be generated from schema file
-                'places'        => ['draft', 'review', 'rejected', 'published'],
-                'supports' => [DefaultMarking::class],
-                'transitions'   => [
-                    'to_review' => [
-                        'from' => 'draft',
-                        'to'   => 'review'
+                'type' => 'cascade',
+                'schema' => [
+                    'initial_state' => 'draft',
+                    'states'        => ['draft', 'review', 'rejected', 'published'],
+                    'transitions'   => [
+                        'to_review' => [
+                            'from' => 'draft',
+                            'to'   => 'review'
+                        ],
+                        'publish' => [
+                            'from' => 'review',
+                            'to'   => 'published'
+                        ],
+                        'reject_published' => [
+                            'from' => 'published',
+                            'to'   => 'rejected'
+                        ]
                     ],
-                    'publish' => [
-                        'from' => 'review',
-                        'to'   => 'published'
+                    'transition_listeners' => [
+                        'to_review' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_1',
+                        'publish' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_2',
+                        'reject_published' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_3'
                     ],
-                    'reject_published' => [
-                        'from' => 'published',
-                        'to'   => 'rejected'
-                    ]
-                ],
-            ],
-
-            'initial_state' => 'draft',
-            'transition_listeners' => [
-                'to_review' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_1',
-                'publish' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_2',
-                'reject_published' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_3'
-            ],
-
-            'transition_listeners_filepaths' => [
-                'to_review' => 'C:\xampp\htdocs\laravel_test\app\Trident\Workflows\Processes\DemoProcessCascadeProcess.php',
-                'publish' => 'C:\xampp\htdocs\laravel_test\app\Trident\Workflows\Processes\DemoProcessCascadeProcess.php',
-                'reject_published' => 'C:\xampp\htdocs\laravel_test\app\Trident\Workflows\Processes\DemoProcessCascadeProcess.php'
+                ]
             ],
         ];
     }

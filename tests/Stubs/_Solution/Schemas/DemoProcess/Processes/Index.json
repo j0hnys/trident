@@ -1,0 +1,55 @@
+{
+    "used_interfaces" : [
+        {
+            "interface": "App\\Trident\\Interfaces\\Workflows\\Processes\\DemoProcess\\IndexInterface"
+        }
+    ],
+    "constructor_parameters" : [
+        {
+            "type": "string",
+            "name": "parameter"
+        },
+        {
+            "type": "int",
+            "name": "parameter1"
+        }
+    ],
+    "process_steps" : [
+        {
+            "step_name" : "step_1",
+            "step_function_parameters" : [
+                {
+                    "type": "string",
+                    "name": "parameter2"
+                }
+            ],
+            "step_returned_type" : "array",
+            "step_code" :  "",
+            "step_return_value" : "[];"
+        },
+        {
+            "step_name" : "step_2",
+            "step_function_parameters" : [
+                {
+                    "type": "int",
+                    "name": "parameter3"
+                }
+            ],
+            "step_returned_type" : "array",
+            "step_code" :  "",
+            "step_return_value" : "[];"
+        },
+        {
+            "step_name" : "step_3",
+            "step_function_parameters" : [
+                {
+                    "type": "int",
+                    "name": "parameter4"
+                }
+            ],
+            "step_returned_type" : "array",
+            "step_code" :  "",
+            "step_return_value" : "[];"
+        }
+    ]
+}

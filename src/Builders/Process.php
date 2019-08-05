@@ -55,6 +55,7 @@ class Process
         $template_data = [];
         if (!empty($schema)) {
 
+            $template_data['Td_entity_name'] = $td_entity_name;
             $template_data['used_interfaces'] = $schema['used_interfaces'];
             $template_data['process_name'] = $process_name;
             

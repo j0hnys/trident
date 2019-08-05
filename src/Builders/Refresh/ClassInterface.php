@@ -33,7 +33,6 @@ class ClassInterface
     {
         $input_path = $this->storage_disk->getBasePath().'/'.$relative_input_path;
         $output_path = $this->storage_disk->getBasePath().'/'.$relative_output_path;
-                
 
         $code = $this->storage_disk->readFile( $input_path.'/'.$name.'.php' );
         $result = $this->getClassFunctionSignatures($code);
@@ -139,6 +138,7 @@ class ClassInterface
 
         $class_namespace_string = '';
         if (isset($analysis_result->class_namespace)) {
+            array_splice($analysis_result->class_namespace->parts, 2, 0, 'Interfaces'); // splice in at position 2
             $class_namespace_string = implode('\\',$analysis_result->class_namespace->parts);
         }
 
@@ -261,6 +261,8 @@ class ClassInterface
                 }
 
                 $function_signature_string .= ': '.$function_signature->return_type.';';
+            } else {
+                $function_signature_string .= ';';
             }
 
             $function_signature_strings []= $function_signature_string;
