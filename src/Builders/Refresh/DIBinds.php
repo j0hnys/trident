@@ -156,52 +156,46 @@ class DIBinds
         
         //workflows
         $workflows = [];
-        if (!empty($workflow_logic_interface_class_instantiations)) {
-            $workflows = array_map(function($element) use ($workflow_logic_interface_class_instantiations){
-                return [
-                    'Td_entity' => ucfirst($element),
-                    'interface_class_instantiations' => implode(",\n".'                ', $workflow_logic_interface_class_instantiations[$element]),
-                ];
-            },$Td_entities_workflows);
-        }
+        $workflows = array_map(function($element) use ($workflow_logic_interface_class_instantiations){
+            return [
+                'Td_entity' => ucfirst($element),
+                'interface_class_instantiations' => isset($workflow_logic_interface_class_instantiations[$element]) ? implode(",\n".'                ', $workflow_logic_interface_class_instantiations[$element]) : null,
+            ];
+        },$Td_entities_workflows);
 
         //businesses
         $businesses = [];
-        if (!empty($business_logic_interface_class_instantiations)) {
-            $businesses = array_map(function($element) use ($business_logic_interface_class_instantiations) {
-                return [
-                    'Td_entity' => ucfirst($element),
-                    'interface_class_instantiations' => implode(",\n".'                ', $business_logic_interface_class_instantiations[$element]),
-                ];
-            },$Td_entities_businesses);
-        }
+        $businesses = array_map(function($element) use ($business_logic_interface_class_instantiations) {
+            return [
+                'Td_entity' => ucfirst($element),
+                'interface_class_instantiations' => isset($business_logic_interface_class_instantiations[$element]) ? implode(",\n".'                ', $business_logic_interface_class_instantiations[$element]) : null,
+            ];
+        },$Td_entities_businesses);
 
         //processes
         $processes = [];
-        if (!empty($process_interface_class_instantiations)) {
-            $processes = array_values(array_filter(array_map(function($element) use ($process_interface_class_instantiations) {
-                if (!isset($process_interface_class_instantiations[$element])) {
-                    return false;
-                }
+        $processes = array_values(array_filter(array_map(function($element) use ($process_interface_class_instantiations) {
+            if (!isset($process_interface_class_instantiations[$element])) {
+                return false;
+            }
 
-                $workflow_function_process = new WorkflowFunctionProcess();
-                $code = $this->storage_disk->readFile( $element );
-                $code_analysis_result = $workflow_function_process->getClassStructure($code);
+            $workflow_function_process = new WorkflowFunctionProcess();
+            $code = $this->storage_disk->readFile( $element );
+            $code_analysis_result = $workflow_function_process->getClassStructure($code);
 
-                $class_name = $code_analysis_result->strings->class_name;
-                $class_path = $code_analysis_result->strings->class_namespace.$class_name;
+            $class_name = $code_analysis_result->strings->class_name;
+            $class_path = $code_analysis_result->strings->class_namespace.$class_name;
 
-                $implemented_interface = array_values(array_filter(array_map(function($element) use ($class_name) {
-                    return $element->name->parts[ count($element->name->parts)-1 ] == $class_name.'Interface' ? implode('\\',$element->name->parts) : false;
-                }, $code_analysis_result->objects->used_namespaces)))[0];
+            $implemented_interface = array_values(array_filter(array_map(function($element) use ($class_name) {
+                return $element->name->parts[ count($element->name->parts)-1 ] == $class_name.'Interface' ? implode('\\',$element->name->parts) : false;
+            }, $code_analysis_result->objects->used_namespaces)))[0];
 
-                return [
-                    'Td_entity_interface' => $implemented_interface,
-                    'Td_entity_class_path' => $class_path,
-                    'interface_class_instantiations' => implode(",\n".'                ', $process_interface_class_instantiations[$element]),
-                ];
-            },$Td_entities_processes)));
-        }
+            return [
+                'Td_entity_interface' => $implemented_interface,
+                'Td_entity_class_path' => $class_path,
+                'interface_class_instantiations' => isset($process_interface_class_instantiations[$element]) ? implode(",\n".'                ', $process_interface_class_instantiations[$element]) : null,
+            ];
+        },$Td_entities_processes)));
 
 
         $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentServiceProvider.php';

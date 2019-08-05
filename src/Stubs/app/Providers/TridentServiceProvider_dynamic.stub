@@ -44,7 +44,9 @@ class TridentServiceProvider extends ServiceProvider
         {{/ register_workflows }}
         {{# register_business }}
         \App::bind('App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface',function($app){
-            {{interface_class_instantiations}}
+            return new \App\Trident\Business\Logic\{{Td_entity}}(
+                {{interface_class_instantiations}}
+            );
         });
         {{/ register_business }}
         {{# register_process }}
