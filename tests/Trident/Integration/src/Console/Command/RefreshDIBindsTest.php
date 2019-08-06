@@ -5,6 +5,8 @@ namespace j0hnys\Trident\Tests\Integration;
 use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
+use j0hnys\Trident\Builders\Process;
+use j0hnys\Trident\Builders\Refresh\ClassInterface;
 use j0hnys\Trident\Builders\Refresh\DIBinds;
 use j0hnys\Trident\Console\Commands\RefreshDIBinds;
 
@@ -33,7 +35,30 @@ class RefreshDIBindsTest extends TestCase
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
         $this->workflow_restful_crud = new WorkflowRestfulCrud($this->storage_disk, $this->storage_trident);
-        $this->workflow_restful_crud->generate($this->td_entity_name, $mock_command);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
+        $this->workflow_restful_crud->generate($this->td_entity_name, $schema, $mock_command);
+
+        //for the process
+        $process_name = 'Index';
+        $schema_path = $this->base_path.'/../Stubs/_Solution/Schemas/DemoProcess/Processes/Index.json';
+        $mock_command = $this->createMock(\Illuminate\Console\Command::class);
+        $processes = new Process($this->storage_disk);
+        $processes->generate($this->td_entity_name, $process_name, $schema_path, $mock_command);
+        
+        $class_interface = new ClassInterface($this->storage_disk);
+        $class_interface->run(
+            $process_name,
+            'app/Trident/Workflows/Processes/'.$this->td_entity_name.'',  //'app/Trident/Workflows/Logic',
+            'app/Trident/Interfaces/Workflows/Processes/'.$this->td_entity_name.''    //'app/Trident/Interfaces/Workflows/Logic',
+        );
+
+        sleep(3);
+        exec('composer dump-autoload');
 
         //refresh class interface
         $this->refresh_di_binds = new DIBinds($this->storage_disk, $this->storage_trident);

@@ -30,6 +30,7 @@ class GenerateWorkflowFunctionProcessTest extends TestCase
 
         $stub = $this->storage_disk->readFile($this->base_path.'/../Stubs/App/Models/DemoProcess.stub');
         $this->storage_disk->writeFile($this->base_path.'/app/Models/DemoProcess.php', $stub);
+        sleep(3);
         exec('composer dump-autoload');
 
         $this->workflow_restful_crud = new WorkflowRestfulCrud($this->storage_disk, $this->storage_trident);
@@ -57,6 +58,7 @@ class GenerateWorkflowFunctionProcessTest extends TestCase
             'app/Trident/Interfaces/Workflows/Processes/'.$this->td_entity_name.''    //'app/Trident/Interfaces/Workflows/Logic',
         );
 
+        sleep(3);
         exec('composer dump-autoload');
 
         //policy function

@@ -33,7 +33,13 @@ class GenerateResourceTest extends TestCase
         $this->workflow_restful_crud = new WorkflowRestfulCrud($this->storage_disk, $this->storage_trident);
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
-        $this->workflow_restful_crud->generate($this->td_entity_name, $mock_command);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
+        $this->workflow_restful_crud->generate($this->td_entity_name, $schema, $mock_command);
 
         //policy function
         $this->resources = new Resources($this->storage_disk);
@@ -52,18 +58,23 @@ class GenerateResourceTest extends TestCase
         $entity_name = '';
         $is_collection = '';
         $domain = '';
+        $schema_path = '';
 
         $this->mock_command_resources->expects($this->at(0))
             ->method('argument')
             ->willReturn($entity_name);
 
-        $this->mock_command_resources->expects($this->at(0))
+        $this->mock_command_resources->expects($this->at(1))
             ->method('option')
             ->willReturn($is_collection);
 
-        $this->mock_command_resources->expects($this->at(1))
+        $this->mock_command_resources->expects($this->at(2))
             ->method('option')
             ->willReturn($domain);
+
+        $this->mock_command_resources->expects($this->at(3))
+            ->method('option')
+            ->willReturn($schema_path);
 
         $this->mock_command_resources->expects($this->at(0))
             ->method('info')

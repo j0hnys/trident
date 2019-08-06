@@ -33,7 +33,13 @@ class RefreshClassInterfaceTest extends TestCase
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
         $this->workflow_restful_crud = new WorkflowRestfulCrud($this->storage_disk, $this->storage_trident);
-        $this->workflow_restful_crud->generate($this->td_entity_name, $mock_command);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
+        $this->workflow_restful_crud->generate($this->td_entity_name, $schema, $mock_command);
 
         //refresh class interface
         $this->refresh_class_interface = new ClassInterface($this->storage_disk);

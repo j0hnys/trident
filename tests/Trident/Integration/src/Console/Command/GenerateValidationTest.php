@@ -33,7 +33,13 @@ class GenerateValidationTest extends TestCase
         $this->workflow_restful_crud = new WorkflowRestfulCrud($this->storage_disk, $this->storage_trident);
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
-        $this->workflow_restful_crud->generate($this->td_entity_name, $mock_command);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
+        $this->workflow_restful_crud->generate($this->td_entity_name, $schema, $mock_command);
 
         //policy function
         $this->validation = new Validation($this->storage_disk);
@@ -51,6 +57,7 @@ class GenerateValidationTest extends TestCase
     {
         $entity_name = '';
         $function_name = '';
+        $schema_path = '';
 
         $this->mock_command_validation->expects($this->at(0))
             ->method('argument')
@@ -59,6 +66,10 @@ class GenerateValidationTest extends TestCase
         $this->mock_command_validation->expects($this->at(1))
             ->method('argument')
             ->willReturn($function_name);
+
+        $this->mock_command_validation->expects($this->at(2))
+            ->method('option')
+            ->willReturn($schema_path);
             
         $this->mock_command_validation->expects($this->at(0))
             ->method('info')

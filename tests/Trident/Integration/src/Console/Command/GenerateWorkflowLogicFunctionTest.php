@@ -24,7 +24,7 @@ class GenerateWorkflowLogicFunctionTest extends TestCase
         $install->run();
 
         //workflow
-        $this->workflow = new Workflow($this->storage_disk);
+        $this->workflow = new Workflow($this->storage_disk, $this->storage_trident);
 
         $this->workflow->generate($this->td_entity_name);
 

@@ -34,7 +34,13 @@ class GenerateControllerFunctionTest extends TestCase
 
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
-        $this->workflow_restful_crud->generate($this->td_entity_name, $mock_command);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
+        $this->workflow_restful_crud->generate($this->td_entity_name, $schema, $mock_command);
 
         $this->controller_function = new ControllerFunction($this->storage_disk);
 

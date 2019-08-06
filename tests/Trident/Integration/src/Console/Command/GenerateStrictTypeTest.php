@@ -33,7 +33,13 @@ class GenerateStrictTypeTest extends TestCase
         $this->workflow_restful_crud = new WorkflowRestfulCrud($this->storage_disk, $this->storage_trident);
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
-        $this->workflow_restful_crud->generate($this->td_entity_name, $mock_command);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
+        $this->workflow_restful_crud->generate($this->td_entity_name, $schema, $mock_command);
 
         //policy function
         $this->strict_type = new StrictType($this->storage_disk);
@@ -53,6 +59,7 @@ class GenerateStrictTypeTest extends TestCase
         $function_name = '';
         $entity_name = '';
         $domain = '';
+        $schema_path = '';
 
         $this->mock_command_strict_type->expects($this->at(0))
             ->method('argument')
@@ -66,9 +73,13 @@ class GenerateStrictTypeTest extends TestCase
             ->method('argument')
             ->willReturn($entity_name);
 
-        $this->mock_command_strict_type->expects($this->at(0))
+        $this->mock_command_strict_type->expects($this->at(3))
             ->method('option')
             ->willReturn($domain);
+
+        $this->mock_command_strict_type->expects($this->at(4))
+            ->method('option')
+            ->willReturn($schema_path);
 
         $this->mock_command_strict_type->expects($this->at(0))
             ->method('info')
