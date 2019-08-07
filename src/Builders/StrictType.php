@@ -96,7 +96,7 @@ class StrictType
 
         $types = [];
         if (!empty($schema)) {
-            foreach ($schema as $key => $data) {
+            foreach ($schema['data'] as $key => $data) {
                 if (isset($data['type'])) {
                     $types []= [
                         'type' => '\''.$key.'\' => '.$data['type'].','

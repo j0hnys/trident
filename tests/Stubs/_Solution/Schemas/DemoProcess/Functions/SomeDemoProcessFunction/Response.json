@@ -1,8 +1,11 @@
 {
-    "name": {
-        "resource": true
-    },
-    "value": {
-        "resource": true
+    "type": "json",
+    "data": {
+        "name": {
+            "resource": true
+        },
+        "value": {
+            "resource": true
+        }
     }
 }

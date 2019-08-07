@@ -41,7 +41,7 @@ class Resources
 
         $types = [];
         if (!empty($schema)) {
-            foreach ($schema as $key => $data) {
+            foreach ($schema['data'] as $key => $data) {
                 if (isset($data['resource'])) {
                     if ($data['resource']) {
                         $types []= [

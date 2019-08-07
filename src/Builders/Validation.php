@@ -39,7 +39,7 @@ class Validation
         $rules = [];
         $messages = [];
         if (!empty($schema)) {
-            foreach ($schema as $key => $data) {
+            foreach ($schema['data'] as $key => $data) {
                 if (isset($data['validation']['rule'])) {
                     $rules []= [
                         'rule' => '\''.$key.'\' => \''.$data['validation']['rule'].'\','
