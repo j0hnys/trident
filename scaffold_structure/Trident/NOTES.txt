@@ -27,7 +27,7 @@ genika
                     |- Triggers
                     |- Listeners
                     |- Subscribers
-                |- Schemas //se sxhmata (JSON h' php array) twn dedomenwn poy thelw na ypolopoihsw sto logic (as einai opws sto validation, Schema\Blueprint, h dikia moy customia entelei (???mhpws t Structs toy Spatie???)). t thelw gia na moy dinei tn domh poy thelw gia t code generation (migrations, CRUD, Structs, e.t.c.)
+                |- Schemas //se sxhmata (JSON h' php array) twn dedomenwn poy thelw na ypolopoihsw sto logic (as einai opws sto validation, Schema\Blueprint, h dikia moy customia entelei (???mhpws t Structs toy J0hnys???)). t thelw gia na moy dinei tn domh poy thelw gia t code generation (migrations, CRUD, Structs, e.t.c.)
                     |- Classes //einai ta specs tn classewn
                     |- Processes //einai step based finite state machines
             |- Workflows

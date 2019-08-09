@@ -2,14 +2,14 @@
 
 namespace App\Trident\Base\Typed\Maps;
 
-use Spatie\Typed\Map;
-use Spatie\Typed\Struct;
-use Spatie\Typed\T;
+use J0hnys\Typed\Map;
+use J0hnys\Typed\Struct;
+use J0hnys\Typed\T;
 
 class MapStruct extends Map
 {
 
-    use \Spatie\Typed\ValidatesType;
+    use \J0hnys\Typed\ValidatesType;
 
     /**
      * valueType
