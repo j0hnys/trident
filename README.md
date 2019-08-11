@@ -7,36 +7,8 @@ The main rationale behind this is that the code generated takes care of all the 
 # Installation instructions
 
 ## to add to a laravel project as a package
-add 
-```json
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/j0hnys/trident"
-    },
-    {
-        "type": "vcs",
-        "url": "https://github.com/j0hnys/laravel-workflow"
-    },
-    {
-        "type": "vcs",
-        "url": "https://github.com/j0hnys/typed"
-    }
-],
-```
-and 
-```json
-"require": {
-    "j0hnys/laravel-workflow": "dev-master",
-    "j0hnys/typed": "dev-master"
-},
-```
-```json
-"require-dev": {
-    "j0hnys/trident": "dev-master",
-},
-```
-to laravels `composer.json`
+
+`composer require j0hnys/trident`
 
 ## to install in laravel
 

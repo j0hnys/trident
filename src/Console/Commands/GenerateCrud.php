@@ -45,8 +45,8 @@ class GenerateCrud extends Command
     {
         try {
             $name = $this->argument('name');
-            $model_db_name = $this->option('model_db_name');
-            $schema_path = $this->option('schema_path');
+            $model_db_name = $this->option('model_db_name') ? $this->option('model_db_name') : '';
+            $schema_path = $this->option('schema_path') ? $this->option('schema_path') : '';
             
 
             $crud = $this->crud_builder->generate($name, $model_db_name, $schema_path);

@@ -46,7 +46,7 @@ class GenerateValidation extends Command
         try {
             $entity_name = $this->argument('entity_name');
             $function_name = $this->argument('function_name');
-            $schema_path = $this->option('schema_path');
+            $schema_path = $this->option('schema_path') ? $this->option('schema_path') : '';
             
 
             $crud = $this->validation->generate($entity_name, $function_name, $schema_path);

@@ -58,19 +58,17 @@ class CrudWorkflowBuilder
         //model generation
         $model_path = $this->storage_disk->getBasePath() . '/app/Models/' . ucfirst($name) . '.php';
         $output_path = str_replace('C:\\','/',$this->storage_disk->getBasePath().'/app/Models/');
-        if (empty($model_db_name)) {
-            $model_db_name = lcfirst($name);
-        }
-
-        if (Schema::hasTable($model_db_name)) {
-            // Generate model for existing table using plural table name 
-            $command->call('krlove:generate:model', [
-                'class-name' => ucfirst($name),
-                '--output-path' => $output_path,
-                '--table-name' => $model_db_name,
-                '--namespace' => 'App\\Models',
-                '--backup' => $this->storage_disk->fileExists($model_path),
-            ]);
+        if (!empty($model_db_name)) {   
+            if (Schema::hasTable($model_db_name)) {
+                // Generate model for existing table using plural table name 
+                $command->call('krlove:generate:model', [
+                    'class-name' => ucfirst($name),
+                    '--output-path' => $output_path,
+                    '--table-name' => $model_db_name,
+                    '--namespace' => 'App\\Models',
+                    '--backup' => $this->storage_disk->fileExists($model_path),
+                ]);
+            }
         } else {
             if (!$this->storage_disk->fileExists($model_path)) {
                 $this->storage_disk->makeDirectory($model_path);

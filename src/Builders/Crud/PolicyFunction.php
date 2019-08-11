@@ -41,7 +41,7 @@ class PolicyFunction
 
         $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
-        $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
+        $stub = str_replace('{{function_name}}', ($function_name), $stub);
         
         $this->storage_disk->writeFile($policy_path, $stub, [
             'append_file' => true

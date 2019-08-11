@@ -91,8 +91,13 @@ class Install
 
         $typed_source_folder = __DIR__.'/../../Stubs/Trident/Base/Typed';
         $typed_destination_folder = $app_path.'/Trident/Base/Typed';
-        $this->storage_disk->makeDirectory($typed_destination_folder.'/a');
+        $this->storage_disk->makeDirectory($typed_destination_folder.'/.');
         $this->storage_disk->copyFoldersAndFiles($typed_source_folder, $typed_destination_folder);
+
+        $processes_source_folder = __DIR__.'/../../Stubs/Trident/Base/Processes';
+        $processes_destination_folder = $app_path.'/Trident/Base/Processes';
+        $this->storage_disk->makeDirectory($processes_destination_folder.'/.');
+        $this->storage_disk->copyFoldersAndFiles($processes_source_folder, $processes_destination_folder);
 
 
         //
