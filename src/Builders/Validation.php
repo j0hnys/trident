@@ -32,7 +32,7 @@ class Validation
 
         $schema = [];
         if (!empty($schema_path)) {
-            $schema = json_decode($this->storage_disk->readFile( $schema_path ),true);
+            $schema = \json_decode($this->storage_disk->readFile( $schema_path ),true);
         }
 
 
@@ -69,6 +69,7 @@ class Validation
         $stub = $this->mustache->render($stub, [
             'td_entity' => lcfirst($name),
             'Td_entity' => ucfirst($name),
+            'id_request_parameter' => lcfirst($td_entity_name),
             'rules' => $rules,
             'messages' => $messages,
         ]);

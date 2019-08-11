@@ -73,7 +73,7 @@ class {{Td_entity}}Request extends FormRequest
     public function all($keys = null) 
     {
         $data = parent::all($keys);
-        $data['id'] = $this->route('id');
+        $data['id'] = (int)$this->route('{{id_request_parameter}}');
         return $data;
     }
 

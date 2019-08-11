@@ -90,7 +90,7 @@ class StrictType
 
         $schema = [];
         if (!empty($schema_path)) {
-            $schema = json_decode($this->storage_disk->readFile( $schema_path ),true);
+            $schema = \json_decode($this->storage_disk->readFile( $schema_path ),true);
         }
 
 
