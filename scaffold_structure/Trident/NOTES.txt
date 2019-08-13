@@ -1,141 +1,169 @@
-loipon
+~~~~~ notes ~~~~~
+migration schema
+```php
+Schema::create('test_entity', function (Blueprint $table) {
+	$table->bigIncrements('id');
+	$table->bigInteger('user_id');
+	$table->string('firstname');
+	$table->string('lastname');
+	$table->string('email')->unique();
+	$table->timestamps();
+});
+```
 
-setup
-    - app\Providers\TdServiceProvider.php prepei na t valw k sto config/app ("App\Providers\TdServiceProvider::class,").
-    - app\Providers\TdEventServiceProvider.php prepei na t valw k sto config/app ("App\Providers\TdEventServiceProvider::class,").
+schema files
+ - testEntity.json
+ ```
+ {
+    "ajax": {
+        "get": {
+            "GET": "\/trident\/resource\/testEntity"
+        },
+        "create": {
+            "POST": "\/trident\/resource\/testEntity"
+        },
+        "update": {
+            "POST": "\/trident\/resource\/testEntity"
+        },
+        "delete": {
+            "DELETE": "\/trident\/resource\/testEntity"
+        }
+    },
+    "presentation": {
+        "type": "form",
+        "schema": [
+            {
+                "column_name": "firstname",
+                "column_type": "string",
+                "type": "fillable",
+                "validation_rules": {
+                    "required": true,
+                    "type": "string",
+                    "trigger": "blur"
+                },
+                "attributes": {
+                    "type": {
+                        "string": true
+                    },
+                    "default_value": "''",
+                    "element_type": false
+                }
+            },
+            {
+                "column_name": "lastname",
+                "column_type": "string",
+                "type": "fillable",
+                "validation_rules": {
+                    "required": true,
+                    "type": "string",
+                    "trigger": "blur"
+                },
+                "attributes": {
+                    "type": {
+                        "string": true
+                    },
+                    "default_value": "''",
+                    "element_type": false
+                }
+            },
+            {
+                "column_name": "email",
+                "column_type": "string",
+                "type": "fillable",
+                "validation_rules": {
+                    "required": true,
+                    "type": "string",
+                    "trigger": "blur"
+                },
+                "attributes": {
+                    "type": {
+                        "string": true
+                    },
+                    "default_value": "''",
+                    "element_type": false
+                }
+            }
+        ]
+    }
+ }
+ ```
 
-terms
-    - td-entity: t business logic poy thelw na ypolopoihsw
+ - Functionality.json
+ ```
+ {
+    "model": {
+        "db_name": "test_entity"
+    }
+ }
+ ```
+ 
+ - Request.json
+ ```
+ {
+    "type": "json",
+    "data": {
+        "id": {
+            "type": "T::nullable(T::int())",
+            "validation": {
+                "rule": "required | integer",
+                "message": "id is required"
+            },
+            "fillable": true
+        },
+        "user_id": {
+            "type": "T::nullable(T::int())",
+            "fillable": true
+        },
+        "firstname": {
+            "type": "T::nullable(T::string())",
+            "validation": {
+                "rule": "required | string",
+                "message": "name is required"
+            },
+            "fillable": true
+        },
+        "lastname": {
+            "type": "T::nullable(T::string())",
+            "validation": {
+                "rule": "required | string",
+                "message": "name is required"
+            },
+            "fillable": true
+        },
+        "email": {
+            "type": "T::nullable(T::string())",
+            "validation": {
+                "rule": "required | string",
+                "message": "name is required"
+            },
+            "fillable": true
+        }
+    }
+ }
+ ```
+ 
+ - Response.json
+ ```
+ {
+    "type": "json",
+    "data": {
+        "id": {
+            "resource": true
+        },
+        "firstname": {
+            "resource": true
+        },
+        "lastname": {
+            "resource": true
+        },
+        "email": {
+            "resource": true
+        }
+    }
+ }
+ ```
 
-symbols
-    - folders
-        - "|* ": root
-        - "|- ": folder
-        - "|->": file
-        - "\tab": child
-
-genika
-    - h domh moy einai h ekshs:
-        |* Td //<--root
-            |- Base //exei ta abstractions apo tn Laravel genika
-            |- Business
-                |- Exceptions //exw ta unique throw poy kanei kathe td-entity 
-                |- Repositories //to abstraction panw apo tn vash moy
-                |- Validations //t validation tn HTTP requests
-                |- Logic //t logic
-                |- Events //t events, mporei na einai eswterika, broadcast (websockets), jobs (queues)
-                    |- Triggers
-                    |- Listeners
-                    |- Subscribers
-                |- Schemas //se sxhmata (JSON h' php array) twn dedomenwn poy thelw na ypolopoihsw sto logic (as einai opws sto validation, Schema\Blueprint, h dikia moy customia entelei (???mhpws t Structs toy J0hnys???)). t thelw gia na moy dinei tn domh poy thelw gia t code generation (migrations, CRUD, Structs, e.t.c.)
-                    |- Classes //einai ta specs tn classewn
-                    |- Processes //einai step based finite state machines
-            |- Workflows
-                |- Exceptions //exw ta unique throw poy kanei kathe td-entity 
-                |- Repositories //to abstraction panw apo tn vash moy
-                |- Validations //t validation tn HTTP requests
-                |- Logic //to logic (antikatoptrizei t sxhma)
-                |- Events //t events, mporei na einai eswterika, broadcast (websockets), jobs (queues)
-                    |- Triggers
-                    |- Listeners
-                    |- Subscribers
-                |- Schemas //se sxhmata (JSON h' php array) twn workflow poy thelw na ypolopoihsw (des symfony workflow). gia twra t thelw gia na moy dinei tn domh poy thelw gia t code generation 
-                    |- Classes //einai ta specs tn classewn
-                    |- Processes //einai step based finite state machines
-            |- Intefaces //exei ola t interfaces (php) 
-                |- Common //Intefaces poy xrhsimopoioyntai pantoy (p.x. Repositories)
-                    |- Exceptions //
-                    |- Repositories //
-                    |- Validations //
-                    |- Logic //
-                |- Business //Intefaces gia t business logic (me ypo-fakeloys gia to kathe ena td-entity poy ftiaxnetai)
-                    |- Exceptions //
-                    |- Repositories //
-                    |- Validations //
-                    |- Logic //
-                |- Workflows //Intefaces gia t workflows
-                    |- Exceptions //
-                    |- Repositories //
-                    |- Validations //
-                    |- Logic //
-    - to concept einai oti an thelw na ylopoihsw ena business logic (td-entity) tote tha xrhsimopoiw code generation
-        gia na ftiaksw ths domes stoys fakeloys "Business", "Workflows" etsi wste na exw isolated kwdika apo external
-        resources (db, filesystem), na einai eyanagnwstes oi roes, taytoxrona ola na einai eykola testable mexri kai 
-        tn teleytaia leptomereia
-    - h domh vasizetai stis ennoies toy DDD kai use case driven development. profanws yparxei t MVC gia t requests k 
-        responses xwria k mono toy. 
-        - h unique proseggish edw einai oti t workflows einai poly eydiakrita kathws ekei einai poy tn patan oloi, den t
-            kanoyn eydiakrita k h katanohsh toy kwdika meta ypoferei. 
-
-gia validation
-    - gia na kanw validation prepei na exw tn klash opwn einai h "PrinterRequest.php"
-        kathe function mias klasshs opoioydhpote controller tha prepei na exei diaforeriko request. epomenws polles klasseis 
-        toy typoy "PrinterRequest.php".
-            - to "public function all($keys = null) " me epitrepei an kanw validation k se GET requests (einai akoma pros ypolopoihsh)
-    - ara kathe kainoyrgio controller poy ftiaxnw gia ena td-entity (dld t business logic poy thelw na ypolopoihsw) prepei 
-        na exei controller poy na kanei use to antistoxw logic (h' workflow) KAI t *Request.php!!!
-
-gia t Exceptions
-    - tha ginoyn opws t "PrinterException.php". 
-        - sthn "render" function mporeis na kanei katheytheian response ama theleis
-        - sthn "report" function mporeis na kaneis log t report h oti allo xreiastei
-
-gia t Repositories
-    - tha ginoyn opws t "PrinterRepository.php". 
-
-gia t Logic
-    - se ayto tn fakelo grafetai h logikh gia ena td-entity (Business h Workflow)
-    - by default ftiaxnetai kai ena interface 
-    
-
-tropos xrhshs
-
-    - consola.
-        - t concept einai na ftiaxnetai sthn arxh olo to structure parapanw k t CRUD gia opoiodhpote td-entity
-            - gia workflow
-                - sthn arxh tha ginetai ena schema me to onoma to td-entity poy thelw. (des symfony workflow)
-                - meta tha symplhrwnw ayto t arxeio me to pws thelw na einai ayto t entity 
-                - meta tha ekteleis mia entolh ">... create business_logic <onoma> ..." to opoio tha ftiaxnei t td
-                    structure opws perigrafthke to migration, tn vash kai to CRUD, ta structs, ola.
-
-                ~ sthn periptwsh poy den yparxei schema me to onoma poy to dinw tha kanei kena pragmata
-                ~ sthn periptwsh poy yparxei hdh to td-entity poy thelw na kanw petaei error
-                ~ sthn periptwsh poy den thelw na ftiaksei migration, CRUD, structs tha vazw flags. p.x. --no-crud
-            - gia business logic
-                - sthn arxh tha ginetai ena schema me to onoma to td-entity poy thelw.
-                - meta tha symplhrwnw ayto t arxeio me to pws thelw na einai ayto t entity 
-                - meta tha ekteleis mia entolh ">... create business_logic <onoma> ..." to opoio tha ftiaxnei t td
-                    structure opws perigrafthke to migration, tn vash kai to CRUD, ta structs, ola.
-
-                ~ sthn periptwsh poy den yparxei schema me to onoma poy to dinw tha kanei kena pragmata
-                ~ sthn periptwsh poy yparxei hdh to td-entity poy thelw na kanw petaei error
-                ~ sthn periptwsh poy den thelw na ftiaksei migration, CRUD, structs tha vazw flags. p.x. --no-crud
-        - sthn synexeia tha mporw na tropopoihsw pragmata sta td-entities
-            - p.x. an thelw na allaksw tis parametroys twn function tha enhmerwnw to schema k meta me mia entolh
-                p.x. ">... update business schema <onoma>" gia na enhmerwnw ta structs tn function (parametroi toys dld)
-    - to development flow
-        - prwta tha kanw oti kanw sthn consola
-        - to vasiko einai t workflow!!! kanw oti kanw sto workflow k meta mpainw ena vhma mesa k t katharo logic to exw
-            sto business!!. 
-            - sto workflow kanw k saves sthn vash/disko/curl an xreiastei.
-
-
-!!! PROSOXH !!!
-    - prepei na kanw update se allages
-        - ta models toy eloquent gia na pw poia einai fillable etsi wste na doyleyei t restful crud
-        - oti einai sta schema
-    ~ ta events ths laravel kanoyn KAI broadcast!! (vasika t broadcast einai event!!)
-        - epishs einai KAI queable!! ara ta kaneis ola t day to day me t events!
-
-    ~ gia na mporw na treksw tests prepei:
-        - `apt-get install php7.2-sqlite3`
-        - ```
-            <env name="DB_CONNECTION" value="sqlite"/>
-            <env name="DB_DATABASE" value=":memory:"/>
-            <env name="API_DEBUG" value="false"/>
-            <ini name="memory_limit" value="512M" />
-          ```
-        - `use RefreshDatabase;` trait se kathe test klash
-        -!!! meta prepei oles oi klasseis moy na exoyn suffix test kai ola t function ths klasshs prefix test
-            (etsi pianei t nohma t phpunit)
-        - an dne doylepsei h entolh `phpunit` tote shmainei oti prepei na xrhsimopoihsw tn `vendor/bin/phpunit`
+entoles
+ 1. `php artisan trident:generate:workflow_restful_crud TestEntity --functionality_schema_path="app/Trident/Solution/Schemas/TestEntity/Resource/Functionality.json" --resource_schema_path="app\Trident\Solution\Schemas\TestEntity\Resource\Response.json" --validation_schema_path="app\Trident\Solution\Schemas\TestEntity\Resource\Request.json" --strict_type_schema_path="app\Trident\Solution\Schemas\TestEntity\Resource\Request.json"`
+ 2. `php artisan vista:export:model testEntity "App\Models\TestEntity"`
+ 3. `php artisan vista:generate:crud test_entity --schema_path="/app/Models/Schemas/Exports/testEntity.json" --resources_relative_path_name="resources_backend"`
