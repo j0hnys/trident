@@ -25,7 +25,7 @@ class Validation
      * @param string $function_name
      * @return void
      */
-    public function generate(string $td_entity_name, string $function_name, string $schema_path = ''): void
+    public function generate(string $td_entity_name, string $function_name, string $schema_path = '', bool $force = false): void
     {
         $name = ucfirst($td_entity_name).ucfirst($function_name);
 
@@ -58,7 +58,7 @@ class Validation
         //workflow logic generation
         $workflow_validation_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Validations/'.$name.'Request.php';
         
-        if ($this->storage_disk->fileExists($workflow_validation_path)) {
+        if ($this->storage_disk->fileExists($workflow_validation_path) && $force === false) {
             throw new \Exception(ucfirst($name) . ' validation already exists!');
         }
 

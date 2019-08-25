@@ -28,6 +28,7 @@ use j0hnys\Trident\Console\Commands\GenerateResource;
 use j0hnys\Trident\Console\Commands\RefreshDIBinds;
 use j0hnys\Trident\Console\Commands\RefreshClassInterface;
 use j0hnys\Trident\Console\Commands\RefreshClassInterfaces;
+use j0hnys\Trident\Console\Commands\RefreshWorkflowRestfulCrud;
 use j0hnys\Trident\Console\Commands\RemoveEntity;
 use j0hnys\Trident\Console\Commands\RemoveEntityFunction;
 use j0hnys\Trident\Console\Commands\GenerateProcess;
@@ -134,6 +135,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident:refresh:class_interfaces', function ($app) {
             return new RefreshClassInterfaces();
         });
+        $this->app->singleton('trident:refresh:workflow_restful_crud', function ($app) {
+            return new RefreshWorkflowRestfulCrud();
+        });
         $this->app->singleton('trident:remove:entity', function ($app) {
             return new RemoveEntity();
         });
@@ -171,6 +175,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident:refresh:di_binds',
             'trident:refresh:class_interface',
             'trident:refresh:class_interfaces',
+            'trident:refresh:workflow_restful_crud',
             'trident:remove:entity',
             'trident:remove:entity_function',
             'trident:remove:process',

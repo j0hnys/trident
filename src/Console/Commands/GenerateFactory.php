@@ -12,7 +12,7 @@ class GenerateFactory extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:factory {model} ";
+    protected $signature = "trident:generate:factory {model} {--force}";
 
     /**
      * The console command description.
@@ -45,9 +45,10 @@ class GenerateFactory extends Command
     {
         try {
             $model = $this->argument('model');
+            $force = $this->option('force');
             
             
-            $crud = $this->factory->generate($this->laravel,$model);
+            $crud = $this->factory->generate($this->laravel, $model, $force);
             
 
             $this->info($model.' factory successfully created');

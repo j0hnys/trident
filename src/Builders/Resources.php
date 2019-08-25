@@ -23,13 +23,13 @@ class Resources
      * @param string $domain
      * @return void
      */
-    public function generate(string $entity_name, bool $is_collection, string $domain, string $schema_path = ''): void
+    public function generate(string $entity_name, bool $is_collection, string $domain, string $schema_path = '', bool $force = false): void
     {
         //Resource logic generation
         $resource_type = $is_collection ? 'ResourceCollection' : 'Resource';
         $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($entity_name).'/Resources/'.ucfirst($entity_name).$resource_type.'.php';
         
-        if ($this->storage_disk->fileExists($struct_path)) {
+        if ($this->storage_disk->fileExists($struct_path) && $force === false) {
             throw new \Exception(ucfirst($entity_name) . $resource_type . ' already exists!');
         }
 

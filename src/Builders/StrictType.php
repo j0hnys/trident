@@ -28,7 +28,7 @@ class StrictType
      * @param string $domain
      * @return void
      */    
-    public function generate(string $strict_type_name, string $function_name, string $td_entity_name, string $domain, string $schema_path = ''): void
+    public function generate(string $strict_type_name, string $function_name, string $td_entity_name, string $domain, string $schema_path = '', bool $force = false): void
     {
 
         if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT']['name']) {
@@ -36,7 +36,7 @@ class StrictType
             //struct logic generation
             $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
             
-            if ($this->storage_disk->fileExists($struct_path)) {
+            if ($this->storage_disk->fileExists($struct_path) && $force === false) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
             }
 
@@ -49,7 +49,7 @@ class StrictType
             //struct logic generation
             $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'CollectionStruct'.ucfirst($function_name).'.php';
             
-            if ($this->storage_disk->fileExists($struct_path)) {
+            if ($this->storage_disk->fileExists($struct_path) && $force === false) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
             }
 
@@ -62,7 +62,7 @@ class StrictType
             //struct logic generation
             $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'MapStruct'.ucfirst($function_name).'.php';
             
-            if ($this->storage_disk->fileExists($struct_path)) {
+            if ($this->storage_disk->fileExists($struct_path) && $force === false) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ' struct already exists!');
             }
 
@@ -75,7 +75,7 @@ class StrictType
             //struct logic generation
             $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name). ucfirst($td_entity_name).'.php';
             
-            if ($this->storage_disk->fileExists($struct_path)) {
+            if ($this->storage_disk->fileExists($struct_path) && $force === false) {
                 throw new \Exception('Struct'.ucfirst($function_name) . ucfirst($td_entity_name) . ' struct already exists!');
             }
 
