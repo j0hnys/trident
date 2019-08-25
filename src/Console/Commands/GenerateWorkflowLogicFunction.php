@@ -12,7 +12,7 @@ class GenerateWorkflowLogicFunction extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:workflow_logic_function {entity_name} {function_name} ";
+    protected $signature = "trident:generate:workflow_logic_function {entity_name} {function_name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=}";
 
     /**
      * The console command description.
@@ -46,9 +46,13 @@ class GenerateWorkflowLogicFunction extends Command
         try {
             $entity_name = $this->argument('entity_name');
             $function_name = $this->argument('function_name');
+            $options['functionality_schema_path'] = $this->option('functionality_schema_path') ? $this->option('functionality_schema_path') : '';
+            $options['resource_schema_path'] = $this->option('resource_schema_path') ? $this->option('resource_schema_path') : '';
+            $options['validation_schema_path'] = $this->option('validation_schema_path') ? $this->option('validation_schema_path') : '';
+            $options['strict_type_schema_path'] = $this->option('strict_type_schema_path') ? $this->option('strict_type_schema_path') : '';
             
 
-            $builders = $this->workflow_logic_function->generate($entity_name, $function_name, $this);
+            $builders = $this->workflow_logic_function->generate($entity_name, $function_name, $options, $this);
 
             $this->info($entity_name.' '.$function_name.' workflow logic function successfully created');
 

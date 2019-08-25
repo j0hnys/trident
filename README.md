@@ -269,7 +269,8 @@ trident:generate:exception                    | Create an exception | {td_entity
 trident:generate:factory                      | Create a factory for a model | {model} {--force}
 trident:generate:policy_function              | Create a policy function | {entity_name} {function_name}
 trident:generate:process                      | Create a process | {td_entity_name} {process_name} {schema_path}
-trident:generate:resource                     | Create a resource | {entity_name} {--collection} {--workflow} {--schema_path=} {--force}
+trident:generate:resources                    | Create resources for restful entity | {entity_name} {--collection} {--workflow} {--schema_path=} {--force}
+trident:generate:resource                     | Create a resource | {entity_name} {function_name} {--collection} {--workflow} {--schema_path=} {--force}
 trident:generate:restful_crud                 | Create a RESTFUL CRUD | {name} {--model_db_name=} {--schema_path=}
 trident:generate:strict_type                  | Create a strict type | {strict_type_name} {function_name} {entity_name} {--workflow} {--schema_path=} {--force}
 trident:generate:validation                   | Create a validation | {entity_name} {function_name} {--schema_path=} {--force}

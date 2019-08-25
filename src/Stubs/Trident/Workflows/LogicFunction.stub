@@ -5,15 +5,16 @@
      * @var array
      * @return array
      */
-    public function {{function_name}}(Request $request, $id)
-    {
+    public function {{function_name}}($request_struct, $id)
+    {   //!!! IMPORTANT !!! -->  add "use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}{{function_name}}Resource;" on top of this file
+        $data = $request_struct->getFilledValues();
         $model = $this->{{td_entity}}_repository->find($id);
         
         //
         // TO DO
         //
 
-        return $model;
+        return new {{Td_entity}}{{function_name}}Resource( $model );
     }
 
 

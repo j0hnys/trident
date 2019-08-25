@@ -34,12 +34,12 @@ class WorkflowLogicFunction
      * @param Command $command
      * @return void
      */
-    public function generate(string $td_entity_name, string $function_name, Command $command): void
+    public function generate(string $td_entity_name, string $function_name, array $options = [], Command $command): void
     {
 
         $this->generateLogicFunction($td_entity_name, $function_name);
 
-        $this->generateOther($td_entity_name, $function_name, $command);
+        $this->generateOther($td_entity_name, $function_name, $options, $command);
 
     }
 
@@ -68,6 +68,7 @@ class WorkflowLogicFunction
         $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ($function_name), $stub);
+        $stub = str_replace('{{Function_name}}', ucfirst($function_name), $stub);
         
         $this->storage_disk->writeFile($workflow_logic_path, $stub, [
             'append_file' => true
@@ -81,17 +82,10 @@ class WorkflowLogicFunction
      * @param Command $command
      * @return void
      */
-    public function generateOther(string $td_entity_name, string $function_name, Command $command): void
+    public function generateOther(string $td_entity_name, string $function_name, array $options = [], Command $command): void
     {
         //
         //sto workflow tha ftiaxnw taytoxrona k ola ta alla functions/domes
-        
-        //new validation class
-        $command->call('trident:generate:validation', [
-            'entity_name' => $td_entity_name,
-            'function_name' => $function_name,
-        ]);
-
         //new controller function
         $command->call('trident:generate:controller_function', [
             'entity_name' => $td_entity_name,
@@ -108,6 +102,39 @@ class WorkflowLogicFunction
         $command->call('trident:generate:business_logic_function', [
             'entity_name' => $td_entity_name,
             'function_name' => $function_name,
+        ]);
+
+        
+        //new validation class
+        $command->call('trident:generate:validation', [
+            'entity_name' => $td_entity_name,
+            'function_name' => $function_name,
+            '--schema_path' => $options['validation_schema_path']
+        ]);
+
+        //new strict type
+        $command->call('trident:generate:strict_type', [
+            'strict_type_name' => 'struct_optional',
+            'function_name' => $function_name,
+            'entity_name' => $td_entity_name,
+            '--workflow' => true,
+            '--schema_path' => $options['strict_type_schema_path']
+        ]);
+
+        // new resource and it's collection
+        $command->call('trident:generate:resource', [
+            'entity_name' => $td_entity_name,
+            'function_name' => $function_name,
+            '--collection' => false,
+            '--workflow' => true,
+            '--schema_path' => $options['resource_schema_path']
+        ]);
+        $command->call('trident:generate:resource', [
+            'entity_name' => $td_entity_name,
+            'function_name' => $function_name,
+            '--collection' => true,
+            '--workflow' => true,
+            '--schema_path' => $options['resource_schema_path']
         ]);
     }
 

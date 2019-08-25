@@ -4,7 +4,7 @@ namespace App\Trident\Workflows\Schemas\Logic\{{Entity_name}}\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class {{Entity_name}}Resource extends JsonResource
+class {{Entity_name}}{{function_name}}Resource extends JsonResource
 {
     /**
      * Transform the resource into an array.

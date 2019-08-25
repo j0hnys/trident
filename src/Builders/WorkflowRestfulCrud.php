@@ -264,13 +264,13 @@ class WorkflowRestfulCrud
         ]);
         
         // Make the basic resource and it's collection
-        $command->call('trident:generate:resource', [
+        $command->call('trident:generate:resources', [
             'entity_name' => ucfirst($name),
             '--collection' => false,
             '--workflow' => true,
             '--schema_path' => $options['resource_schema_path']
         ]);
-        $command->call('trident:generate:resource', [
+        $command->call('trident:generate:resources', [
             'entity_name' => ucfirst($name),
             '--collection' => true,
             '--workflow' => true,
