@@ -54,7 +54,7 @@ class GenerateWorkflowLogicFunctionTest extends TestCase
             ->method('argument')
             ->willReturn($function_name);
             
-        $this->mock_command_workflow_logic_function->expects($this->at(0))
+        $this->mock_command_workflow_logic_function->expects($this->at(2))
             ->method('info')
             ->willReturn(null);
 
@@ -69,6 +69,12 @@ class GenerateWorkflowLogicFunctionTest extends TestCase
     {
         $td_entity_name = 'DemoProcess';
         $function_name = 'otinanai';
+        $options = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
         $method_command = [];
@@ -88,7 +94,7 @@ class GenerateWorkflowLogicFunctionTest extends TestCase
             ->willReturn(true);
 
             
-        $this->workflow_logic_function->generateOther($td_entity_name, $function_name, $mock_command);    
+        $this->workflow_logic_function->generateOther($td_entity_name, $function_name, $options, $mock_command);    
         
         
         $this->assertTrue(true);
