@@ -5,14 +5,14 @@ namespace j0hnys\Trident\Tests\Integration;
 use j0hnys\Trident\Tests\Base\TestCase;
 use j0hnys\Trident\Builders\Setup\Install;
 use j0hnys\Trident\Builders\WorkflowRestfulCrud;
-use j0hnys\Trident\Builders\StrictType;
-use j0hnys\Trident\Console\Commands\GenerateStrictType;
+use j0hnys\Trident\Builders\Resources;
+use j0hnys\Trident\Console\Commands\GenerateResources;
 
-class GenerateStrictTypeTest extends TestCase
+class GenerateResourcesTest extends TestCase
 {
     private $workflow_restful_crud;
     private $td_entity_name;
-    private $strict_type;
+    private $resources;
 
     public function setUp(): void
     {
@@ -42,12 +42,12 @@ class GenerateStrictTypeTest extends TestCase
         $this->workflow_restful_crud->generate($this->td_entity_name, $schema, $mock_command);
 
         //policy function
-        $this->strict_type = new StrictType($this->storage_disk);
+        $this->resources = new Resources($this->storage_disk);
 
         //command behavioural test
-        $this->mock_strict_type = $this->createMock(StrictType::class);
-        $this->mock_command_strict_type = $this->getMockBuilder(GenerateStrictType::class)
-            ->setConstructorArgs([$this->mock_strict_type])
+        $this->mock_resources = $this->createMock(Resources::class);
+        $this->mock_command_resources = $this->getMockBuilder(GenerateResources::class)
+            ->setConstructorArgs([$this->mock_resources])
             ->setMethods(['argument','option','info'])
             ->getMock();
     }
@@ -55,42 +55,37 @@ class GenerateStrictTypeTest extends TestCase
 
     public function testHandle()
     {
-        $strict_type_name = '';
-        $function_name = '';
         $entity_name = '';
+        $is_collection = '';
         $domain = '';
         $schema_path = '';
         $force = false;
 
-        $this->mock_command_strict_type->expects($this->at(0))
-            ->method('argument')
-            ->willReturn($strict_type_name);
-
-        $this->mock_command_strict_type->expects($this->at(1))
-            ->method('argument')
-            ->willReturn($function_name);
-
-        $this->mock_command_strict_type->expects($this->at(2))
+        $this->mock_command_resources->expects($this->at(0))
             ->method('argument')
             ->willReturn($entity_name);
 
-        $this->mock_command_strict_type->expects($this->at(3))
+        $this->mock_command_resources->expects($this->at(1))
+            ->method('option')
+            ->willReturn($is_collection);
+
+        $this->mock_command_resources->expects($this->at(2))
             ->method('option')
             ->willReturn($domain);
 
-        $this->mock_command_strict_type->expects($this->at(4))
+        $this->mock_command_resources->expects($this->at(3))
             ->method('option')
             ->willReturn($schema_path);
 
-        $this->mock_command_strict_type->expects($this->at(5))
+        $this->mock_command_resources->expects($this->at(4))
             ->method('option')
             ->willReturn($force);
 
-        $this->mock_command_strict_type->expects($this->at(0))
+        $this->mock_command_resources->expects($this->at(0))
             ->method('info')
             ->willReturn(null);
 
-        $this->mock_command_strict_type->handle();
+        $this->mock_command_resources->handle();
 
         //assert
         $this->assertTrue(true);
@@ -99,11 +94,12 @@ class GenerateStrictTypeTest extends TestCase
 
     public function testGenerate()
     {
-        $strict_type_name = 'struct';
-        $function_name = 'otinanai';
+        $is_collection = 'Resource';
         $domain = 'Workflows';
+        $schema_path = $this->base_path.'/../Stubs/_Solution/Schemas/DemoProcess/Resource/Response.json';
+        $force = false;
         
-        $this->strict_type->generate($strict_type_name, $function_name, $this->td_entity_name, $domain);
+        $this->resources->generate($this->td_entity_name, $is_collection, $domain, $schema_path, $force);
 
         $this->assertTrue(true);
     }

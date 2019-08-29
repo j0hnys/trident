@@ -57,7 +57,7 @@ class RefreshDIBindsTest extends TestCase
             'app/Trident/Interfaces/Workflows/Processes/'.$this->td_entity_name.''    //'app/Trident/Interfaces/Workflows/Logic',
         );
 
-        sleep(3);
+        sleep(10);
         exec('composer dump-autoload');
 
         //refresh class interface

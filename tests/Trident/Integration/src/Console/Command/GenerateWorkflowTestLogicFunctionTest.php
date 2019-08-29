@@ -29,7 +29,7 @@ class GenerateWorkflowTestLogicFunctionTest extends TestCase
         $this->workflow = new Workflow($this->storage_disk, $this->storage_trident);
 
         $this->workflow->generate($this->td_entity_name);
-        sleep(3);
+        sleep(10);
         exec('composer dump-autoload');
 
         //workflow tests

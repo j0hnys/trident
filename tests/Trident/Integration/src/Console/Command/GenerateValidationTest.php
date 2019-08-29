@@ -58,6 +58,7 @@ class GenerateValidationTest extends TestCase
         $entity_name = '';
         $function_name = '';
         $schema_path = '';
+        $force = false;
 
         $this->mock_command_validation->expects($this->at(0))
             ->method('argument')
@@ -70,6 +71,10 @@ class GenerateValidationTest extends TestCase
         $this->mock_command_validation->expects($this->at(2))
             ->method('option')
             ->willReturn($schema_path);
+
+        $this->mock_command_validation->expects($this->at(3))
+            ->method('option')
+            ->willReturn($force);
             
         $this->mock_command_validation->expects($this->at(0))
             ->method('info')

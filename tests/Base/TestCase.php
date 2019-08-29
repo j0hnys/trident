@@ -27,7 +27,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->storage_disk->deleteDirectoryAndFiles($this->base_path.'/');
 
-        sleep(3);
+        sleep(10);
 
         $this->storage_disk->makeDirectory($this->base_path.'/app/.');
         $this->storage_disk->makeDirectory($this->base_path.'/app/Providers/.');

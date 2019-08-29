@@ -114,9 +114,15 @@ class GenerateWorkflowLogicFunctionTest extends TestCase
     public function testGenerate()
     {
         $function_name = 'otinanai';
+        $options = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
-        $this->workflow_logic_function->generate($this->td_entity_name, $function_name, $mock_command);
+        $this->workflow_logic_function->generate($this->td_entity_name, $function_name, $options, $mock_command);
 
         $this->assertTrue(true);
     }

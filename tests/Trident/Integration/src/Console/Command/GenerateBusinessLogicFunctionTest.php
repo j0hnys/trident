@@ -19,7 +19,7 @@ class GenerateBusinessLogicFunctionTest extends TestCase
     {
         parent::setUp();
 
-        sleep(3);
+        sleep(10);
 
         $this->td_entity_name = 'DemoProcess';
 
