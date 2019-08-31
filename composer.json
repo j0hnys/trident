@@ -1,6 +1,6 @@
 {
     "name": "j0hnys/trident",
-    "description": "a laravel code generator for developing applications following Domain Driven Design (DDD) principles",
+    "description": "A laravel package for developing applications following Domain Driven Design (DDD) and Test Driven Design (TDD) principles",
     "type": "project",
     "license": "MIT",
     "authors": [
