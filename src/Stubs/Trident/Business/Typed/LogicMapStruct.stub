@@ -3,7 +3,7 @@
 namespace App\Trident\Business\Schemas\Logic\{{Td_entity}}\Typed;
 
 use App\Trident\Base\Typed\Maps\MapStruct;
-use Spatie\Typed\T;
+use J0hnys\Typed\T;
 
 class MapStruct{{function_name}} extends MapStruct
 {

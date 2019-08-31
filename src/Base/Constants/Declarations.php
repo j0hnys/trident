@@ -24,6 +24,20 @@ class Declarations
             'enabled' => true
         ],
     ];
+    const PROCESS_TYPES = [
+        'CASCADE' => [
+            'name' => 'cascade',
+            'enabled' => true
+        ],
+        'CASCADE_STATE_MACHINE' => [
+            'name' => 'cascade_state_machine',
+            'enabled' => true
+        ],
+        'STATE_MACHINE' => [
+            'name' => 'state_machine',
+            'enabled' => true
+        ],
+    ];
     const STRICT_TYPES = [
         'STRUCT' => [
             'name' => 'struct',

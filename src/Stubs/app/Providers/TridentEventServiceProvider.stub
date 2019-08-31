@@ -31,6 +31,7 @@ class TridentEventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
+        'App\Trident\Base\Processes\Subscribers\CascadeSubscriber',
         {{# register_workflow_subscribers }}
         'App\Trident\Workflows\Events\Subscribers\{{Td_entity}}Subscriber',
         {{/ register_workflow_subscribers }}

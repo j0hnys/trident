@@ -11,6 +11,8 @@ use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Base\Constants\Declarations;
 
+use j0hnys\Trident\Builders\WorkflowFunctionProcess;
+
 class DIBinds
 {
     private $storage_disk;
@@ -41,10 +43,19 @@ class DIBinds
 
         $Td_entities_workflows = $this->storage_trident->getCurrentWorkflows();
         $Td_entities_businesses = $this->storage_trident->getCurrentBusinesses();
+        $Td_entities_processes = $this->storage_trident->getCurrentProcesses();
+
+        // dd([
+        //     '$Td_entities_workflows' => $Td_entities_workflows,
+        //     '$Td_entities_businesses' => $Td_entities_businesses,
+        //     '$Td_entities_processes' => $Td_entities_processes,
+        // ]);
 
         $workflow_logic_di_interfaces = [];
         $business_logic_di_interfaces = [];
+        $process_di_interfaces = [];
 
+        //workflow
         foreach ($Td_entities_workflows as $Td_entities_workflow) {
 
             $name = $Td_entities_workflow;
@@ -55,6 +66,7 @@ class DIBinds
             }, $this->getDIInterfaces($code));
         }
 
+        //business
         foreach ($Td_entities_businesses as $Td_entities_business) {
             
             $name = $Td_entities_business;
@@ -65,6 +77,20 @@ class DIBinds
             }, $this->getDIInterfaces($code));
         }
 
+        //process
+        foreach ($Td_entities_processes as $Td_entities_process) {
+            
+            $name = $Td_entities_process;
+
+            $code = $this->storage_disk->readFile( $Td_entities_process );
+            $process_di_interfaces[$name] = array_map(function($element) {
+                return implode('\\', $element->name->parts);
+            }, $this->getDIInterfaces($code));
+        }
+
+        //
+
+        //workflow
         $workflow_logic_interface_class_instantiations = [];
         foreach ($workflow_logic_di_interfaces as $workflow_logic => $di_interfaces) {
             foreach ($di_interfaces as $di_interface) {
@@ -75,15 +101,12 @@ class DIBinds
                 if (!isset($workflow_logic_interface_class_instantiations[$workflow_logic])) {
                     $workflow_logic_interface_class_instantiations[$workflow_logic] = [];
                 }
-    
-                if (strpos($class_name,'\\Repositories')) {
-                    $workflow_logic_interface_class_instantiations[$workflow_logic] []= 'new \\'.$class_name.'($app)';
-                } else {
-                    $workflow_logic_interface_class_instantiations[$workflow_logic] []= 'new \\'.$class_name;
-                }
+
+                $workflow_logic_interface_class_instantiations[$workflow_logic] []= '$app->make(\''.$di_interface.'\')';
             }
         }
 
+        //business
         $business_logic_interface_class_instantiations = [];
         foreach ($business_logic_di_interfaces as $business_logic => $di_interfaces) {
             foreach ($di_interfaces as $di_interface) {
@@ -94,37 +117,73 @@ class DIBinds
                 if (!isset($business_logic_interface_class_instantiations[$business_logic])) {
                     $business_logic_interface_class_instantiations[$business_logic] = [];
                 }
-    
-                if (strpos($class_name,'\\Repositories')) {
-                    $business_logic_interface_class_instantiations[$business_logic] []= 'new \\'.$class_name.'($app)';
-                } else {
-                    $business_logic_interface_class_instantiations[$business_logic] []= 'new \\'.$class_name;
+
+                $business_logic_interface_class_instantiations[$business_logic] []= '$app->make(\''.$di_interface.'\')';
+            }
+        }
+
+        //process
+        $process_interface_class_instantiations = [];
+        foreach ($process_di_interfaces as $process => $di_interfaces) {
+            foreach ($di_interfaces as $di_interface) {
+                $class_name = str_replace('Interfaces','',$di_interface);
+                $class_name = str_replace('Interface','',$class_name);
+                $class_name = str_replace('\\\\','\\',$class_name);
+
+                if (!isset($process_interface_class_instantiations[$process])) {
+                    $process_interface_class_instantiations[$process] = [];
                 }
+
+                $process_interface_class_instantiations[$process] []= '$app->make(\''.$di_interface.'\')';
             }
         }
 
         
         //
         //update TridentServiceProvider
+        
+        //workflows
         $workflows = [];
-        if (!empty($workflow_logic_interface_class_instantiations)) {
-            $workflows = array_map(function($element) use ($workflow_logic_interface_class_instantiations){
-                return [
-                    'Td_entity' => ucfirst($element),
-                    'interface_class_instantiations' => implode(",\n", $workflow_logic_interface_class_instantiations[$element]),
-                ];
-            },$Td_entities_workflows);
-        }
+        $workflows = array_map(function($element) use ($workflow_logic_interface_class_instantiations){
+            return [
+                'Td_entity' => ucfirst($element),
+                'interface_class_instantiations' => isset($workflow_logic_interface_class_instantiations[$element]) ? implode(",\n".'                ', $workflow_logic_interface_class_instantiations[$element]) : null,
+            ];
+        },$Td_entities_workflows);
 
+        //businesses
         $businesses = [];
-        if (!empty($business_logic_interface_class_instantiations)) {
-            $businesses = array_map(function($element) use ($business_logic_interface_class_instantiations) {
-                return [
-                    'Td_entity' => ucfirst($element),
-                    'interface_class_instantiations' => implode(",\n", $business_logic_interface_class_instantiations[$element]),
-                ];
-            },$Td_entities_businesses);
-        }
+        $businesses = array_map(function($element) use ($business_logic_interface_class_instantiations) {
+            return [
+                'Td_entity' => ucfirst($element),
+                'interface_class_instantiations' => isset($business_logic_interface_class_instantiations[$element]) ? implode(",\n".'                ', $business_logic_interface_class_instantiations[$element]) : null,
+            ];
+        },$Td_entities_businesses);
+
+        //processes
+        $processes = [];
+        $processes = array_values(array_filter(array_map(function($element) use ($process_interface_class_instantiations) {
+            if (!isset($process_interface_class_instantiations[$element])) {
+                return false;
+            }
+
+            $workflow_function_process = new WorkflowFunctionProcess();
+            $code = $this->storage_disk->readFile( $element );
+            $code_analysis_result = $workflow_function_process->getClassStructure($code);
+
+            $class_name = $code_analysis_result->strings->class_name;
+            $class_path = $code_analysis_result->strings->class_namespace.'\\'.$class_name;
+
+            $implemented_interface = array_values(array_filter(array_map(function($element) use ($class_name) {
+                return $element->name->parts[ count($element->name->parts)-1 ] == $class_name.'Interface' ? implode('\\',$element->name->parts) : false;
+            }, $code_analysis_result->objects->used_namespaces)))[0];
+
+            return [
+                'Td_entity_interface' => $implemented_interface,
+                'Td_entity_class_path' => $class_path,
+                'interface_class_instantiations' => isset($process_interface_class_instantiations[$element]) ? implode(",\n".'                ', $process_interface_class_instantiations[$element]) : null,
+            ];
+        },$Td_entities_processes)));
 
 
         $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentServiceProvider.php';
@@ -132,6 +191,7 @@ class DIBinds
         $stub = $this->mustache->render($stub, [
             'register_workflows' => $workflows,
             'register_business' => $businesses,
+            'register_process' => $processes,
         ]);
         
 
@@ -187,16 +247,24 @@ class DIBinds
 
         foreach ($analysis_result->constructor_params as $constructor_param) {
             foreach ($analysis_result->used_namespaces as $used_namespace) {
-                if (count($constructor_param->type->parts) == 1) {  //dld exw alias
-                    if (!empty($used_namespace->alias)) {
-                        if ($used_namespace->alias == $constructor_param->type->parts[0]) {
-                            $di_interfaces []= (object)[
-                                'name' => $used_namespace->name
-                            ];
+                if (isset($constructor_param->type->parts)) {
+                    if (count($constructor_param->type->parts) == 1) {  //dld exw alias
+                        if (!empty($used_namespace->alias)) {
+                            if ($used_namespace->alias == $constructor_param->type->parts[0]) {
+                                $di_interfaces []= (object)[
+                                    'name' => $used_namespace->name
+                                ];
+                            }
+                        } else {
+                            if ($used_namespace->name->parts[ count($used_namespace->name->parts)-1 ] == $constructor_param->type->parts[0]) {
+                                $di_interfaces []= (object)[
+                                    'name' => $used_namespace->name
+                                ];
+                            }
                         }
+                    } else {
+                        // TO DO
                     }
-                } else {
-                    // TO DO
                 }
             }
 

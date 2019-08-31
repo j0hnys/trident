@@ -19,6 +19,8 @@ class GenerateBusinessLogicFunctionTest extends TestCase
     {
         parent::setUp();
 
+        sleep(10);
+
         $this->td_entity_name = 'DemoProcess';
 
         $install = new Install($this->storage_disk);
@@ -34,7 +36,13 @@ class GenerateBusinessLogicFunctionTest extends TestCase
 
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
 
-        $this->workflow_restful_crud->generate($this->td_entity_name, $mock_command);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
+        $this->workflow_restful_crud->generate($this->td_entity_name, $schema, $mock_command);
 
         $this->business_logic_function = new BusinessLogicFunction($this->storage_disk);
 

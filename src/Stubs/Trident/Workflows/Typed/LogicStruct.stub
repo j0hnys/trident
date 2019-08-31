@@ -2,8 +2,8 @@
 
 namespace App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed;
 
-use Spatie\Typed\Struct;
-use Spatie\Typed\T;
+use J0hnys\Typed\Struct;
+use J0hnys\Typed\T;
 
 class Struct{{function_name}} extends Struct
 {

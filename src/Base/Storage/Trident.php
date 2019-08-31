@@ -74,6 +74,21 @@ class Trident
         return $filenames;
     }
 
+
+    public function getCurrentProcesses(): array
+    {
+        $Directory = new \RecursiveDirectoryIterator($this->base_path.'/app/Trident/Workflows/Processes/');
+        $Iterator = new \RecursiveIteratorIterator($Directory);
+        $regex = new \RegexIterator($Iterator, '/^.+\.php$/i', \RecursiveRegexIterator::GET_MATCH);
+
+        $files = [];
+        foreach ($regex as $info) {
+            $files []= $info[0];
+        }
+
+        return $files;
+    }
+
     /**
      * @param string $type
      * @return array

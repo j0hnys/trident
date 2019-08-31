@@ -12,7 +12,7 @@ class GenerateResource extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:resource {entity_name} {--collection} {--workflow} ";
+    protected $signature = "trident:generate:resource {entity_name} {function_name} {--collection} {--workflow} {--schema_path=} {--force}";
 
     /**
      * The console command description.
@@ -22,17 +22,17 @@ class GenerateResource extends Command
     protected $description = 'Create a resource';
 
     /**
-     * @var Builders\Resources
+     * @var Builders\Resource
      */
-    private $resources;
+    private $resource;
 
-    public function __construct(Builders\Resources $resources = null)
+    public function __construct(Builders\Resource $resource = null)
     {
         parent::__construct();
 
-        $this->resources = new Builders\Resources();
-        if (!empty($resources)) {
-            $this->resources = $resources;
+        $this->resource = new Builders\Resource();
+        if (!empty($resource)) {
+            $this->resource = $resource;
         }
     }
     
@@ -45,10 +45,13 @@ class GenerateResource extends Command
     {
         try {
             $entity_name = $this->argument('entity_name');
+            $function_name = $this->argument('function_name');
             $is_collection = $this->option('collection');
             $domain = $this->option('workflow') ? 'Workflows' : 'Business';
+            $schema_path = $this->option('schema_path');
+            $force = $this->option('force');
             
-            $crud = $this->resources->generate($entity_name, $is_collection, $domain);
+            $crud = $this->resource->generate($entity_name, $function_name, $is_collection, $domain, $schema_path, $force);
             
             $collection_message = $is_collection ? ' Collection' : '';
             $this->info($entity_name.' Resource'.$collection_message.' successfully created for '.$domain);

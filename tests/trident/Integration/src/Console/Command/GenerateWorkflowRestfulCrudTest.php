@@ -60,6 +60,12 @@ class GenerateWorkflowRestfulCrudTest extends TestCase
         //arrange
         $td_entity_name = 'DemoProcess';
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
 
         $mock_command->method('call')
             ->with(
@@ -75,7 +81,7 @@ class GenerateWorkflowRestfulCrudTest extends TestCase
             ->willReturn(true);
 
         //act
-        $this->workflow_restful_crud->generateCrud($td_entity_name, $mock_command);    
+        $this->workflow_restful_crud->generateCrud($td_entity_name, $schema, $mock_command);    
 
         //assert
         $this->assertTrue(true);
@@ -86,6 +92,12 @@ class GenerateWorkflowRestfulCrudTest extends TestCase
     {
         $td_entity_name = 'DemoProcess';
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
 
         $method_command = [];
         $method_parameters = [];
@@ -104,7 +116,7 @@ class GenerateWorkflowRestfulCrudTest extends TestCase
             ->willReturn(true);
 
             
-        $this->workflow_restful_crud->generateOther($td_entity_name, $mock_command);    
+        $this->workflow_restful_crud->generateOther($td_entity_name, $schema, $mock_command);    
         
         
         $this->assertTrue(true);
@@ -125,8 +137,14 @@ class GenerateWorkflowRestfulCrudTest extends TestCase
     {
         $td_entity_name = 'DemoProcess';
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
+        $schema = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
 
-        $this->workflow_restful_crud->generate($td_entity_name, $mock_command);
+        $this->workflow_restful_crud->generate($td_entity_name, $schema, $mock_command);
 
         $this->assertTrue(true);
     }

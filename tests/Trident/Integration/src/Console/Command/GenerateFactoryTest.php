@@ -42,12 +42,17 @@ class GenerateFactoryTest extends TestCase
     public function testHandle()
     {
         $model = '';
+        $force = false;
 
         $this->mock_command_factory->expects($this->at(0))
             ->method('argument')
             ->willReturn($model);
 
-        $this->mock_command_factory->expects($this->at(0))
+        $this->mock_command_factory->expects($this->at(1))
+            ->method('option')
+            ->willReturn($force);
+
+        $this->mock_command_factory->expects($this->at(2))
             ->method('info')
             ->willReturn(null);
 

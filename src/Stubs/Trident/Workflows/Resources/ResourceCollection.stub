@@ -4,14 +4,14 @@ namespace App\Trident\Workflows\Schemas\Logic\{{Entity_name}}\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class {{Entity_name}}ResourceCollection extends ResourceCollection
+class {{Entity_name}}{{function_name}}ResourceCollection extends ResourceCollection
 {
     /**
      * The resource that this resource collects.
      *
      * @var string
      */
-    public $collects = 'App\Trident\Workflows\Schemas\Logic\{{Entity_name}}\Resources\{{Entity_name}}Resource';
+    public $collects = 'App\Trident\Workflows\Schemas\Logic\{{Entity_name}}\Resources\{{Entity_name}}{{function_name}}Resource';
     
     /**
      * Transform the resource collection into an array.

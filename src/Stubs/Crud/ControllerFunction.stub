@@ -5,10 +5,13 @@
      * @param  {{Td_entity}}{{function_name}}Request
      * @return \Illuminate\Http\Response
      */
-    public function {{function_name}}({{Td_entity}}{{function_name}}Request $request,$id)
-    {   //!!! IMPORTANT !!! -->  add "use App\Trident\Workflows\Validations\{{Td_entity}}{{function_name}}Request;" on top of this file
+    public function {{function_name}}({{Td_entity}}{{Function_name}}Request $request,$id)
+    {   //!!! IMPORTANT !!! -->  add "use App\Trident\Workflows\Validations\{{Td_entity}}{{Function_name}}Request;" on top of this file
+        //!!! IMPORTANT !!! -->  add "use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\Struct{{Function_name}}{{Td_entity}};" on top of this file
         $this->authorize('{{function_name}}', [$this->{{td_entity}}_repository,$id]);
-        return response()->json( $this->{{td_entity}}_workflow->{{function_name}}($request,$id) );
+        $struct{{function_name}}{{Td_entity}} = new Struct{{Function_name}}{{Td_entity}}($request->all());    
+        ${{td_entity}}{{function_name}}Resource = $this->{{td_entity}}_workflow->{{function_name}}( $struct{{function_name}}{{Td_entity}} ,$id);
+        return response()->json( ${{td_entity}}{{function_name}}Resource );
     }
 
 

@@ -1,0 +1,15 @@
+{
+    "endpoint": "/something (~in resource creation is not relevant~)",
+    "model": {
+        "db_name": "demo_process"
+    },
+    "workflow": {
+        "type": "cascade | cascade_state_machine | state_machine",
+        "schema": {
+            "initial_state": " . . . ",
+            "states": " . . . ",
+            "transitions": " . . . ",
+            "transition_listeners": " . . . "
+        }
+    }
+}

@@ -21,7 +21,7 @@ class GenerateWorkflowTest extends TestCase
         $install = new Install($this->storage_disk);
         $install->run();
 
-        $this->workflow = new Workflow($this->storage_disk);
+        $this->workflow = new Workflow($this->storage_disk, $this->storage_trident);
 
         //command behavioural test
         $this->mock_workflow = $this->createMock(Workflow::class);

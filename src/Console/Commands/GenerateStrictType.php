@@ -12,7 +12,7 @@ class GenerateStrictType extends Command
      *
      * @var string
      */
-    protected $signature = "trident:generate:strict_type {strict_type_name} {function_name} {entity_name} {--workflow} ";
+    protected $signature = "trident:generate:strict_type {strict_type_name} {function_name} {entity_name} {--workflow} {--schema_path=} {--force}";
 
     /**
      * The console command description.
@@ -48,8 +48,10 @@ class GenerateStrictType extends Command
             $function_name = $this->argument('function_name');
             $entity_name = $this->argument('entity_name');
             $domain = $this->option('workflow') ? 'Workflows' : 'Business';
+            $schema_path = $this->option('schema_path');
+            $force = $this->option('force');
             
-            $this->strict_type->generate($strict_type_name, $function_name, $entity_name, $domain);
+            $this->strict_type->generate($strict_type_name, $function_name, $entity_name, $domain, $schema_path, $force);
 
             $this->info($strict_type_name.' '.$entity_name.' '.$function_name.' strict type successfully created for '.$domain);
             

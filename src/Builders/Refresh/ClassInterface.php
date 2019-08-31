@@ -33,7 +33,6 @@ class ClassInterface
     {
         $input_path = $this->storage_disk->getBasePath().'/'.$relative_input_path;
         $output_path = $this->storage_disk->getBasePath().'/'.$relative_output_path;
-                
 
         $code = $this->storage_disk->readFile( $input_path.'/'.$name.'.php' );
         $result = $this->getClassFunctionSignatures($code);
@@ -63,7 +62,8 @@ class ClassInterface
             'class_name' => $class_name,
             'function_signatures' => $function_signatures,
         ]);
-                
+        
+        $this->storage_disk->makeDirectory($output_path.'/'.$name.'Interface.php'); 
 
         $this->storage_disk->writeFile($output_path.'/'.$name.'Interface.php', $stub);
     }
@@ -122,6 +122,14 @@ class ClassInterface
                     }
                     $tmp_function->parameters []= $tmp;
                 }
+
+                if (isset($node->returnType)) {
+                    if (isset($node->returnType->name)) {
+                        $tmp_function->return_type = $node->returnType->name;
+                    } else if (isset($node->returnType->parts)) {
+                        $tmp_function->return_type = $node->returnType->parts[ count($node->returnType->parts)-1 ];
+                    }
+                }
                 
                 $analysis_result->functions_signature []= $tmp_function;
             }
@@ -130,6 +138,7 @@ class ClassInterface
 
         $class_namespace_string = '';
         if (isset($analysis_result->class_namespace)) {
+            array_splice($analysis_result->class_namespace->parts, 2, 0, 'Interfaces'); // splice in at position 2
             $class_namespace_string = implode('\\',$analysis_result->class_namespace->parts);
         }
 
@@ -151,8 +160,12 @@ class ClassInterface
                 }
             }
 
-            array_pop($tmp_used_namespace->name->parts);
-            $class_implemented_interfaces_namespaces_strings []= implode('\\', $tmp_used_namespace->name->parts );
+            if (is_array($tmp_used_namespace)) {
+                array_pop($tmp_used_namespace->name->parts);
+                $class_implemented_interfaces_namespaces_strings []= implode('\\', $tmp_used_namespace->name->parts );
+            } else {
+                $class_implemented_interfaces_namespaces_strings []= $class_namespace_string;
+            }
         }
 
 
@@ -220,11 +233,37 @@ class ClassInterface
                     }
                 }
 
-                $function_signature_string .= implode(', ',$function_signature_parameters).');';
+                $function_signature_string .= implode(', ',$function_signature_parameters).')';
             } else {
-                $function_signature_string .= ');';
+                $function_signature_string .= ')';
             }            
 
+            //gia to return type
+            if (isset($function_signature->return_type)) {
+
+                $type_name = $function_signature->return_type;
+
+                //gia na valw t swsta `use` sthn arxh toy arxeioy
+                foreach ($analysis_result->used_namespaces as $index => $used_namespace) {
+                    if (isset($used_namespace->alias)) {
+                        if ($type_name == $used_namespace->alias) {
+                            if (!in_array($index, $used_namespaces_indexes)) {
+                                $used_namespaces_indexes []= $index;
+                            }
+                        }
+                    } else {
+                        if ($type_name == $used_namespace->name->parts[ count($used_namespace->name->parts)-1 ]) {
+                            if (!in_array($index, $used_namespaces_indexes)) {
+                                $used_namespaces_indexes []= $index;
+                            }
+                        }
+                    }
+                }
+
+                $function_signature_string .= ': '.$function_signature->return_type.';';
+            } else {
+                $function_signature_string .= ';';
+            }
 
             $function_signature_strings []= $function_signature_string;
         }
@@ -255,6 +294,10 @@ class ClassInterface
                 'class_name' => $analysis_result->class_name->name,
                 'used_namespaces' => $used_namespaces_strings,
                 'function_signatures' => $function_signature_strings,
+            ],
+            'objects' => (object)[
+                'used_namespaces' => $analysis_result->used_namespaces,
+                'function_signatures' => $analysis_result->functions_signature,
             ]
         ];
     }

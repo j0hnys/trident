@@ -1,0 +1,32 @@
+{
+    "endpoint": "/something",
+    "model": {
+        "db_name": "demo_process"
+    },
+    "workflow": {
+        "type": "cascade",
+        "schema": {
+            "initial_state": "draft",
+            "states": ["draft", "review", "rejected", "published"],
+            "transitions": {
+                "to_review": {
+                    "from": "draft",
+                    "to": "review"
+                },
+                "publish": {
+                    "from": "review",
+                    "to": "published"
+                },
+                "reject_published": {
+                    "from": "published",
+                    "to": "rejected"
+                }
+            },
+            "transition_listeners": {
+                "to_review": "App\\Trident\\Workflows\\Processes\\DemoProcess\\Index@step_1",
+                "publish": "App\\Trident\\Workflows\\Processes\\DemoProcess\\Index@step_2",
+                "reject_published": "App\\Trident\\Workflows\\Processes\\DemoProcess\\Index@step_3"
+            }
+        }
+    }
+}

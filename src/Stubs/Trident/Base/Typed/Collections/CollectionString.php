@@ -2,8 +2,8 @@
 
 namespace App\Trident\Base\Typed\Collections;
 
-use Spatie\Typed\Collection;
-use Spatie\Typed\T;
+use J0hnys\Typed\Collection;
+use J0hnys\Typed\T;
 
 class CollectionString extends Collection
 {

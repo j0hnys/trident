@@ -25,38 +25,29 @@ class Validation
      * @param string $function_name
      * @return void
      */
-    public function generate(string $td_entity_name, string $function_name): void
+    public function generate(string $td_entity_name, string $function_name, string $schema_path = '', bool $force = false): void
     {
         $name = ucfirst($td_entity_name).ucfirst($function_name);
 
 
         $schema = [];
-        $configuration = config('trident');
-        if (!empty($configuration)) {
-            if (isset($configuration['solution']['schemas']['folder'])) {
-                $tmp_schemas = $this->storage_disk->getFolderFiles($configuration['solution']['schemas']['folder']);
-
-                foreach ($tmp_schemas as $tmp_schema) {
-                    if ($tmp_schema == $td_entity_name.'.json') {
-                        $schema = json_decode($this->storage_disk->readFile( $configuration['solution']['schemas']['folder'].'/'.$tmp_schema ),true);
-                    }
-                }
-            }
+        if (!empty($schema_path)) {
+            $schema = \json_decode($this->storage_disk->readFile( $schema_path ),true);
         }
 
 
         $rules = [];
         $messages = [];
         if (!empty($schema)) {
-            foreach ($schema as $key => $data) {
-                if (isset($data['input']['validation']['rule'])) {
+            foreach ($schema['data'] as $key => $data) {
+                if (isset($data['validation']['rule'])) {
                     $rules []= [
-                        'rule' => '\''.$key.'\' => \''.$data['input']['validation']['rule'].'\','
+                        'rule' => '\''.$key.'\' => \''.$data['validation']['rule'].'\','
                     ];
                 }
-                if (isset($data['input']['validation']['message'])) {
+                if (isset($data['validation']['message'])) {
                     $messages []= [
-                        'message' => '\''.$key.'\' => \''.$data['input']['validation']['message'].'\','
+                        'message' => '\''.$key.'\' => \''.$data['validation']['message'].'\','
                     ];
                 }
             }
@@ -67,7 +58,7 @@ class Validation
         //workflow logic generation
         $workflow_validation_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Validations/'.$name.'Request.php';
         
-        if ($this->storage_disk->fileExists($workflow_validation_path)) {
+        if ($this->storage_disk->fileExists($workflow_validation_path) && $force === false) {
             throw new \Exception(ucfirst($name) . ' validation already exists!');
         }
 
@@ -78,6 +69,7 @@ class Validation
         $stub = $this->mustache->render($stub, [
             'td_entity' => lcfirst($name),
             'Td_entity' => ucfirst($name),
+            'id_request_parameter' => lcfirst($td_entity_name),
             'rules' => $rules,
             'messages' => $messages,
         ]);

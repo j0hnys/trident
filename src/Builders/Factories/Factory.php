@@ -40,7 +40,7 @@ class Factory
      * @param string $model
      * @return void
      */
-    public function generate($laravel, string $model = ''): void
+    public function generate($laravel, string $model = '', bool $force = false): void
     {
         $this->laravel = $laravel;
 
@@ -57,8 +57,8 @@ class Factory
             throw new \Exception($model." is not a model", 1);
         }
 
-        $fullpath_to_create = base_path().'/database/factories/models/'.$reflectionClass->getName().'php';
-        if (file_exists($fullpath_to_create)) {
+        $fullpath_to_create = $this->storage_disk->getBasePath().'/database/factories/models/'.$reflectionClass->getName().'php';
+        if ($this->storage_disk->fileExists($fullpath_to_create) && $force === false) {
             throw new \Exception($fullpath_to_create . ' already exists!');
         }
 
@@ -85,7 +85,7 @@ class Factory
             'properties' => $properties,
         ]);
 
-        if ($this->storage_disk->fileExists($factory_path)) {
+        if ($this->storage_disk->fileExists($factory_path) && $force === false) {
             throw new \Exception($factory_path . ' already exists!');
         }
         $this->storage_disk->makeDirectory($factory_path);

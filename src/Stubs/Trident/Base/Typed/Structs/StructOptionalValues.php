@@ -2,7 +2,7 @@
 
 namespace App\Trident\Base\Typed\Structs;
 
-use Spatie\Typed\Struct;
+use J0hnys\Typed\Struct;
 
 class StructOptionalValues extends Struct
 {

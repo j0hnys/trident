@@ -2,8 +2,8 @@
 
 namespace App\Trident\Base\Typed\Maps;
 
-use Spatie\Typed\Map;
-use Spatie\Typed\T;
+use J0hnys\Typed\Map;
+use J0hnys\Typed\T;
 
 class MapStringNumber extends Map
 {

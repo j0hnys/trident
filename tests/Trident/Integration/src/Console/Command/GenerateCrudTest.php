@@ -44,10 +44,20 @@ class GenerateCrudTest extends TestCase
     public function testHandle()
     {
         $entity_name = '';
+        $model_db_name = '';
+        $schema_path = '';
 
         $this->mock_command_crud_builder->expects($this->at(0))
             ->method('argument')
             ->willReturn($entity_name);
+
+        $this->mock_command_crud_builder->expects($this->at(1))
+            ->method('option')
+            ->willReturn($model_db_name);
+
+        $this->mock_command_crud_builder->expects($this->at(2))
+            ->method('option')
+            ->willReturn($schema_path);
 
         $this->mock_command_crud_builder->expects($this->at(0))
             ->method('info')

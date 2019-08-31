@@ -23,37 +23,27 @@ class Resources
      * @param string $domain
      * @return void
      */
-    public function generate(string $entity_name, bool $is_collection, string $domain): void
+    public function generate(string $entity_name, bool $is_collection, string $domain, string $schema_path = '', bool $force = false): void
     {
         //Resource logic generation
         $resource_type = $is_collection ? 'ResourceCollection' : 'Resource';
         $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($entity_name).'/Resources/'.ucfirst($entity_name).$resource_type.'.php';
         
-        if ($this->storage_disk->fileExists($struct_path)) {
+        if ($this->storage_disk->fileExists($struct_path) && $force === false) {
             throw new \Exception(ucfirst($entity_name) . $resource_type . ' already exists!');
         }
 
 
         $schema = [];
-        $configuration = config('trident');
-        if (!empty($configuration)) {
-            if (isset($configuration['solution']['schemas']['folder'])) {
-                $tmp_schemas = $this->storage_disk->getFolderFiles($configuration['solution']['schemas']['folder']);
-
-                foreach ($tmp_schemas as $tmp_schema) {
-                    if ($tmp_schema == $entity_name.'.json') {
-                        $schema = json_decode( $this->storage_disk->readFile( $configuration['solution']['schemas']['folder'].'/'.$tmp_schema ),true);
-                    }
-                }
-            }
+        if (!empty($schema_path)) {
+            $schema = json_decode( $this->storage_disk->readFile( $schema_path ),true);
         }
-
 
         $types = [];
         if (!empty($schema)) {
-            foreach ($schema as $key => $data) {
-                if (isset($data['output']['resource'])) {
-                    if ($data['output']['resource']) {
+            foreach ($schema['data'] as $key => $data) {
+                if (isset($data['resource'])) {
+                    if ($data['resource']) {
                         $types []= [
                             'type' => '\''.$key.'\' => $this->'.$key.','
                         ];
