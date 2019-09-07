@@ -5,6 +5,7 @@ namespace j0hnys\Trident\Builders\Crud;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Base\Constants\Trident\Request;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class CrudBuilder
 {
@@ -24,6 +25,7 @@ class CrudBuilder
         }
         $this->mustache = new \Mustache_Engine;
         $this->request_definition = new Request();
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -36,6 +38,7 @@ class CrudBuilder
 
         //
         //controller generation
+        $this->folder_structure->checkPath('app/Http/Controllers/Trident/*');
         $controller_path = $this->storage_disk->getBasePath().'/app/Http/Controllers/Trident/'.ucfirst(strtolower($name)).'Controller.php';
         
         if (!$this->storage_disk->fileExists($controller_path)) {
@@ -55,6 +58,7 @@ class CrudBuilder
 
         //
         //model generation
+        $this->folder_structure->checkPath('app/Models/*');
         $model_path = $this->storage_disk->getBasePath().'/app/Models/'.ucfirst($name).'.php';
         
         if (!$this->storage_disk->fileExists($model_path)) {
@@ -101,6 +105,7 @@ class CrudBuilder
             ];
         },$Td_entities_workflows);
 
+        $this->folder_structure->checkPath('routes/trident.php');
         $trident_resource_routes_path = $this->storage_disk->getBasePath().'/routes/trident.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/routes/trident.stub');
         $stub = $this->mustache->render($stub, [
@@ -111,6 +116,7 @@ class CrudBuilder
 
         //
         //update trident auth provider
+        $this->folder_structure->checkPath('app/Providers/TridentAuthServiceProvider.php');
         $trident_auth_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentAuthServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
         $stub = $this->mustache->render($stub, [
@@ -121,6 +127,7 @@ class CrudBuilder
 
         //
         //policy generation
+        $this->folder_structure->checkPath('app/Policies/Trident/*');
         $trident_policy_path = $this->storage_disk->getBasePath().'/app/Policies/Trident/'.ucfirst($name).'Policy.php';
         if (!file_exists($trident_policy_path)) {
             $this->storage_disk->makeDirectory($trident_policy_path);

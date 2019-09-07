@@ -13,31 +13,33 @@ class Functionality extends Definition
     ];
 
     const workflow = [
-        "type" => "{{workflow_type}}",
-        'schema' => [
-            'initial_state' => 'T::string()',   //'draft'
-            'states'        => 'T::array()',    //['draft', 'review', 'rejected', 'published']
-            'transitions'   => [
-                '{{workflow_transition}}' => [  //to_review
-                    'from' => 'T::string()',    //'from' => 'draft',
-                    'to'   => 'T::string()'     //'to'   => 'review'
+        'workflow' => [
+            "type" => "{{workflow_type}}",
+            'schema' => [
+                'initial_state' => 'T::string()',   //'draft'
+                'states'        => 'T::array()',    //['draft', 'review', 'rejected', 'published']
+                'transitions'   => [
+                    '{{workflow_transition}}' => [  //to_review
+                        'from' => 'T::string()',    //'from' => 'draft',
+                        'to'   => 'T::string()'     //'to'   => 'review'
+                    ],
+                    // 'publish' => [
+                    //     'from' => 'review',
+                    //     'to'   => 'published'
+                    // ],
+                    // 'reject_published' => [
+                    //     'from' => 'published',
+                    //     'to'   => 'rejected'
+                    // ]
                 ],
-                // 'publish' => [
-                //     'from' => 'review',
-                //     'to'   => 'published'
+                'transition_listeners' => 'T::array()', //vvv there is a bug here vvv
+                // [
+                //     '{{workflow_transition}}' => '{{workflow_transition_listener}}',  //App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_1
+                //     // 'publish' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_2',
+                //     // 'reject_published' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_3'
                 // ],
-                // 'reject_published' => [
-                //     'from' => 'published',
-                //     'to'   => 'rejected'
-                // ]
-            ],
-            'transition_listeners' => [
-                '{{workflow_transition}}' => '{{workflow_transition_listener}}',  //App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_1
-                // 'publish' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_2',
-                // 'reject_published' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_3'
-            ],
+            ]
         ]
-
     ];
 
     const workflow_type = [

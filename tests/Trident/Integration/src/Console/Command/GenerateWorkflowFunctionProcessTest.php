@@ -112,6 +112,7 @@ class GenerateWorkflowFunctionProcessTest extends TestCase
         $type = '';
         $function_name = '';
         $schema_path = $this->base_path.'/../Stubs/_Solution/Schemas/DemoProcess/Resource/Functionality.json';
+        // $schema_path = $this->base_path.'/../Stubs/_Solution/Schemas/DemoProcess/Processes/Index.json';
         $mock_command = $this->createMock(\Illuminate\Console\Command::class);
         
         $this->workflow_function_process->generate($this->td_entity_name, $type, $function_name, $schema_path, $mock_command);

@@ -29,6 +29,7 @@ class WorkflowRestfulCrud
         }
         $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder($storage_disk, $storage_trident);
         $this->functionality_definition = new Functionality();
+        $this->folder_structure = new FolderStructure();
     }
 
     /**
@@ -38,6 +39,10 @@ class WorkflowRestfulCrud
      */
     public function generate(string $name = 'TEST', array $options = [], Command $command): void
     {
+
+        // $this->folder_structure->checkPath('routes/trident.php');
+
+        // dd('sdsdf');
         
         $this->generateCrud($name, $options, $command);
 

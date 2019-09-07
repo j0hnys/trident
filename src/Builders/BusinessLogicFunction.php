@@ -3,6 +3,7 @@
 namespace j0hnys\Trident\Builders;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class BusinessLogicFunction
 {
@@ -14,6 +15,7 @@ class BusinessLogicFunction
         if (!empty($storage_disk)) {
             $this->storage_disk = $storage_disk;
         }
+        $this->folder_structure = new FolderStructure();
     }
 
     /**
@@ -29,6 +31,7 @@ class BusinessLogicFunction
 
         //
         //BusinessLogic function generation
+        $this->folder_structure->checkPath('app/Trident/Business/Logic/*');
         $business_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Business/Logic/'.ucfirst($td_entity_name).'.php';
         
         $lines = file($business_logic_path); 

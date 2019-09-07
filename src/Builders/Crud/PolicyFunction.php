@@ -3,6 +3,7 @@
 namespace j0hnys\Trident\Builders\Crud;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class PolicyFunction
 {
@@ -14,6 +15,7 @@ class PolicyFunction
         if (!empty($storage_disk)) {
             $this->storage_disk = $storage_disk;
         }
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -29,6 +31,7 @@ class PolicyFunction
 
         //
         //policy function generation
+        $this->folder_structure->checkPath('app/Policies/Trident/*');
         $policy_path = $this->storage_disk->getBasePath().'/app/Policies/Trident/'.ucfirst($td_entity_name).'Policy.php';
         
         $lines = $this->storage_disk->readFileArray($policy_path); 

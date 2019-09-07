@@ -5,6 +5,7 @@ namespace j0hnys\Trident\Builders;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Base\Constants\Declarations;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Events
 {
@@ -25,6 +26,7 @@ class Events
         }
         $this->mustache = new \Mustache_Engine;
         $this->declarations = new Declarations();
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -59,6 +61,7 @@ class Events
         if ($event_type == $this->declarations::EVENTS['TRIGGER_LISTENER']['name']) {
             //
             //workflow trigger generation
+            $this->folder_structure->checkPath('app/Trident/'.$type.'/Events/Triggers/*');
             $workflow_event_path = $this->storage_disk->getBasePath().'/app/Trident/'.$type.'/Events/Triggers/'.$td_entity_name.'Trigger.php';
             
             if (!$this->storage_disk->fileExists($workflow_event_path)) {
@@ -74,6 +77,7 @@ class Events
 
             //
             //workflow listener generation
+            $this->folder_structure->checkPath('app/Trident/'.$type.'/Events/Listeners/*');
             $workflow_event_path = $this->storage_disk->getBasePath().'/app/Trident/'.$type.'/Events/Listeners/'.$td_entity_name.'Listener.php';
             
             if (!$this->storage_disk->fileExists($workflow_event_path)) {
@@ -90,6 +94,7 @@ class Events
         } else if ($event_type == $this->declarations::EVENTS['SUBSCRIBER']['name']) {
             //
             //workflow subscriber generation
+            $this->folder_structure->checkPath('app/Trident/'.$type.'/Events/Subscribers/*');
             $workflow_event_path = $this->storage_disk->getBasePath().'/app/Trident/'.$type.'/Events/Subscribers/'.$td_entity_name.ucfirst($event_type).'.php';
             
             if (!$this->storage_disk->fileExists($workflow_event_path)) {
@@ -123,6 +128,7 @@ class Events
         },$Td_entities_subscribers);
 
 
+        $this->folder_structure->checkPath('app/Providers/TridentEventServiceProvider.php');
         $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentEventServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/app/Providers/TridentEventServiceProvider.stub');
         $stub = $this->mustache->render($stub, [

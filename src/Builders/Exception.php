@@ -4,6 +4,7 @@ namespace j0hnys\Trident\Builders;
 
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Constants\Declarations;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Exception
 {
@@ -17,6 +18,7 @@ class Exception
             $this->storage_disk = $storage_disk;
         }
         $this->declarations = new Declarations();
+        $this->folder_structure = new FolderStructure();
     }
 
     /**
@@ -41,6 +43,7 @@ class Exception
 
         //
         //workflow logic generation
+        $this->folder_structure->checkPath('app/Trident/'.$type.'/Exceptions/*');
         $workflow_exception_path = $this->storage_disk->getBasePath().'/app/Trident/'.$type.'/Exceptions/'.$td_entity_name.'Exception.php';
         
         if (file_exists($workflow_exception_path)) {

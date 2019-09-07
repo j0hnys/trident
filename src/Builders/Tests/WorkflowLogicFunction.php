@@ -3,6 +3,7 @@
 namespace j0hnys\Trident\Builders\Tests;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class WorkflowLogicFunction
 {
@@ -14,6 +15,7 @@ class WorkflowLogicFunction
         if (!empty($storage_disk)) {
             $this->storage_disk = $storage_disk;
         }
+        $this->folder_structure = new FolderStructure();
     }
 
     /**
@@ -33,6 +35,7 @@ class WorkflowLogicFunction
 
         //
         //workflow logic test function generation
+        $this->folder_structure->checkPath('tests/Trident/Workflows/Logic/*');
         $workflow_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Workflows/Logic/'.ucfirst($td_entity_name).'Test.php';
         
         $lines = $this->storage_disk->readFileArray($workflow_logic_test_path); 
@@ -57,6 +60,7 @@ class WorkflowLogicFunction
 
         //
         //business logic test function generation
+        $this->folder_structure->checkPath('tests/Trident/Business/Logic/*');
         $business_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Business/Logic/'.ucfirst($td_entity_name).'Test.php';
         
         $lines = $this->storage_disk->readFileArray($business_logic_test_path); 

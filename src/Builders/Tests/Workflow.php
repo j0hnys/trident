@@ -3,6 +3,7 @@
 namespace j0hnys\Trident\Builders\Tests;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Workflow
 {
@@ -16,6 +17,7 @@ class Workflow
             $this->storage_disk = $storage_disk;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->folder_structure = new FolderStructure();
     }
 
     /**
@@ -27,6 +29,7 @@ class Workflow
         
         //
         //workflow logic test generation
+        $this->folder_structure->checkPath('tests/Trident/Workflows/Logic/*');
         $workflow_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Workflows/Logic/'.ucfirst($name).'Test.php';
         
         $class_name = '\\App\\Trident\\Workflows\\Logic\\'.ucfirst($name);
@@ -59,6 +62,7 @@ class Workflow
 
         //
         //workflow logic test generation
+        $this->folder_structure->checkPath('tests/Trident/Business/Logic/*');
         $business_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Business/Logic/'.ucfirst($name).'Test.php';
         
         $class_name = '\\App\\Trident\\Business\\Logic\\'.ucfirst($name);

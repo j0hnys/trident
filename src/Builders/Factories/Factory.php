@@ -15,6 +15,7 @@ use Symfony\Component\ClassLoader\ClassMapGenerator;
 use Illuminate\Database\Eloquent\Model;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Factory
 {
@@ -33,6 +34,7 @@ class Factory
             $this->storage_disk = $storage_disk;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->folder_structure = new FolderStructure();
     }
 
     /**
@@ -57,7 +59,8 @@ class Factory
             throw new \Exception($model." is not a model", 1);
         }
 
-        $fullpath_to_create = $this->storage_disk->getBasePath().'/database/factories/models/'.$reflectionClass->getName().'php';
+        $this->folder_structure->checkPath('database/factories/Models/*');
+        $fullpath_to_create = $this->storage_disk->getBasePath().'/database/factories/Models/'.$reflectionClass->getName().'.php';
         if ($this->storage_disk->fileExists($fullpath_to_create) && $force === false) {
             throw new \Exception($fullpath_to_create . ' already exists!');
         }
@@ -78,6 +81,7 @@ class Factory
 
         $properties = array_values(array_merge($properties_from_table, $methods));
 
+        $this->folder_structure->checkPath('database/factories/Models/*');
         $factory_path = $this->storage_disk->getBasePath().'/database/factories/Models/'.$reflectionClass->getShortName().'.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/database/factories/Factory.stub');
         $stub = $this->mustache->render($stub, [

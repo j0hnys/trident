@@ -80,7 +80,9 @@ class FolderStructure extends Definition
                     ],
                     'Exceptions' => 'T::string()',
                     'Logic' => 'T::string()',
-                    'Processes' => 'T::string()',
+                    'Processes' => [
+                        '{{workflow_process}}' => 'T::string()',
+                    ],
                     'Repositories' => 'T::string()',
                     'Validations' => 'T::string()',
                     'Schemas' => [
@@ -93,16 +95,16 @@ class FolderStructure extends Definition
                     ]
                 ],
             ],
-            'routes' => 'trident.php',
-            'tests' => [
-                'Trident' => [
-                    'Business' => [
-                        'Logic' => 'T::string()',
-                    ],
-                    'Workflows' => [
-                        'Logic' => 'T::string()',
-                    ],
-                ]
+        ],
+        'routes' => 'trident.php',
+        'tests' => [
+            'Trident' => [
+                'Business' => [
+                    'Logic' => 'T::string()',
+                ],
+                'Workflows' => [
+                    'Logic' => 'T::string()',
+                ],
             ]
         ],
         // "{{base_path}}/database/generated_migrations/",
@@ -158,6 +160,8 @@ class FolderStructure extends Definition
     ];
 
     const td_entity_name = 'T::string()';
+
+    const workflow_process = 'T::string()';
 
 }
 
