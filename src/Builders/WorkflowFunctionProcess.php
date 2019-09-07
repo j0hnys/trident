@@ -8,7 +8,7 @@ use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Builders;
 use J0hnys\TridentWorkflow\WorkflowRegistry;
 use Symfony\Component\Workflow\Definition;
-use j0hnys\Trident\Builders\Refresh\ClassInterface;
+use j0hnys\Trident\Base\Constants\Trident\Process;
 
 use PhpParser\{Node, NodeFinder};
 use PhpParser\ParserFactory;
@@ -32,6 +32,7 @@ class WorkflowFunctionProcess
             $this->storage_trident = $storage_trident;
         }
         $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder();
+        $this->process_definition = new Process();
     }
     
     /**
@@ -62,6 +63,7 @@ class WorkflowFunctionProcess
         $schema = [];
         if (!empty($schema_path)) {
             $schema = json_decode( $this->storage_disk->readFile( $schema_path ), true);
+            $this->process_definition->check($schema);
         }
 
         $schema_workflow = $schema['workflow']['schema'];

@@ -4,6 +4,7 @@ namespace j0hnys\Trident\Builders\Crud;
 
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
+use j0hnys\Trident\Base\Constants\Trident\Request;
 
 class CrudBuilder
 {
@@ -22,6 +23,7 @@ class CrudBuilder
             $this->storage_trident = $storage_trident;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->request_definition = new Request();
     }
     
     /**
@@ -61,6 +63,7 @@ class CrudBuilder
             $schema = [];
             if (!empty($schema_path)) {
                 $schema = json_decode( $this->storage_disk->readFile( $schema_path ),true);
+                $this->request_definition = new Request();
             }
 
             $fillables = [];

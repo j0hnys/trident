@@ -3,6 +3,7 @@
 namespace j0hnys\Trident\Builders;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\Response;
 
 class Resources
 {
@@ -15,6 +16,7 @@ class Resources
             $this->storage_disk = $storage_disk;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->response_definition = new Response();
     }
     
     /**
@@ -37,7 +39,9 @@ class Resources
         $schema = [];
         if (!empty($schema_path)) {
             $schema = json_decode( $this->storage_disk->readFile( $schema_path ),true);
+            $this->response_definition->check($schema);
         }
+
 
         $types = [];
         if (!empty($schema)) {

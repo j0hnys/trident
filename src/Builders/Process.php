@@ -4,6 +4,7 @@ namespace j0hnys\Trident\Builders;
 
 use j0hnys\Trident\Base\Storage\Disk;
 use Illuminate\Console\Command;
+use j0hnys\Trident\Base\Constants\Trident\Process;
 
 class Process
 {
@@ -16,6 +17,7 @@ class Process
             $this->storage_disk = $storage_disk;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->process_definition = new Process();
     }
 
 
@@ -50,6 +52,7 @@ class Process
         $schema = [];
         if (!empty($schema_path)) {
             $schema = json_decode( $this->storage_disk->readFile( $schema_path ), true);
+            $this->process_definition->check($schema);
         }
 
         $template_data = [];

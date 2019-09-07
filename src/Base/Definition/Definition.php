@@ -15,13 +15,16 @@ class Definition
      * @param array $haystack
      * @return void
      */
-    public function check(array $data, string $definition_property = 'schema',  array $haystack = null): void
+    public function check(array $data, string $definition_property = '',  array $haystack = null): void
     {
         $className = get_class($this);
         $oClass = new \ReflectionClass($className);
         $constants = $oClass->getConstants();
 
         if ($haystack === null) {
+            if ($definition_property === '') {
+                $definition_property = array_key_first($constants);
+            }
             $haystack = $constants[ $definition_property ];
         }
 
@@ -132,13 +135,16 @@ class Definition
         $this->checkPathRecursive($parts_nested, $definition_property, null);
     }
 
-    private function checkPathRecursive($data, string $definition_property = 'schema',  array $haystack = null)
+    private function checkPathRecursive($data, string $definition_property = '',  array $haystack = null)
     {
         $className = get_class($this);
         $oClass = new \ReflectionClass($className);
         $constants = $oClass->getConstants();
 
         if ($haystack === null) {
+            if ($definition_property === '') {
+                $definition_property = array_key_first($constants);
+            }
             $haystack = $constants[ $definition_property ];
         }
         

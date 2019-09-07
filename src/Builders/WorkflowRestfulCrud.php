@@ -38,13 +38,7 @@ class WorkflowRestfulCrud
      */
     public function generate(string $name = 'TEST', array $options = [], Command $command): void
     {
-
-        $folder_structure = new FolderStructure();
-
-        $folder_structure->checkPath('*/database/factories/Models/');
-
-        dd('sdclksdmckldscmsdlkmcdsl');
-
+        
         $this->generateCrud($name, $options, $command);
 
         $this->generateWorkflow($name);

@@ -2,9 +2,8 @@
 
 namespace j0hnys\Trident\Builders;
 
-use function GuzzleHttp\json_decode;
-
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\Request;
 
 class Validation
 {
@@ -18,6 +17,7 @@ class Validation
             $this->storage_disk = $storage_disk;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->request_definition = new Request();
     }
     
     /**
@@ -33,6 +33,7 @@ class Validation
         $schema = [];
         if (!empty($schema_path)) {
             $schema = \json_decode($this->storage_disk->readFile( $schema_path ),true);
+            $this->request_definition->check($schema);
         }
 
 
