@@ -41,7 +41,7 @@ class WorkflowRestfulCrud
 
         $folder_structure = new FolderStructure();
 
-        $folder_structure->checkPath('*/database/factories/Models/*.php');
+        $folder_structure->checkPath('*/database/factories/Models/');
 
         dd('sdclksdmckldscmsdlkmcdsl');
 
