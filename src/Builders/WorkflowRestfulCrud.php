@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Builders;
+use j0hnys\Trident\Base\Constants\Trident\Functionality;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class WorkflowRestfulCrud
 {    
@@ -26,6 +28,7 @@ class WorkflowRestfulCrud
             $this->storage_trident = $storage_trident;
         }
         $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder($storage_disk, $storage_trident);
+        $this->functionality_definition = new Functionality();
     }
 
     /**
@@ -35,6 +38,13 @@ class WorkflowRestfulCrud
      */
     public function generate(string $name = 'TEST', array $options = [], Command $command): void
     {
+
+        $folder_structure = new FolderStructure();
+
+        $folder_structure->checkPath('*/database/factories/Models/*.php');
+
+        dd('sdclksdmckldscmsdlkmcdsl');
+
         $this->generateCrud($name, $options, $command);
 
         $this->generateWorkflow($name);
@@ -56,6 +66,8 @@ class WorkflowRestfulCrud
             if (!empty($options['functionality_schema_path'])) {
                 $schema = json_decode( $this->storage_disk->readFile( $options['functionality_schema_path'] ),true);
             }
+
+            $this->functionality_definition->check($schema, 'schema');
 
             $model_db_name = $schema['model']['db_name'];
         }
