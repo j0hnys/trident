@@ -97,6 +97,7 @@ class Entity
             ];
         }, $Td_entities_workflows);
 
+        $this->folder_structure->checkPath('routes/trident.php');
         $trident_resource_routes_path = $this->storage_disk->getBasePath() . '/routes/trident.php';
         $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/routes/trident.stub');
         $stub = $this->mustache->render($stub, [
@@ -107,6 +108,7 @@ class Entity
 
         //
         //update trident auth provider
+        $this->folder_structure->checkPath('app/Providers/TridentAuthServiceProvider.php');
         $trident_auth_provider_path = $this->storage_disk->getBasePath() . '/app/Providers/TridentAuthServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
         $stub = $this->mustache->render($stub, [
@@ -134,6 +136,7 @@ class Entity
         },$Td_entities_businesses);
 
 
+        $this->folder_structure->checkPath('app/Providers/TridentServiceProvider.php');
         $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Providers/TridentServiceProvider.stub');
         $stub = $this->mustache->render($stub, [
