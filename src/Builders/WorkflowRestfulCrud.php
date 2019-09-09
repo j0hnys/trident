@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Builders;
+use j0hnys\Trident\Base\Constants\Trident\Functionality;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class WorkflowRestfulCrud
 {    
@@ -26,6 +28,8 @@ class WorkflowRestfulCrud
             $this->storage_trident = $storage_trident;
         }
         $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder($storage_disk, $storage_trident);
+        $this->functionality_definition = new Functionality();
+        $this->folder_structure = new FolderStructure();
     }
 
     /**
@@ -35,6 +39,7 @@ class WorkflowRestfulCrud
      */
     public function generate(string $name = 'TEST', array $options = [], Command $command): void
     {
+        
         $this->generateCrud($name, $options, $command);
 
         $this->generateWorkflow($name);
@@ -55,7 +60,9 @@ class WorkflowRestfulCrud
             $schema = [];
             if (!empty($options['functionality_schema_path'])) {
                 $schema = json_decode( $this->storage_disk->readFile( $options['functionality_schema_path'] ),true);
+                $this->functionality_definition->check($schema, 'schema');
             }
+
 
             $model_db_name = $schema['model']['db_name'];
         }
@@ -74,6 +81,7 @@ class WorkflowRestfulCrud
         
         //
         //workflow logic generation
+        $this->folder_structure->checkPath('app/Trident/Workflows/Logic/*');
         $workflow_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.ucfirst($name).'.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/LogicCrud.stub';
         $this->makeFile(
@@ -85,6 +93,7 @@ class WorkflowRestfulCrud
 
         //
         //workflow exception generation
+        $this->folder_structure->checkPath('app/Trident/Workflows/Exceptions/*');
         $workflow_exception_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Exceptions/'.ucfirst($name).'Exception.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/LogicException.stub';
         $this->makeFile(
@@ -96,6 +105,7 @@ class WorkflowRestfulCrud
 
         //
         //workflow interface generation
+        $this->folder_structure->checkPath('app/Trident/Interfaces/Workflows/Logic/*');
         $workflow_interface_path = $this->storage_disk->getBasePath().'/app/Trident/Interfaces/Workflows/Logic/'.ucfirst($name).'Interface.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/LogicInterface.stub';
         $this->makeFile(
@@ -106,6 +116,7 @@ class WorkflowRestfulCrud
 
         //
         //workflow repository interface generation
+        $this->folder_structure->checkPath('app/Trident/Interfaces/Workflows/Repositories/*');
         $workflow_interface_path = $this->storage_disk->getBasePath().'/app/Trident/Interfaces/Workflows/Repositories/'.ucfirst($name).'RepositoryInterface.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/LogicRepositoryInterface.stub';
         $this->makeFile(
@@ -116,6 +127,7 @@ class WorkflowRestfulCrud
 
         //
         //workflow repository generation
+        $this->folder_structure->checkPath('app/Trident/Workflows/Repositories/*');
         $workflow_repository_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Repositories/'.ucfirst($name).'Repository.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Workflows/LogicRepository.stub';
         $this->makeFile(
@@ -130,6 +142,7 @@ class WorkflowRestfulCrud
 
         //
         //business logic generation
+        $this->folder_structure->checkPath('app/Trident/Business/Logic/*');
         $business_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Business/Logic/'.ucfirst($name).'.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Business/LogicCrud.stub';
         $this->makeFile(
@@ -140,6 +153,7 @@ class WorkflowRestfulCrud
 
         //
         //business logic exception generation
+        $this->folder_structure->checkPath('app/Trident/Business/Exceptions/*');
         $business_logic_exception_path = $this->storage_disk->getBasePath().'/app/Trident/Business/Exceptions/'.ucfirst($name).'Exception.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Business/LogicException.stub';
         $this->makeFile(
@@ -150,6 +164,7 @@ class WorkflowRestfulCrud
 
         //
         //business logic interface generation
+        $this->folder_structure->checkPath('app/Trident/Interfaces/Business/Logic/*');
         $business_logic_interface_path = $this->storage_disk->getBasePath().'/app/Trident/Interfaces/Business/Logic/'.ucfirst($name).'Interface.php';
         $stub_path = __DIR__.'/../../src/Stubs/Trident/Business/LogicInterface.stub';
         $this->makeFile(
@@ -177,6 +192,7 @@ class WorkflowRestfulCrud
         },$Td_entities_businesses);
 
 
+        $this->folder_structure->checkPath('app/Providers/TridentServiceProvider.php');
         $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/app/Providers/TridentServiceProvider.stub');
         $stub = $this->mustache->render($stub, [

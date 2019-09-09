@@ -3,6 +3,8 @@
 namespace j0hnys\Trident\Builders;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\Response;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Resources
 {
@@ -15,6 +17,8 @@ class Resources
             $this->storage_disk = $storage_disk;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->response_definition = new Response();
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -27,6 +31,7 @@ class Resources
     {
         //Resource logic generation
         $resource_type = $is_collection ? 'ResourceCollection' : 'Resource';
+        $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/'.$entity_name.'/Resources/*');
         $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($entity_name).'/Resources/'.ucfirst($entity_name).$resource_type.'.php';
         
         if ($this->storage_disk->fileExists($struct_path) && $force === false) {
@@ -37,7 +42,9 @@ class Resources
         $schema = [];
         if (!empty($schema_path)) {
             $schema = json_decode( $this->storage_disk->readFile( $schema_path ),true);
+            $this->response_definition->check($schema);
         }
+
 
         $types = [];
         if (!empty($schema)) {

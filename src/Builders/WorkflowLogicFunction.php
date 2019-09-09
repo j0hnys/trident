@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Builders;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class WorkflowLogicFunction
 {
@@ -26,6 +27,7 @@ class WorkflowLogicFunction
             $this->storage_trident = $storage_trident;
         }
         $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder();
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -55,6 +57,7 @@ class WorkflowLogicFunction
 
         //
         //workflowLogic function generation
+        $this->folder_structure->checkPath('tests/Trident/Workflows/Logic/*');
         $workflow_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.ucfirst($td_entity_name).'.php';
         
         $lines = $this->storage_disk->readFileArray($workflow_logic_path); 

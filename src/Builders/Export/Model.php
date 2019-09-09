@@ -4,6 +4,7 @@ namespace j0hnys\Trident\Builders\Export;
 
 use Illuminate\Container\Container as App;
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Model
 {
@@ -17,6 +18,7 @@ class Model
             $this->storage_disk = $storage_disk;
         }
         $this->app = new App();
+        $this->folder_structure = new FolderStructure();
     }
 
     /**
@@ -27,6 +29,7 @@ class Model
     public function generate(string $td_entity_name, ?string $output_path): void
     {   
         $td_entity_name = ucfirst($td_entity_name);
+        $this->folder_structure->checkPath('app/Models/Schemas/Exports/*');
         $output_path = !empty($output_path) ? $output_path : $this->storage_disk->getBasePath().'/app/Models/Schemas/Exports/';
 
         $this->storage_disk->makeDirectory($output_path);

@@ -12,6 +12,7 @@ use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Base\Constants\Declarations;
 
 use j0hnys\Trident\Builders\WorkflowFunctionProcess;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class DIBinds
 {
@@ -32,6 +33,7 @@ class DIBinds
         }
         $this->mustache = new \Mustache_Engine;
         $this->declarations = new Declarations();
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -60,6 +62,7 @@ class DIBinds
 
             $name = $Td_entities_workflow;
     
+            $this->folder_structure->checkPath('app/Trident/Workflows/Logic/*');
             $code = $this->storage_disk->readFile( $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.ucfirst($name).'.php' );
             $workflow_logic_di_interfaces[$name] = array_map(function($element) {
                 return implode('\\', $element->name->parts);
@@ -71,6 +74,7 @@ class DIBinds
             
             $name = $Td_entities_business;
 
+            $this->folder_structure->checkPath('app/Trident/Business/Logic/*');
             $code = $this->storage_disk->readFile( $this->storage_disk->getBasePath().'/app/Trident/Business/Logic/'.ucfirst($name).'.php' );
             $business_logic_di_interfaces[$name] = array_map(function($element) {
                 return implode('\\', $element->name->parts);
@@ -186,6 +190,7 @@ class DIBinds
         },$Td_entities_processes)));
 
 
+        $this->folder_structure->checkPath('app/Providers/TridentServiceProvider.php');
         $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../../src/Stubs/app/Providers/TridentServiceProvider_dynamic.stub');
         $stub = $this->mustache->render($stub, [

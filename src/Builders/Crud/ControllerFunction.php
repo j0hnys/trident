@@ -3,6 +3,7 @@
 namespace j0hnys\Trident\Builders\Crud;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class ControllerFunction
 {
@@ -14,6 +15,7 @@ class ControllerFunction
         if (!empty($storage_disk)) {
             $this->storage_disk = $storage_disk;
         }
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -29,6 +31,7 @@ class ControllerFunction
 
         //
         //controller function generation
+        $this->folder_structure->checkPath('app/Http/Controllers/Trident/*');
         $controller_path = $this->storage_disk->getBasePath().'/app/Http/Controllers/Trident/'.ucfirst($td_entity_name).'Controller.php';
         
         $lines = $this->storage_disk->readFileArray($controller_path); 

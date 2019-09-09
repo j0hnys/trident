@@ -4,6 +4,7 @@ namespace j0hnys\Trident\Builders\Build;
 
 use Illuminate\Console\Command;
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Models
 {
@@ -15,10 +16,12 @@ class Models
         if (!empty($storage_disk)) {
             $this->storage_disk = $storage_disk;
         }
+        $this->folder_structure = new FolderStructure();
     }
 
     public function generate($data = [], Command $command): void
     {
+        $this->folder_structure->checkPath('database/generated_models/');
         $output_path = !empty($data['output_path']) ? $data['output_path'] : $this->storage_disk->getBasePath().'/database/generated_models/';
 
         $this->storage_disk->makeDirectory($output_path);

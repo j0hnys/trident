@@ -3,6 +3,7 @@
 namespace j0hnys\Trident\Builders\Setup;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Tests
 {
@@ -14,6 +15,7 @@ class Tests
         if (!empty($storage_disk)) {
             $this->storage_disk = $storage_disk;
         }
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -21,7 +23,7 @@ class Tests
      */
     public function run()
     {
-        
+        $this->folder_structure->checkPath('tests/*');
         $tests_path = $this->storage_disk->getBasePath().'/tests';
         
         //

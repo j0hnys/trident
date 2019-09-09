@@ -3,6 +3,7 @@
 namespace j0hnys\Trident\Builders\Setup;
 
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Install
 {
@@ -16,6 +17,7 @@ class Install
             $this->storage_disk = $storage_disk;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -23,7 +25,7 @@ class Install
      */
     public function run()
     {
-        
+        $this->folder_structure->checkPath('app/*');
         $app_path = $this->storage_disk->getBasePath().'/app';
 
         //
@@ -38,6 +40,7 @@ class Install
         
         //
         //write trident service providers
+        $this->folder_structure->checkPath('app/Providers/TridentServiceProvider.php');
         $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Providers/TridentServiceProvider.stub');
         $stub = $this->mustache->render($stub, [
@@ -48,11 +51,13 @@ class Install
         $this->storage_disk->writeFile($trident_event_service_provider_path, $stub);
 
         //route provider
+        $this->folder_structure->checkPath('app/Providers/TridentRouteServiceProvider.php');
         $trident_route_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentRouteServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Providers/TridentRouteServiceProvider.stub');
         $this->storage_disk->writeFile($trident_route_service_provider_path, $stub);
 
         //event provider
+        $this->folder_structure->checkPath('app/Providers/TridentEventServiceProvider.php');
         $trident_event_service_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentEventServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Providers/TridentEventServiceProvider.stub');
         $stub = $this->mustache->render($stub, [
@@ -63,6 +68,7 @@ class Install
         $this->storage_disk->writeFile($trident_event_service_provider_path, $stub);
 
         //auth provider
+        $this->folder_structure->checkPath('app/Providers/TridentAuthServiceProvider.php');
         $trident_auth_provider_path = $this->storage_disk->getBasePath().'/app/Providers/TridentAuthServiceProvider.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Providers/TridentAuthServiceProvider.stub');
         $stub = $this->mustache->render($stub, [
@@ -74,16 +80,19 @@ class Install
 
         //
         //write trident base files
+        $this->folder_structure->checkPath('app/Trident/Base/Exceptions/DbRepositoryException.php');
         $trident_base_exception_path = $this->storage_disk->getBasePath().'/app/Trident/Base/Exceptions/DbRepositoryException.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Trident/Base/Exceptions/DbRepositoryException.stub');
         $this->storage_disk->makeDirectory($trident_base_exception_path);
         $this->storage_disk->writeFile($trident_base_exception_path, $stub);
 
+        $this->folder_structure->checkPath('app/Trident/Base/Interfaces/DbRepositoryInterface.php');
         $trident_base_repository_interface_path = $this->storage_disk->getBasePath().'/app/Trident/Base/Interfaces/DbRepositoryInterface.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Trident/Base/Interfaces/DbRepositoryInterface.stub');
         $this->storage_disk->makeDirectory($trident_base_repository_interface_path);
         $this->storage_disk->writeFile($trident_base_repository_interface_path, $stub);
 
+        $this->folder_structure->checkPath('app/Trident/Base/Repositories/DbRepository.php');
         $trident_base_repository_path = $this->storage_disk->getBasePath().'/app/Trident/Base/Repositories/DbRepository.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Trident/Base/Repositories/DbRepository.stub');
         $this->storage_disk->makeDirectory($trident_base_repository_path);
@@ -102,6 +111,7 @@ class Install
 
         //
         //write resource routes file
+        $this->folder_structure->checkPath('routes/trident.php');
         $trident_base_repository_path = $this->storage_disk->getBasePath().'/routes/trident.php';
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/routes/trident.stub');
         $stub = $this->mustache->render($stub, [

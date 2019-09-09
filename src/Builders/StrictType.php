@@ -4,6 +4,8 @@ namespace j0hnys\Trident\Builders;
 
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Constants\Declarations;
+use j0hnys\Trident\Base\Constants\Trident\Request;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class StrictType
 {
@@ -19,6 +21,8 @@ class StrictType
         }
         $this->mustache = new \Mustache_Engine;
         $this->declarations = new Declarations();
+        $this->request_definition = new Request();
+        $this->folder_structure = new FolderStructure();
     }
 
     /**
@@ -34,6 +38,7 @@ class StrictType
         if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT']['name']) {
             //
             //struct logic generation
+            $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');
             $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name).'.php';
             
             if ($this->storage_disk->fileExists($struct_path) && $force === false) {
@@ -47,6 +52,7 @@ class StrictType
         } else if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['COLLECTION_STRUCT']['name']) {
             //
             //struct logic generation
+            $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');
             $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'CollectionStruct'.ucfirst($function_name).'.php';
             
             if ($this->storage_disk->fileExists($struct_path) && $force === false) {
@@ -60,6 +66,7 @@ class StrictType
         } else if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['MAP_STRUCT']['name']) {
             //
             //struct logic generation
+            $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');
             $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'MapStruct'.ucfirst($function_name).'.php';
             
             if ($this->storage_disk->fileExists($struct_path) && $force === false) {
@@ -73,6 +80,7 @@ class StrictType
         } else if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT_OPTIONAL']['name']) {
             //
             //struct logic generation
+            $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');
             $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name). ucfirst($td_entity_name).'.php';
             
             if ($this->storage_disk->fileExists($struct_path) && $force === false) {
@@ -91,6 +99,7 @@ class StrictType
         $schema = [];
         if (!empty($schema_path)) {
             $schema = \json_decode($this->storage_disk->readFile( $schema_path ),true);
+            $this->request_definition->check($schema);
         }
 
 

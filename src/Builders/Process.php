@@ -4,6 +4,8 @@ namespace j0hnys\Trident\Builders;
 
 use j0hnys\Trident\Base\Storage\Disk;
 use Illuminate\Console\Command;
+use j0hnys\Trident\Base\Constants\Trident\Process as ProcessDefinition;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Process
 {
@@ -16,6 +18,8 @@ class Process
             $this->storage_disk = $storage_disk;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->process_definition = new ProcessDefinition();
+        $this->folder_structure = new FolderStructure();
     }
 
 
@@ -40,6 +44,7 @@ class Process
     public function generateProcess(string $td_entity_name, string $process_name, string $schema_path): void
     {
         //Resource logic generation
+        $this->folder_structure->checkPath('app/Trident/Workflows/Processes/{{workflow_process}}/*');
         $process_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Processes/'.$td_entity_name.'/'.$process_name.'.php';
         
         if ($this->storage_disk->fileExists($process_path)) {
@@ -50,6 +55,7 @@ class Process
         $schema = [];
         if (!empty($schema_path)) {
             $schema = json_decode( $this->storage_disk->readFile( $schema_path ), true);
+            $this->process_definition->check($schema);
         }
 
         $template_data = [];

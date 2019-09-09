@@ -9,6 +9,7 @@ use PhpParser\{Node, NodeFinder};
 
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class EntityFunction
 {
@@ -27,6 +28,7 @@ class EntityFunction
             $this->storage_trident = $storage_trident;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -39,6 +41,7 @@ class EntityFunction
         //
         //
         //workflow
+        $this->folder_structure->checkPath('app/Trident/Workflows/Logic/*');
         $workflow_input_path = $this->storage_disk->getBasePath().'/'.'app/Trident/Workflows/Logic';
         $code = $this->storage_disk->readFile( $workflow_input_path.'/'.$name.'.php' );
         $workflow_file = $this->storage_disk->readFileArray( $workflow_input_path.'/'.$name.'.php' );
@@ -84,6 +87,7 @@ class EntityFunction
         //
         //
         //controller
+        $this->folder_structure->checkPath('app/Http/Controllers/Trident');
         $controller_input_path = $this->storage_disk->getBasePath().'/'.'app/Http/Controllers/Trident';
         $code = $this->storage_disk->readFile( $controller_input_path.'/'.$name.'Controller.php' );
         $controller_file = $this->storage_disk->readFileArray( $controller_input_path.'/'.$name.'Controller.php' );

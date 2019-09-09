@@ -8,7 +8,8 @@ use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Builders;
 use J0hnys\TridentWorkflow\WorkflowRegistry;
 use Symfony\Component\Workflow\Definition;
-use j0hnys\Trident\Builders\Refresh\ClassInterface;
+use j0hnys\Trident\Base\Constants\Trident\Functionality;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 use PhpParser\{Node, NodeFinder};
 use PhpParser\ParserFactory;
@@ -32,6 +33,8 @@ class WorkflowFunctionProcess
             $this->storage_trident = $storage_trident;
         }
         $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder();
+        $this->functionality_definition = new Functionality();
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -62,6 +65,7 @@ class WorkflowFunctionProcess
         $schema = [];
         if (!empty($schema_path)) {
             $schema = json_decode( $this->storage_disk->readFile( $schema_path ), true);
+            $this->functionality_definition->check($schema, 'workflow');
         }
 
         $schema_workflow = $schema['workflow']['schema'];
@@ -133,6 +137,7 @@ class WorkflowFunctionProcess
 
 
         //update workflow function
+        $this->folder_structure->checkPath('tests/Trident/Workflows/Logic/*');
         $workflow_logic_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Logic/'.$td_entity_name.'.php';
 
         $new_code = $this->updateWorkflowFunction(

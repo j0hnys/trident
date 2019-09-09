@@ -2,9 +2,9 @@
 
 namespace j0hnys\Trident\Builders;
 
-use function GuzzleHttp\json_decode;
-
 use j0hnys\Trident\Base\Storage\Disk;
+use j0hnys\Trident\Base\Constants\Trident\Request;
+use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 
 class Validation
 {
@@ -18,6 +18,8 @@ class Validation
             $this->storage_disk = $storage_disk;
         }
         $this->mustache = new \Mustache_Engine;
+        $this->request_definition = new Request();
+        $this->folder_structure = new FolderStructure();
     }
     
     /**
@@ -33,6 +35,7 @@ class Validation
         $schema = [];
         if (!empty($schema_path)) {
             $schema = \json_decode($this->storage_disk->readFile( $schema_path ),true);
+            $this->request_definition->check($schema);
         }
 
 
@@ -56,6 +59,7 @@ class Validation
 
         //
         //workflow logic generation
+        $this->folder_structure->checkPath('tests/Trident/Workflows/Validations/*');
         $workflow_validation_path = $this->storage_disk->getBasePath().'/app/Trident/Workflows/Validations/'.$name.'Request.php';
         
         if ($this->storage_disk->fileExists($workflow_validation_path) && $force === false) {
