@@ -24,12 +24,11 @@ final class Functionality extends Definition
                         'to'   => 'T::string()'
                     ],
                 ],
-                'transition_listeners' => 'T::array()', //vvv there is a bug here vvv
-                // [
-                //     '{{workflow_transition}}' => '{{workflow_transition_listener}}',  //App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_1
-                //     // 'publish' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_2',
-                //     // 'reject_published' => 'App\Trident\Workflows\Processes\DemoProcessCascadeProcess@step_3'
-                // ],
+                'transition_listeners' => [
+                    [
+                        '{{workflow_transition}}' => '{{workflow_transition_listener}}',
+                    ],
+                ]
             ]
         ]
     ];
