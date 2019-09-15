@@ -2,9 +2,9 @@
 
 namespace j0hnys\Trident\Base\Constants\Trident;
 
-use j0hnys\Trident\Base\Definition\Definition;
+use j0hnys\Definitions\Definition;
 
-class Response extends Definition
+final class Response extends Definition
 {
     const schema = [
         "type" => '{{request_type}}',

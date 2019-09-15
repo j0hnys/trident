@@ -2,9 +2,9 @@
 
 namespace j0hnys\Trident\Base\Constants;
 
-use j0hnys\Trident\Base\Definition\Definition;
+use j0hnys\Definitions\Definition;
 
-class Declarations extends Definition
+final class Declarations extends Definition
 {
     const ENTITIES = [
         'WORKFLOW' => [

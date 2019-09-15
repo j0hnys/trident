@@ -10,6 +10,15 @@
         }
     ],
     "minimum-stability": "alpha",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../definitions",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require": {
         "mustache/mustache": "2.12.0",
         "doctrine/dbal": "2.9.1",
@@ -18,7 +27,8 @@
         "xethron/migrations-generator": "2.0.2",
         "nikic/php-parser": "4.2.1",
         "j0hnys/trident-workflow": "0.1.0.0",
-        "j0hnys/trident-typed": "0.1.0.0"
+        "j0hnys/trident-typed": "0.1.0.0",
+        "j0hnys/definitions": "dev-master"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

@@ -2,9 +2,9 @@
 
 namespace j0hnys\Trident\Base\Constants\Trident;
 
-use j0hnys\Trident\Base\Definition\Definition;
+use j0hnys\Definitions\Definition;
 
-class Functionality extends Definition
+final class Functionality extends Definition
 {
     const schema = [
         "model" => [
@@ -16,21 +16,13 @@ class Functionality extends Definition
         'workflow' => [
             "type" => "{{workflow_type}}",
             'schema' => [
-                'initial_state' => 'T::string()',   //'draft'
-                'states'        => 'T::array()',    //['draft', 'review', 'rejected', 'published']
+                'initial_state' => 'T::string()',
+                'states'        => 'T::array()',
                 'transitions'   => [
-                    '{{workflow_transition}}' => [  //to_review
-                        'from' => 'T::string()',    //'from' => 'draft',
-                        'to'   => 'T::string()'     //'to'   => 'review'
+                    '{{workflow_transition}}' => [
+                        'from' => 'T::string()',
+                        'to'   => 'T::string()'
                     ],
-                    // 'publish' => [
-                    //     'from' => 'review',
-                    //     'to'   => 'published'
-                    // ],
-                    // 'reject_published' => [
-                    //     'from' => 'published',
-                    //     'to'   => 'rejected'
-                    // ]
                 ],
                 'transition_listeners' => 'T::array()', //vvv there is a bug here vvv
                 // [
