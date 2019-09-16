@@ -36,9 +36,7 @@ final class Functionality extends Definition
     const workflow_type = [
         'cascade', 'cascade_state_machine', 'state_machine'
     ];
-
     const workflow_transition = 'T::string()';
-
     const workflow_transition_listener = 'T::string()';
 }
 

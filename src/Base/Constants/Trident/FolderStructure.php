@@ -110,14 +110,10 @@ final class FolderStructure extends Definition
     ];
 
     const base_path = 'T::string()';
-
     const workflow_or_business = [
         'Workflow', 'Business'
     ];
-
     const td_entity_name = 'T::string()';
-
     const workflow_process = 'T::string()';
-
 }
 

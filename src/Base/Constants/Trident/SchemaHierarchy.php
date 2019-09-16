@@ -9,7 +9,10 @@ final class SchemaHierarchy extends Definition
     const hierarchy = [
         'trident' => [
             '{{entity_name}}' => [
-                'Processes',
+                'FolderStructure' => '@\j0hnys\Trident\Base\Constants\Trident\FolderStructure',
+                'Processes' => [
+                    '@\j0hnys\Trident\Base\Constants\Trident\Process',
+                ],
                 'Resource' => [
                     '@\j0hnys\Trident\Base\Constants\Trident\Functionality',
                     '@\j0hnys\Trident\Base\Constants\Trident\Request',
@@ -20,6 +23,5 @@ final class SchemaHierarchy extends Definition
     ];
 
     const entity_name = 'T::string()';
-    
 }
 

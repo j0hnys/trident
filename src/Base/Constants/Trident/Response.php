@@ -18,8 +18,6 @@ final class Response extends Definition
     const request_type = [
         'json'
     ];
-
     const entity_property = 'T::string()';
-    
 }
 
