@@ -46,15 +46,8 @@ class {{Td_entity}} implements {{Td_entity}}Interface
             'integer' => 1,
         ]);
 
-        
-        // $this->{{td_entity}}_repository->string = $result['string'];
-        // $this->{{td_entity}}_repository->integer = $result['integer'];
-        // $this->{{td_entity}}_repository->save();
-
-        
 
         return true;
-
     }
 
     public function get_all()   //~not to be included in code generator~
