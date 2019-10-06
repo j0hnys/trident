@@ -35,7 +35,7 @@ class CrudWorkflowBuilder
      * @param Command $command
      * @return void
      */
-    public function generate(string $name = 'TEST', string $model_db_name = '', string $schema_path = '', Command $command): void
+    public function generate(string $name, string $model_db_name = '', string $schema_path = '', Command $command): void
     {        
         //
         //controller generation

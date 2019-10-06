@@ -35,7 +35,7 @@ class Exception
         $type = '';
         if ($td_entity_type == $this->declarations::ENTITIES['WORKFLOW']['name']) {
             $type = 'Workflows';
-        } else if ($td_entity_type == $this->declarations::ENTITIES['BUSINESS']['name']) {
+        } elseif ($td_entity_type == $this->declarations::ENTITIES['BUSINESS']['name']) {
             $type = 'Business';
         } else {
             throw new \Exception('entity type '.$type.' does not exists!');

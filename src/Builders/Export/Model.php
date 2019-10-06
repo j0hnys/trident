@@ -77,7 +77,7 @@ class Model
                 "default_value" => '\'\'',
                 "element_type" => false,
             ];
-        } else if ($column_type == 'integer') {
+        } elseif ($column_type == 'integer') {
             $item['validation_rules'] = [
                 "required" => true,
                 "type" => "number",

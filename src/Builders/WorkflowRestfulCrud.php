@@ -37,7 +37,7 @@ class WorkflowRestfulCrud
      * @param Command $command
      * @return void
      */
-    public function generate(string $name = 'TEST', array $options = [], Command $command): void
+    public function generate(string $name, array $options = [], Command $command): void
     {
         
         $this->generateCrud($name, $options, $command);

@@ -37,10 +37,9 @@ class DIBinds
     }
     
     /**
-     * @param string $name
      * @return void
      */
-    public function run(string $name = 'TEST'): void
+    public function run(): void
     {
 
         $Td_entities_workflows = $this->storage_trident->getCurrentWorkflows();

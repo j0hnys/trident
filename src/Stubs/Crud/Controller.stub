@@ -16,9 +16,9 @@ class {{Td_entity}}Controller extends Controller
      */
     protected ${{td_entity}};
 
-    public function __construct({{Td_entity}}Workflow ${{td_entity}}Workflow, {{Td_entity}}Repository ${{td_entity}}_repository)
+    public function __construct({{Td_entity}}Workflow ${{td_entity}}_workflow, {{Td_entity}}Repository ${{td_entity}}_repository)
     {
-        $this->{{td_entity}}_workflow = ${{td_entity}}Workflow;
+        $this->{{td_entity}}_workflow = ${{td_entity}}_workflow;
         $this->{{td_entity}}_repository = ${{td_entity}}_repository;
     }
 

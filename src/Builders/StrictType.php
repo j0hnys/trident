@@ -49,7 +49,7 @@ class StrictType
 
             $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStruct.stub');
 
-        } else if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['COLLECTION_STRUCT']['name']) {
+        } elseif (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['COLLECTION_STRUCT']['name']) {
             //
             //struct logic generation
             $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');
@@ -63,7 +63,7 @@ class StrictType
 
             $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicCollectionStruct.stub');
 
-        } else if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['MAP_STRUCT']['name']) {
+        } elseif (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['MAP_STRUCT']['name']) {
             //
             //struct logic generation
             $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');
@@ -77,7 +77,7 @@ class StrictType
 
             $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicMapStruct.stub');
 
-        } else if (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT_OPTIONAL']['name']) {
+        } elseif (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT_OPTIONAL']['name']) {
             //
             //struct logic generation
             $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');

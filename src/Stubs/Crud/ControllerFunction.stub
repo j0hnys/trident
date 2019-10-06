@@ -5,7 +5,7 @@
      * @param  {{Td_entity}}{{function_name}}Request
      * @return \Illuminate\Http\Response
      */
-    public function {{function_name}}({{Td_entity}}{{Function_name}}Request $request,$id)
+    public function {{function_name}}({{Td_entity}}{{Function_name}}Request $request, $id)
     {   //!!! IMPORTANT !!! -->  add "use App\Trident\Workflows\Validations\{{Td_entity}}{{Function_name}}Request;" on top of this file
         //!!! IMPORTANT !!! -->  add "use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\Struct{{Function_name}}{{Td_entity}};" on top of this file
         $this->authorize('{{function_name}}', [$this->{{td_entity}}_repository,$id]);

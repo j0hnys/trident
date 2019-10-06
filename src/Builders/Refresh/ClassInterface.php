@@ -126,7 +126,7 @@ class ClassInterface
                 if (isset($node->returnType)) {
                     if (isset($node->returnType->name)) {
                         $tmp_function->return_type = $node->returnType->name;
-                    } else if (isset($node->returnType->parts)) {
+                    } elseif (isset($node->returnType->parts)) {
                         $tmp_function->return_type = $node->returnType->parts[ count($node->returnType->parts)-1 ];
                     }
                 }
@@ -178,9 +178,9 @@ class ClassInterface
             //gia tn modifier/access
             if ($function_signature->flags == 1) {
                 $function_signature_string .= 'public ';
-            } else if ($function_signature->flags == 2) {
+            } elseif ($function_signature->flags == 2) {
                 $function_signature_string .= 'protected ';
-            } else if ($function_signature->flags == 4) {
+            } elseif ($function_signature->flags == 4) {
                 $function_signature_string .= 'private ';
             }
 
@@ -228,7 +228,7 @@ class ClassInterface
                             $tmp_type = $type->name;
                         }
                         $function_signature_parameters []= $tmp_type.' $'.$parameter->var->name;
-                    } else if (isset($parameter->var)) {
+                    } elseif (isset($parameter->var)) {
                         $function_signature_parameters []= '$'.$parameter->var->name;
                     }
                 }

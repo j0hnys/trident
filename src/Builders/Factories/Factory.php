@@ -2,7 +2,6 @@
 
 namespace j0hnys\Trident\Builders\Factories;
 
-
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Database\Eloquent\Relations\Relation;
