@@ -4,16 +4,11 @@ namespace App\Trident\Workflows\Repositories;
 
 use App\Trident\Base\Repositories\DbRepository;
 use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface;
-//use Brexis\LaravelWorkflow\Traits\WorkflowTrait;
 
 class {{Td_entity}}Repository extends DbRepository implements {{Td_entity}}RepositoryInterface
 {
-    //use WorkflowTrait;
-    
-    // needed to select appropriate data source
     public function model()
     {
         return 'App\Models\{{Td_entity}}';
     }
-
 }
