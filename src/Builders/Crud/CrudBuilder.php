@@ -32,7 +32,7 @@ class CrudBuilder
      * @param string $name
      * @return void
      */
-    public function generate(string $name = 'TEST', string $model_db_name = '', string $schema_path = ''): void
+    public function generate(string $name, string $model_db_name = '', string $schema_path = ''): void
     {
         
 

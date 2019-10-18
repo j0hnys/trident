@@ -469,13 +469,13 @@ class WorkflowFunctionProcess
 
                     if (empty($constructor_data->function_signature->lines->from)) {
                         $constructor_data->function_signature->lines->from = $constructor_arguments->var->getAttributes()['startLine'];
-                    } else if ($constructor_data->function_signature->lines->from > $constructor_arguments->var->getAttributes()['startLine']) {
+                    } elseif ($constructor_data->function_signature->lines->from > $constructor_arguments->var->getAttributes()['startLine']) {
                         $constructor_data->function_signature->lines->from = $constructor_arguments->var->getAttributes()['startLine'];
                     }
 
                     if (empty($constructor_data->function_signature->lines->to)) {
                         $constructor_data->function_signature->lines->to = $constructor_arguments->var->getAttributes()['endLine'];
-                    } else if ($constructor_data->function_signature->lines->to < $constructor_arguments->var->getAttributes()['endLine']) {
+                    } elseif ($constructor_data->function_signature->lines->to < $constructor_arguments->var->getAttributes()['endLine']) {
                         $constructor_data->function_signature->lines->to = $constructor_arguments->var->getAttributes()['endLine'];
                     }
                 }
@@ -511,7 +511,7 @@ class WorkflowFunctionProcess
                     if (isset($node->returnType)) {
                         if (isset($node->returnType->name)) {
                             $tmp_function->return_type = $node->returnType->name;
-                        } else if (isset($node->returnType->parts)) {
+                        } elseif (isset($node->returnType->parts)) {
                             $tmp_function->return_type = $node->returnType->parts[ count($node->returnType->parts)-1 ];
                         }
                     }
@@ -544,13 +544,13 @@ class WorkflowFunctionProcess
 
                         if (empty($function_data->function_signature->lines->from)) {
                             $function_data->function_signature->lines->from = $function_arguments->var->getAttributes()['startLine'];
-                        } else if ($function_data->function_signature->lines->from > $function_arguments->var->getAttributes()['startLine']) {
+                        } elseif ($function_data->function_signature->lines->from > $function_arguments->var->getAttributes()['startLine']) {
                             $function_data->function_signature->lines->from = $function_arguments->var->getAttributes()['startLine'];
                         }
 
                         if (empty($function_data->function_signature->lines->to)) {
                             $function_data->function_signature->lines->to = $function_arguments->var->getAttributes()['endLine'];
-                        } else if ($function_data->function_signature->lines->to < $function_arguments->var->getAttributes()['endLine']) {
+                        } elseif ($function_data->function_signature->lines->to < $function_arguments->var->getAttributes()['endLine']) {
                             $function_data->function_signature->lines->to = $function_arguments->var->getAttributes()['endLine'];
                         }
                     }
@@ -609,9 +609,9 @@ class WorkflowFunctionProcess
             //gia tn modifier/access
             if ($function_signature->flags == 1) {
                 $function_signature_string .= 'public ';
-            } else if ($function_signature->flags == 2) {
+            } elseif ($function_signature->flags == 2) {
                 $function_signature_string .= 'protected ';
-            } else if ($function_signature->flags == 4) {
+            } elseif ($function_signature->flags == 4) {
                 $function_signature_string .= 'private ';
             }
 
@@ -659,7 +659,7 @@ class WorkflowFunctionProcess
                             $tmp_type = $type->name;
                         }
                         $function_signature_parameters []= $tmp_type.' $'.$parameter->var->name;
-                    } else if (isset($parameter->var)) {
+                    } elseif (isset($parameter->var)) {
                         $function_signature_parameters []= '$'.$parameter->var->name;
                     }
                 }
@@ -788,7 +788,7 @@ class WorkflowFunctionProcess
                     if (isset($node->returnType)) {
                         if (isset($node->returnType->name)) {
                             $tmp_function->return_type = $node->returnType->name;
-                        } else if (isset($node->returnType->parts)) {
+                        } elseif (isset($node->returnType->parts)) {
                             $tmp_function->return_type = $node->returnType->parts[ count($node->returnType->parts)-1 ];
                         }
                     }
@@ -840,9 +840,9 @@ class WorkflowFunctionProcess
             //gia tn modifier/access
             if ($function_signature->flags == 1) {
                 $function_signature_string .= 'public ';
-            } else if ($function_signature->flags == 2) {
+            } elseif ($function_signature->flags == 2) {
                 $function_signature_string .= 'protected ';
-            } else if ($function_signature->flags == 4) {
+            } elseif ($function_signature->flags == 4) {
                 $function_signature_string .= 'private ';
             }
 
@@ -890,7 +890,7 @@ class WorkflowFunctionProcess
                             $tmp_type = $type->name;
                         }
                         $function_signature_parameters []= $tmp_type.' $'.$parameter->var->name;
-                    } else if (isset($parameter->var)) {
+                    } elseif (isset($parameter->var)) {
                         $function_signature_parameters []= '$'.$parameter->var->name;
                     }
                 }

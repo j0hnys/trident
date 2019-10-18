@@ -30,7 +30,7 @@ class Workflow
      * @param string $name
      * @return void
      */
-    public function generate(string $name = 'TEST'): void
+    public function generate(string $name): void
     {        
         //
         //workflow logic generation

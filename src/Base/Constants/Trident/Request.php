@@ -2,9 +2,9 @@
 
 namespace j0hnys\Trident\Base\Constants\Trident;
 
-use j0hnys\Trident\Base\Definition\Definition;
+use j0hnys\Definitions\Definition;
 
-class Request extends Definition
+final class Request extends Definition
 {
     const schema = [
         "type" => '{{request_type}}',
@@ -23,10 +23,7 @@ class Request extends Definition
     const request_type = [
         'json'
     ];
-
     const entity_property = 'T::string()';
-
     const laravel_validation_rule_string = 'T::string()';
-    
 }
 

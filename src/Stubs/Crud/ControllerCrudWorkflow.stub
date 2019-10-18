@@ -4,12 +4,8 @@ namespace App\Http\Controllers\Trident;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-// use Illuminate\Container\Container as App;
-// use Workflow;
 use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface as {{Td_entity}}Workflow;
 use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
-// use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
-// use App\Trident\Workflows\Events\Triggers\{{Td_entity}}Trigger;
 use App\Trident\Workflows\Validations\{{Td_entity}}StoreRequest;
 use App\Trident\Workflows\Validations\{{Td_entity}}UpdateRequest;
 use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructIndex{{Td_entity}};
@@ -29,9 +25,9 @@ class {{Td_entity}}Controller extends Controller
      */
     protected ${{td_entity}}_repository;
 
-    public function __construct({{Td_entity}}Workflow ${{td_entity}}Workflow, {{Td_entity}}Repository ${{td_entity}}_repository)
+    public function __construct({{Td_entity}}Workflow ${{td_entity}}_workflow, {{Td_entity}}Repository ${{td_entity}}_repository)
     {
-        $this->{{td_entity}}_workflow = ${{td_entity}}Workflow;
+        $this->{{td_entity}}_workflow = ${{td_entity}}_workflow;
         $this->{{td_entity}}_repository = ${{td_entity}}_repository;
     }
 

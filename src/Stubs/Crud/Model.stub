@@ -3,20 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-// use Brexis\LaravelWorkflow\Traits\WorkflowTrait;
 
 class {{Td_entity}} extends Model
 {
-    // use WorkflowTrait;
         
     protected $table = '{{db_name}}';
 
     protected $fillable = [{{fillables_comma_separated}}];
-
-
-    // public function user()
-    // {
-    //     return $this->belongsTo(\App\User::class);
-    // }
-
+    
 }

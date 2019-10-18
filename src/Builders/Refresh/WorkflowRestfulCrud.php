@@ -33,7 +33,7 @@ class WorkflowRestfulCrud
      * @param Command $command
      * @return void
      */
-    public function refresh(string $name = 'TEST', array $options = [], Command $command): void
+    public function refresh(string $name, array $options = [], Command $command): void
     {
         //new model factory
         $command->call('trident:generate:factory', [

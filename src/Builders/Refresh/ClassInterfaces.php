@@ -45,7 +45,7 @@ class ClassInterfaces
                     'relative_output_path' => 'app/Trident/Interfaces/Workflows/Logic',
                 ]);
             }
-        } else if ($type == $this->declarations::ENTITIES['BUSINESS']['name']) {
+        } elseif ($type == $this->declarations::ENTITIES['BUSINESS']['name']) {
             $business_names = $this->storage_trident->getCurrentBusinesses();
 
             foreach ($business_names as $business_name) {

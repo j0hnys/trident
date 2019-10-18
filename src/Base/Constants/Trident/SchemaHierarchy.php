@@ -2,14 +2,25 @@
 
 namespace j0hnys\Trident\Base\Constants\Trident;
 
-use j0hnys\Trident\Base\Definition\Definition;
+use j0hnys\Definitions\Definition;
 
-class SchemaHierarchy extends Definition
+final class SchemaHierarchy extends Definition
 {
-    const hierarchy = [
+    const schema = [
+        'package' => [
+            '{{command}}' => [
+                '{{builder}}' => [
+                    'stub' => '{{stub}}',
+                    'FolderStructure' => '@\j0hnys\Trident\Base\Constants\Trident\FolderStructure',
+                ]
+            ]
+        ],
         'trident' => [
             '{{entity_name}}' => [
-                'Processes',
+                'FolderStructure' => '@\j0hnys\Trident\Base\Constants\Trident\FolderStructure',
+                'Processes' => [
+                    '@\j0hnys\Trident\Base\Constants\Trident\Process',
+                ],
                 'Resource' => [
                     '@\j0hnys\Trident\Base\Constants\Trident\Functionality',
                     '@\j0hnys\Trident\Base\Constants\Trident\Request',
@@ -19,7 +30,9 @@ class SchemaHierarchy extends Definition
         ],
     ];
 
+    const command = '@\j0hnys\Trident\Console\Commands';
+    const builder = '@\j0hnys\Trident\Builders';
+    const stub = './src/Stubs/*';
     const entity_name = 'T::string()';
-    
 }
 

@@ -46,7 +46,7 @@ class Events
         $type = '';
         if ($td_entity_type == $this->declarations::ENTITIES['WORKFLOW']['name']) {
             $type = 'Workflows';
-        } else if ($td_entity_type == $this->declarations::ENTITIES['BUSINESS']['name']) {
+        } elseif ($td_entity_type == $this->declarations::ENTITIES['BUSINESS']['name']) {
             $type = 'Business';
             throw new \Exception('entity type '.$type.' is not supported at the moment');
         } else {
@@ -91,7 +91,7 @@ class Events
                 $this->storage_disk->writeFile($workflow_event_path, $stub);
             }
 
-        } else if ($event_type == $this->declarations::EVENTS['SUBSCRIBER']['name']) {
+        } elseif ($event_type == $this->declarations::EVENTS['SUBSCRIBER']['name']) {
             //
             //workflow subscriber generation
             $this->folder_structure->checkPath('app/Trident/'.$type.'/Events/Subscribers/*');

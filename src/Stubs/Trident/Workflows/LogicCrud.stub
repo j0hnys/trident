@@ -37,10 +37,10 @@ class {{Td_entity}} implements {{Td_entity}}Interface
      * @var string
      * @return void
      */
-    public function __construct({{Td_entity}}Business ${{td_entity}}Business, {{Td_entity}}Repository ${{td_entity}}Repository)
+    public function __construct({{Td_entity}}Business ${{td_entity}}_business, {{Td_entity}}Repository ${{td_entity}}_repository)
     {
-        $this->{{td_entity}}_business = ${{td_entity}}Business;
-        $this->{{td_entity}}_repository = ${{td_entity}}Repository;
+        $this->{{td_entity}}_business = ${{td_entity}}_business;
+        $this->{{td_entity}}_repository = ${{td_entity}}_repository;
     }
 
 
