@@ -5,6 +5,8 @@ The purpose of this package is to assist developers in building laravel applicat
 
 The main rationale behind this is that the code generated takes care of all the wiring and architecture enforcing that way DDD and TDD principles. This leaves developers more time to focus on implementing business logic. 
 
+**video introduction at:** https://www.youtube.com/watch?v=nMjZEMkYkNM and https://www.youtube.com/watch?v=DxAgaBFP6Rc
+
 # Installation instructions
 
 ## to add to a laravel project as a package
