@@ -1,0 +1,205 @@
+<?php
+
+namespace Tests\Trident\Workflows\Logic;
+
+use App\User;
+use App\Models\{{Td_entity}};
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class {{Td_entity}}Test extends TestCase
+{
+    use RefreshDatabase;
+
+    /**
+     * index test example.
+     *
+     * @return void
+     */
+    public function testIndex()
+    {
+        $user = factory(User::class)->create();
+        $td_entity = factory({{Td_entity}}::class)->create([
+        {{# properties }}
+            {{{property}}}
+        {{/ properties }}
+        {{^ properties }}
+            //
+        {{/ properties }}
+        ]);
+
+        $response = $this->actingAs($user)
+                         ->get('/trident/resource/{{td_entity}}')
+                         ->assertJsonFragment([
+                        {{# properties }}
+                            {{{property}}}
+                        {{/ properties }}
+                        {{^ properties }}
+                            //
+                        {{/ properties }}
+                         ]);        
+        $response->assertStatus(200);
+    }
+
+
+    /**
+     * create test example.
+     *
+     * @return void
+     */
+    public function testCreate()
+    {
+        $this->assertTrue(true);
+    }
+
+
+    /**
+     * store test example.
+     *
+     * @return void
+     */
+    public function testStore()
+    {
+        $user = factory(User::class)->create();
+        $request_body = [
+        {{# properties }}
+            {{{property}}}
+        {{/ properties }}
+        {{^ properties }}
+            //
+        {{/ properties }}
+        ];
+
+        $response = $this->actingAs($user)
+                         ->json(
+                            'POST', 
+                            '/trident/resource/{{td_entity}}', 
+                            $request_body
+                         );
+
+        $this->assertDatabaseHas('project', $request_body);
+        $response->assertStatus(200);
+    }
+
+
+    /**
+     * show test example.
+     *
+     * @return void
+     */
+    public function testShow()
+    {
+        $user = factory(User::class)->create();
+        $td_entity = factory({{Td_entity}}::class)->create([
+            'user_id' => $user->id,
+        {{# properties }}
+            {{{property}}}
+        {{/ properties }}
+        {{^ properties }}
+            //
+        {{/ properties }}
+        ]);
+
+        $response = $this->actingAs($user)
+                         ->get('/trident/resource/{{td_entity}}/'.$td_entity->id)
+                         ->assertJsonFragment([
+                        {{# properties }}
+                            {{{property}}}
+                        {{/ properties }}
+                        {{^ properties }}
+                            //
+                        {{/ properties }}
+                         ]);        
+        $response->assertStatus(200);
+    }
+
+
+    /**
+     * edit test example.
+     *
+     * @return void
+     */
+    public function testedit()
+    {
+        $this->assertTrue(true);
+    }
+
+
+    /**
+     * update test example.
+     *
+     * @return void
+     */
+    public function testUpdate()
+    {
+        $user = factory(User::class)->create();
+        $td_entity = factory({{Td_entity}}::class)->create([
+            'user_id' => $user->id
+        ]);
+        $request_body = [
+        {{# properties }}
+            {{{property}}}
+        {{/ properties }}
+        {{^ properties }}
+            //
+        {{/ properties }}
+        ];
+
+        $response = $this->actingAs($user)
+                         ->json(
+                            'PUT', 
+                            '/trident/resource/{{td_entity}}/'.$td_entity->id, 
+                            $request_body
+                         );
+        
+        $this->assertDatabaseHas('project', [
+            'user_id' => $user->id,
+        {{# properties }}
+            {{{property}}}
+        {{/ properties }}
+        {{^ properties }}
+            //
+        {{/ properties }}
+        ]);
+        $response->assertStatus(200);
+    }
+
+
+    /**
+     * destroy test example.
+     *
+     * @return void
+     */
+    public function testDestroy()
+    {
+        $user = factory(User::class)->create();
+        $td_entity = factory({{Td_entity}}::class)->create([
+            'user_id' => $user->id,
+        {{# properties }}
+            {{{property}}}
+        {{/ properties }}
+        {{^ properties }}
+            //
+        {{/ properties }}
+        ]);
+
+        $response = $this->actingAs($user)
+                         ->json(
+                            'DELETE', 
+                            '/trident/resource/{{td_entity}}/'.$td_entity->id
+                         );
+        
+        $this->assertDatabaseMissing('project', [
+            'user_id' => $user->id,
+        {{# properties }}
+            {{{property}}}
+        {{/ properties }}
+        {{^ properties }}
+            //
+        {{/ properties }}
+        ]);
+        $response->assertStatus(200);
+    }
+
+
+}
