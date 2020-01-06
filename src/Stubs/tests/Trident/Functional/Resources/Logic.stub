@@ -11,63 +11,48 @@ class {{Td_entity}}Test extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * index test example.
-     *
-     * @return void
-     */
-    public function testIndex()
+    public function testIndex(): void
     {
         $user = factory(User::class)->create();
         $td_entity = factory({{Td_entity}}::class)->create([
-        {{# properties }}
+        {{# request_properties }}
             {{{property}}}
-        {{/ properties }}
-        {{^ properties }}
+        {{/ request_properties }}
+        {{^ request_properties }}
             //
-        {{/ properties }}
+        {{/ request_properties }}
         ]);
 
         $response = $this->actingAs($user)
                          ->get('/trident/resource/{{td_entity}}')
                          ->assertJsonFragment([
-                        {{# properties }}
+                        {{# response_properties }}
                             {{{property}}}
-                        {{/ properties }}
-                        {{^ properties }}
+                        {{/ response_properties }}
+                        {{^ response_properties }}
                             //
-                        {{/ properties }}
+                        {{/ response_properties }}
                          ]);        
         $response->assertStatus(200);
     }
 
 
-    /**
-     * create test example.
-     *
-     * @return void
-     */
-    public function testCreate()
+    public function testCreate(): void
     {
         $this->assertTrue(true);
     }
 
 
-    /**
-     * store test example.
-     *
-     * @return void
-     */
-    public function testStore()
+    public function testStore(): void
     {
         $user = factory(User::class)->create();
         $request_body = [
-        {{# properties }}
+        {{# request_properties }}
             {{{property}}}
-        {{/ properties }}
-        {{^ properties }}
+        {{/ request_properties }}
+        {{^ request_properties }}
             //
-        {{/ properties }}
+        {{/ request_properties }}
         ];
 
         $response = $this->actingAs($user)
@@ -82,67 +67,52 @@ class {{Td_entity}}Test extends TestCase
     }
 
 
-    /**
-     * show test example.
-     *
-     * @return void
-     */
-    public function testShow()
+    public function testShow(): void
     {
         $user = factory(User::class)->create();
         $td_entity = factory({{Td_entity}}::class)->create([
             'user_id' => $user->id,
-        {{# properties }}
+        {{# request_properties }}
             {{{property}}}
-        {{/ properties }}
-        {{^ properties }}
+        {{/ request_properties }}
+        {{^ request_properties }}
             //
-        {{/ properties }}
+        {{/ request_properties }}
         ]);
 
         $response = $this->actingAs($user)
                          ->get('/trident/resource/{{td_entity}}/'.$td_entity->id)
                          ->assertJsonFragment([
-                        {{# properties }}
+                        {{# response_properties }}
                             {{{property}}}
-                        {{/ properties }}
-                        {{^ properties }}
+                        {{/ response_properties }}
+                        {{^ response_properties }}
                             //
-                        {{/ properties }}
+                        {{/ response_properties }}
                          ]);        
         $response->assertStatus(200);
     }
 
 
-    /**
-     * edit test example.
-     *
-     * @return void
-     */
-    public function testedit()
+    public function testEdit(): void
     {
         $this->assertTrue(true);
     }
 
 
-    /**
-     * update test example.
-     *
-     * @return void
-     */
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $user = factory(User::class)->create();
         $td_entity = factory({{Td_entity}}::class)->create([
             'user_id' => $user->id
         ]);
         $request_body = [
-        {{# properties }}
+        {{# request_properties }}
             {{{property}}}
-        {{/ properties }}
-        {{^ properties }}
+        {{/ request_properties }}
+        {{^ request_properties }}
             //
-        {{/ properties }}
+        {{/ request_properties }}
         ];
 
         $response = $this->actingAs($user)
@@ -154,33 +124,28 @@ class {{Td_entity}}Test extends TestCase
         
         $this->assertDatabaseHas('project', [
             'user_id' => $user->id,
-        {{# properties }}
+        {{# request_properties }}
             {{{property}}}
-        {{/ properties }}
-        {{^ properties }}
+        {{/ request_properties }}
+        {{^ request_properties }}
             //
-        {{/ properties }}
+        {{/ request_properties }}
         ]);
         $response->assertStatus(200);
     }
 
 
-    /**
-     * destroy test example.
-     *
-     * @return void
-     */
-    public function testDestroy()
+    public function testDestroy(): void
     {
         $user = factory(User::class)->create();
         $td_entity = factory({{Td_entity}}::class)->create([
             'user_id' => $user->id,
-        {{# properties }}
+        {{# request_properties }}
             {{{property}}}
-        {{/ properties }}
-        {{^ properties }}
+        {{/ request_properties }}
+        {{^ request_properties }}
             //
-        {{/ properties }}
+        {{/ request_properties }}
         ]);
 
         $response = $this->actingAs($user)
@@ -191,12 +156,12 @@ class {{Td_entity}}Test extends TestCase
         
         $this->assertDatabaseMissing('project', [
             'user_id' => $user->id,
-        {{# properties }}
+        {{# request_properties }}
             {{{property}}}
-        {{/ properties }}
-        {{^ properties }}
+        {{/ request_properties }}
+        {{^ request_properties }}
             //
-        {{/ properties }}
+        {{/ request_properties }}
         ]);
         $response->assertStatus(200);
     }

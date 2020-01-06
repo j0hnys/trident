@@ -5,8 +5,8 @@ namespace j0hnys\Trident\Builders\Tests;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 use j0hnys\Trident\Base\Constants\Trident\Functionality;
-use j0hnys\Trident\Base\Constants\Trident\Request;
-use j0hnys\Trident\Base\Constants\Trident\Response;
+use j0hnys\Trident\Base\Constants\Trident\Tests\Request;
+use j0hnys\Trident\Base\Constants\Trident\Tests\Response;
 
 class WorkflowRestfulCrud
 {
@@ -57,61 +57,6 @@ class WorkflowRestfulCrud
             }
         }
 
-
-        //
-        //
-        //
-        $request_schema = [
-            "type" => 'json',
-            "data" => [
-                "id" => [
-                    'property' => 'auto_id',
-                    'type' => 'T::nullable(T::integer())',
-                    'validation' => [
-                        'rule' => 'required | integer',
-                        'message' => 'field 1 is required',
-                    ],
-                    'fillable' => true,
-                ],
-                "user_id" => [
-                    'property' => 'auto_id',
-                    'type' => 'T::nullable(T::integer())',
-                    'validation' => [
-                        'rule' => 'integer',
-                        'message' => 'field 1 is required',
-                    ],
-                    'fillable' => true,
-                ],
-                "name" => [
-                    'type' => 'T::nullable(T::string())',
-                    'validation' => [
-                        'rule' => 'required | string',
-                        'message' => 'field 1 is required',
-                    ],
-                    'fillable' => true,
-                ],
-                "root_folder" => [
-                    'type' => 'T::nullable(T::string())',
-                    'validation' => [
-                        'rule' => 'required | string',
-                        'message' => 'field 1 is required',
-                    ],
-                    'fillable' => true,
-                ],
-                "relative_schemas_folder" => [
-                    'type' => 'T::nullable(T::string())',
-                    'validation' => [
-                        'rule' => 'required | string',
-                        'message' => 'field 1 is required',
-                    ],
-                    'fillable' => true,
-                ],
-            ],
-        ];
-        //
-        //
-        //
-
         
         //
         //restful crud test generation
@@ -125,20 +70,41 @@ class WorkflowRestfulCrud
 
             $stub = str_replace('{{Td_entity}}', $name, $stub);
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
-            $properties = [];
+            $request_properties = [];
             if (!empty($request_schema)) {
                 foreach ($request_schema['data'] as $key => $data) {
-                    if (!isset($data['property']) || (isset($data['property']) && $data['property'] != 'auto_id')) {
-                        if (strpos($data['type'], 'string') !== false) {
-                            $properties []= [
-                                'property' => '\''.$key.'\' => \''.$data['type'].'\','
+                    if ($data['property_type'] != 'auto_id') {
+                        if (is_string($data['value'])) {
+                            $request_properties []= [
+                                'property' => '\''.$key.'\' => \''.$data['value'].'\','
                             ];
-                        } else if (strpos($data['type'], 'bool') !== false) {
-                            $properties []= [
-                                'property' => '\''.$key.'\' => '.($data['type'] ? 'true' : 'false').','
+                        } else if (is_bool($data['value'])) {
+                            $request_properties []= [
+                                'property' => '\''.$key.'\' => '.($data['value'] ? 'true' : 'false').','
                             ];
                         } else {
-                            $properties []= [
+                            $request_properties []= [
+                                'property' => '\''.$key.'\' => '.'2'.','
+                            ];
+                        }
+                    }
+                }
+            }
+
+            $response_properties = [];
+            if (!empty($request_schema)) {
+                foreach ($request_schema['data'] as $key => $data) {
+                    if ($data['property_type'] != 'auto_id') {
+                        if (is_string($data['value'])) {
+                            $response_properties []= [
+                                'property' => '\''.$key.'\' => \''.$data['value'].'\','
+                            ];
+                        } else if (is_bool($data['value'])) {
+                            $response_properties []= [
+                                'property' => '\''.$key.'\' => '.($data['value'] ? 'true' : 'false').','
+                            ];
+                        } else {
+                            $response_properties []= [
                                 'property' => '\''.$key.'\' => '.'2'.','
                             ];
                         }
@@ -146,7 +112,8 @@ class WorkflowRestfulCrud
                 }
             }
             $stub = $this->mustache->render($stub, [
-                'properties' => $properties,
+                'request_properties' => $request_properties,
+                'response_properties' => $response_properties,
             ]);
             
             $this->storage_disk->writeFile($workflow_restful_crud_logic_test_path, $stub);
