@@ -1,0 +1,13 @@
+{
+    "type": "json",
+    "data": {
+        "name": {
+            "property_type": "default",
+            "value": "name"
+        },
+        "value": {
+            "property_type": "default",
+            "value": "value"
+        }
+    }
+}

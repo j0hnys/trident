@@ -99,6 +99,11 @@ final class FolderStructure extends Definition
         'routes' => 'trident.php',
         'tests' => [
             'Trident' => [
+                'Functional' => [
+                    'Resource' => [
+                        'Logic' => 'T::string()',
+                    ],
+                ],
                 'Business' => [
                     'Logic' => 'T::string()',
                 ],
