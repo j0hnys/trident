@@ -26,7 +26,7 @@ class GenerateWorkflowRestfulCrudTests extends Command
      */
     private $workflow;
 
-    public function __construct(Tests\Workflow $workflow = null)
+    public function __construct(Tests\WorkflowRestfulCrud $workflow = null)
     {
         parent::__construct();
 

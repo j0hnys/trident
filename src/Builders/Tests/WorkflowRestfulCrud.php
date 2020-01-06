@@ -84,7 +84,7 @@ class WorkflowRestfulCrud
                             ];
                         } else {
                             $request_properties []= [
-                                'property' => '\''.$key.'\' => '.'2'.','
+                                'property' => '\''.$key.'\' => '.$data['value'].','
                             ];
                         }
                     }
@@ -105,7 +105,7 @@ class WorkflowRestfulCrud
                             ];
                         } else {
                             $response_properties []= [
-                                'property' => '\''.$key.'\' => '.'2'.','
+                                'property' => '\''.$key.'\' => '.$data['value'].','
                             ];
                         }
                     }
