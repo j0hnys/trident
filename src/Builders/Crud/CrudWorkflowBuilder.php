@@ -106,23 +106,25 @@ class CrudWorkflowBuilder
 
         //
         //update resource routes
+        $this->folder_structure->checkPath('routes/trident.php');
+        $trident_resource_routes_path = $this->storage_disk->getBasePath() . '/routes/trident.php';
         $Td_entities_workflows = $this->storage_trident->getCurrentControllers();
-
         $workflows = array_map(function ($element) {
             return [
                 'Td_entity' => ucfirst($element),
                 'td_entity' => lcfirst($element),
             ];
         }, $Td_entities_workflows);
+        
+        if (!$this->storage_disk->fileExists($trident_resource_routes_path)) {
+            $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/routes/trident.stub');
+            $stub = $this->mustache->render($stub, [
+                'register_resource_routes' => $workflows,
+            ]);
+            
+            $this->storage_disk->writeFile($trident_resource_routes_path, $stub);
+        }
 
-        $this->folder_structure->checkPath('routes/trident.php');
-        $trident_resource_routes_path = $this->storage_disk->getBasePath() . '/routes/trident.php';
-        $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/routes/trident.stub');
-        $stub = $this->mustache->render($stub, [
-            'register_resource_routes' => $workflows,
-        ]);
-
-        $this->storage_disk->writeFile($trident_resource_routes_path, $stub);
 
         //
         //update trident auth provider

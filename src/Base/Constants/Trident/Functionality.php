@@ -12,6 +12,14 @@ final class Functionality extends Definition
         ],
     ];
 
+    const endpoint = [
+        "endpoint" => [
+            "uri" => "T::string()",
+            "group" => "{{endpoint_group}}",
+            "type" => "{{endpoint_type}}"
+        ]
+    ];
+
     const workflow = [
         'workflow' => [
             "type" => "{{workflow_type}}",
@@ -38,5 +46,12 @@ final class Functionality extends Definition
     ];
     const workflow_transition = 'T::string()';
     const workflow_transition_listener = 'T::string()';
+
+    const endpoint_type = [
+        'create', 'read', 'update', 'delete'
+    ];
+    const endpoint_group = [
+        '', 'auth'
+    ];
 }
 
