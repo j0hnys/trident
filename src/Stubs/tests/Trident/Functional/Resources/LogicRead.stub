@@ -1,0 +1,27 @@
+    public function test{{function_name}}(): void
+    {
+        $user = factory(User::class)->create();
+        $td_entity = factory({{Td_entity}}::class)->create([
+            'user_id' => $user->id,
+        {{# request_properties }}
+            {{{property}}}
+        {{/ request_properties }}
+        {{^ request_properties }}
+            //
+        {{/ request_properties }}
+        ]);
+
+        $response = $this->actingAs($user)
+                            ->get('{{endpoint_uri}}/'.$td_entity->id)
+                            ->assertJsonFragment([
+                        {{# response_properties }}
+                            {{{property}}}
+                        {{/ response_properties }}
+                        {{^ response_properties }}
+                            //
+                        {{/ response_properties }}
+                            ]);        
+        $response->assertStatus(200);
+    }
+
+}

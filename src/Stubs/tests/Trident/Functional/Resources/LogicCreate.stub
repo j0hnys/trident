@@ -1,0 +1,24 @@
+    public function test{{function_name}}(): void
+    {
+        $user = factory(User::class)->create();
+        $request_body = [
+        {{# request_properties }}
+            {{{property}}}
+        {{/ request_properties }}
+        {{^ request_properties }}
+            //
+        {{/ request_properties }}
+        ];
+
+        $response = $this->actingAs($user)
+                            ->json(
+                            'POST', 
+                            '{{endpoint_uri}}', 
+                            $request_body
+                            );
+
+        $this->assertDatabaseHas('{{model_db_name}}', $request_body);
+        $response->assertStatus(200);
+    }
+
+}
