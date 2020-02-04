@@ -28,4 +28,3 @@
         ]);
         $response->assertStatus(200);
     }
-

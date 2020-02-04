@@ -20,4 +20,3 @@
         $this->assertDatabaseHas('{{model_db_name}}', $request_body);
         $response->assertStatus(200);
     }
-

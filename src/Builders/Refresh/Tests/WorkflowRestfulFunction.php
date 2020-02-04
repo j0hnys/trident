@@ -139,7 +139,7 @@ class WorkflowRestfulFunction
         }
         $lines = array_values($lines);
 
-        array_splice($lines, $start_line, 0, $stub);        
+        array_splice($lines, $start_line, 0, $stub);
 
         
         //

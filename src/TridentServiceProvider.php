@@ -33,6 +33,7 @@ use j0hnys\Trident\Console\Commands\RefreshClassInterface;
 use j0hnys\Trident\Console\Commands\RefreshClassInterfaces;
 use j0hnys\Trident\Console\Commands\RefreshWorkflowRestfulCrud;
 use j0hnys\Trident\Console\Commands\RefreshWorkflowLogicFunction;
+use j0hnys\Trident\Console\Commands\RefreshWorkflowRestfulCrudTests;
 use j0hnys\Trident\Console\Commands\RefreshWorkflowRestfulFunctionTest;
 use j0hnys\Trident\Console\Commands\RemoveEntity;
 use j0hnys\Trident\Console\Commands\RemoveEntityFunction;
@@ -155,6 +156,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident:refresh:workflow_logic_function', function ($app) {
             return new RefreshWorkflowLogicFunction();
         });
+        $this->app->singleton('trident:refresh:workflow_restful_crud_tests', function ($app) {
+            return new RefreshWorkflowRestfulCrudTests();
+        });
         $this->app->singleton('trident:refresh:workflow_restful_function_test', function ($app) {
             return new RefreshWorkflowRestfulFunctionTest();
         });
@@ -200,6 +204,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident:refresh:class_interfaces',
             'trident:refresh:workflow_restful_crud',
             'trident:refresh:workflow_logic_function',
+            'trident:refresh:workflow_restful_crud_tests',
             'trident:refresh:workflow_restful_function_test',
             'trident:remove:entity',
             'trident:remove:entity_function',
