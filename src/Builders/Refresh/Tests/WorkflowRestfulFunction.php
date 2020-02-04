@@ -1,7 +1,10 @@
 <?php
 
-namespace j0hnys\Trident\Builders\Tests;
+namespace j0hnys\Trident\Builders\Refresh\Tests;
 
+use PhpParser\Error;
+use PhpParser\ParserFactory;
+use PhpParser\{Node, NodeFinder};
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 use j0hnys\Trident\Base\Constants\Trident\Functionality;
@@ -30,7 +33,7 @@ class WorkflowRestfulFunction
      * @param string $name
      * @return void
      */
-    public function generate(string $name, string $function_name, array $options = []): void
+    public function refresh(string $name, string $function_name, array $options = []): void
     {
         $this->folder_structure->checkPath('tests/Trident/Functional/Resource/*');
         $workflow_restful_crud_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Functional/Resource/'.$name.'Test.php';
@@ -64,13 +67,13 @@ class WorkflowRestfulFunction
         //restful function test generation
         $stub = '';
         if ($functionality_schema['endpoint']['type'] == 'create') {
-            $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Functional/Resources/LogicCreate.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../../Stubs/tests/Trident/Functional/Resources/LogicCreate.stub');
         } else if ($functionality_schema['endpoint']['type'] == 'read') {
-            $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Functional/Resources/LogicRead.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../../Stubs/tests/Trident/Functional/Resources/LogicRead.stub');
         } else if ($functionality_schema['endpoint']['type'] == 'update') {
-            $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Functional/Resources/LogicUpdate.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../../Stubs/tests/Trident/Functional/Resources/LogicUpdate.stub');
         } else if ($functionality_schema['endpoint']['type'] == 'delete') {
-            $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Functional/Resources/LogicDelete.stub');
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../../Stubs/tests/Trident/Functional/Resources/LogicDelete.stub');
         }
 
         $stub = str_replace('{{Td_entity}}', $name, $stub);
@@ -123,23 +126,70 @@ class WorkflowRestfulFunction
 
 
         //
-        //removing end "}" from file
-        $lines = $this->storage_disk->readFileArray($workflow_restful_crud_logic_test_path); 
-        $last = sizeof($lines) - 1; 
-        unset($lines[$last]);
-        $this->storage_disk->writeFileArray($workflow_restful_crud_logic_test_path, $lines); 
+        //replace function in code with new
+        $code = $this->storage_disk->readFile($workflow_restful_crud_logic_test_path);
+        $result = $this->getClassFunction($code, 'test'.$function_name);
+        $start_line = $result->objects->function_signatures->line_span->start - 1;
+        $end_line = $result->objects->function_signatures->line_span->end - 1;
 
+        $lines = $this->storage_disk->readFileArray($workflow_restful_crud_logic_test_path); 
+        
+        for ($i=$start_line; $i<=$end_line; $i++) { 
+            unset($lines[$i]);
+        }
+        $lines = array_values($lines);
+
+        array_splice($lines, $start_line, 0, $stub);        
+
+        
         //
         //write new test function
-        $this->storage_disk->writeFile($workflow_restful_crud_logic_test_path, $stub, [
-            'append_file' => true
-        ]);
+        $this->storage_disk->writeFileArray($workflow_restful_crud_logic_test_path, $lines); 
+    }
 
-        //
-        //adding end "}"
-        $this->storage_disk->writeFile($workflow_restful_crud_logic_test_path, '}', [
-            'append_file' => true
-        ]);
+    /**
+     * @param string $code
+     * @return Object
+     */
+    public function getClassFunction(string $code, string $function_name): Object
+    {
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        try {
+            $ast = $parser->parse($code);
+        } catch (Error $error) {
+            echo "Parse error: {$error->getMessage()}\n";
+            return (object)[];
+        }
+
+        $analysis_result = (object)[
+            'functions_signature' => [],
+        ];
+
+        $nodeFinder = new NodeFinder;
+        $nodeFinder->find($ast, function(Node $node) use (&$analysis_result, $function_name){
+            if ($node instanceof Node\Stmt\ClassMethod) {
+                $tmp_function = (object)[
+                    'flags' => $node->flags,  //dld public (1), protected (2), private (4), e.t.c.
+                    'name' => $node->name,
+                ];
+
+                if ($node->name == $function_name) {
+                    $tmp_function->line_span = (object)[
+                        'start' => $node->getStartLine(),
+                        'end' => $node->getEndLine(),
+                    ];
+
+                    $analysis_result->functions_signature = $tmp_function;
+                }                
+            }
+
+        });        
+
+        return (object)[
+            'objects' => (object)[
+                'function_signatures' => $analysis_result->functions_signature,
+            ]
+        ];
     }
     
 }
