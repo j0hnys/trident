@@ -104,8 +104,31 @@ class GenerateWorkflowLogicFunctionTest extends TestCase
     public function testGenerateLogicFunction()
     {
         $function_name = 'otinanai';
+        $options = [
+            'functionality_schema_path' => '',
+            'validation_schema_path' => '',
+            'strict_type_schema_path' => '',
+            'resource_schema_path' => '',
+        ];
 
-        $this->workflow_logic_function->generateLogicFunction($this->td_entity_name, $function_name);
+        $this->workflow_logic_function->generateLogicFunction($this->td_entity_name, $function_name, $options);
+
+        $this->assertTrue(true);
+    }
+
+
+    public function testUpdateRoutes()
+    {
+        $function_name = 'otinanai';
+        $functionality_schema_path = [
+            'endpoint' => [
+                'uri' => '/a',
+                'type' => 'read',
+                'group' => 'auth'
+            ]
+        ];
+
+        $this->workflow_logic_function->updateRoutes($this->td_entity_name, $function_name, $functionality_schema_path);
 
         $this->assertTrue(true);
     }

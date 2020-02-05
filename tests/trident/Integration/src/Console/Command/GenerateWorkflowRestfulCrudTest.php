@@ -133,6 +133,16 @@ class GenerateWorkflowRestfulCrudTest extends TestCase
     }
 
 
+    public function testUpdateRoutes()
+    {
+        $td_entity_name = 'DemoProcess';
+
+        $this->workflow_restful_crud->updateRoutes($td_entity_name);
+
+        $this->assertTrue(true);
+    }
+
+
     public function testGenerate_()
     {
         $td_entity_name = 'DemoProcess';
