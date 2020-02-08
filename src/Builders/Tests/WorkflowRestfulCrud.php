@@ -70,6 +70,7 @@ class WorkflowRestfulCrud
 
             $stub = str_replace('{{Td_entity}}', $name, $stub);
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{model_db_name}}', $model_db_name, $stub);
             $request_properties = [];
             if (!empty($request_schema)) {
                 foreach ($request_schema['data'] as $key => $data) {

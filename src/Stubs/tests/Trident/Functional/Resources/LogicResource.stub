@@ -49,7 +49,7 @@
                             $request_body
                          );
 
-        $this->assertDatabaseHas('project', $request_body);
+        $this->assertDatabaseHas('{{model_db_name}}', $request_body);
         $response->assertStatus(200);
     }
 
@@ -109,7 +109,7 @@
                             $request_body
                          );
         
-        $this->assertDatabaseHas('project', [
+        $this->assertDatabaseHas('{{model_db_name}}', [
             'user_id' => $user->id,
         {{# request_properties }}
             {{{property}}}
@@ -141,7 +141,7 @@
                             '/trident/resource/{{td_entity}}/'.$td_entity->id
                          );
         
-        $this->assertDatabaseMissing('project', [
+        $this->assertDatabaseMissing('{{model_db_name}}', [
             'user_id' => $user->id,
         {{# request_properties }}
             {{{property}}}
