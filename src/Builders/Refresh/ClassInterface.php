@@ -3,7 +3,6 @@
 namespace j0hnys\Trident\Builders\Refresh;
 
 use PhpParser\Error;
-use PhpParser\NodeDumper;
 use PhpParser\ParserFactory;
 use PhpParser\{Node, NodeFinder};
 
