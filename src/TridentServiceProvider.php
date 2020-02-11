@@ -16,6 +16,7 @@ use j0hnys\Trident\Console\Commands\GenerateWorkflowRestfulCrud;
 use j0hnys\Trident\Console\Commands\GenerateWorkflowRestfulCrudTests;
 use j0hnys\Trident\Console\Commands\GenerateWorkflowRestfulFunctionTest;
 use j0hnys\Trident\Console\Commands\GenerateFactory;
+use j0hnys\Trident\Console\Commands\GenerateFactories;
 use j0hnys\Trident\Console\Commands\Install;
 use j0hnys\Trident\Console\Commands\SetupTests;
 use j0hnys\Trident\Console\Commands\GenerateStrictType;
@@ -106,6 +107,9 @@ class TridentServiceProvider extends ServiceProvider
         $this->app->singleton('trident:generate:factory', function ($app) {
             return new GenerateFactory();
         });
+        $this->app->singleton('trident:generate:factories', function ($app) {
+            return new GenerateFactories();
+        });
         $this->app->singleton('trident:install', function ($app) {
             return new Install();
         });
@@ -191,6 +195,7 @@ class TridentServiceProvider extends ServiceProvider
             'trident:generate:workflow_restful_crud_tests',
             'trident:generate:workflow_restful_function_test',
             'trident:generate:factory',
+            'trident:generate:factories',
             'trident:generate:validation',
             'trident:generate:strict_type',
             'trident:generate:exception',

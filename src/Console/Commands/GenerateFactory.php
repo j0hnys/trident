@@ -45,14 +45,11 @@ class GenerateFactory extends Command
     {
         try {
             $model = $this->argument('model');
-            $force = $this->option('force');
+            $force = $this->option('force');            
             
-            
-            $crud = $this->factory->generate($this->laravel, $model, $force);
-            
+            $crud = $this->factory->generate($this->laravel, $model, $force);            
 
-            $this->info($model.' factory successfully created');
-            
+            $this->info($model.' factory successfully created');            
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
         }
