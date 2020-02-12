@@ -48,7 +48,7 @@ class GenerateFactories extends Command
             
             $crud = $this->factories->generate($this->laravel, $this, $force);            
 
-            $this->info($model.' factories successfully created!');            
+            $this->info('factories successfully created!');            
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
         }
