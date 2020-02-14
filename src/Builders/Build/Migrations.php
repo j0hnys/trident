@@ -27,9 +27,9 @@ class Migrations
     public function generate(?string $output_path, Command $command): void
     {
         $this->folder_structure->checkPath('database/generated_migrations/');
-        $output_path = !empty($output_path) ? $output_path : $this->storage_disk->getBasePath().'/database/generated_migrations/';
-            
-        $this->storage_disk->makeDirectory($output_path);
+        $output_path = !empty($output_path) ? $output_path : $this->storage_disk->getBasePath().'/database/generated_migrations';
+        
+        $this->storage_disk->makeDirectory($output_path.'/*');
         
         //new validation class
         $command->call('migrate:generate', [

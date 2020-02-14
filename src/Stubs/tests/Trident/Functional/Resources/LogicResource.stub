@@ -1,16 +1,3 @@
-<?php
-
-namespace Tests\Trident\Workflows\Logic;
-
-use App\User;
-use App\Models\{{Td_entity}};
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-class {{Td_entity}}Test extends TestCase
-{
-    use RefreshDatabase;
-
     public function testIndex(): void
     {
         $user = factory(User::class)->create();
@@ -168,6 +155,3 @@ class {{Td_entity}}Test extends TestCase
         ]);
         $response->assertStatus(200);
     }
-
-
-}

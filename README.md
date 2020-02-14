@@ -288,35 +288,39 @@ So in this example the `TestEntityController` calls `TestEntity` from workflow w
 
 | Command | Description | Parameters |
 |---|---|---|
-trident:build:migrations                      | Create all migrations from current database connection | {--output-path=}
-trident:build:model_exports                   | Create all model exports from current models | {--output-path=}
-trident:build:models                          | Create all models from current database connection | {--output-path=}
-trident:export:model                          | export a models schema | {entity_name} {--output-path=}
-trident:generate:business_logic_function      | Create a business logic function | {entity_name} {function_name}
-trident:generate:controller_function          | Create a controller function | {entity_name} {function_name}
-trident:generate:events                       | Create an event | {td_entity_type} {event_type} {td_entity_name}
-trident:generate:exception                    | Create an exception | {td_entity_type} {td_entity_name}
-trident:generate:factory                      | Create a factory for a model | {model} {--force}
-trident:generate:policy_function              | Create a policy function | {entity_name} {function_name}
-trident:generate:process                      | Create a process | {td_entity_name} {process_name} {schema_path}
-trident:generate:resources                    | Create resources for restful entity | {entity_name} {--collection} {--workflow} {--schema_path=} {--force}
-trident:generate:resource                     | Create a resource | {entity_name} {function_name} {--collection} {--workflow} {--schema_path=} {--force}
-trident:generate:restful_crud                 | Create a RESTFUL CRUD | {name} {--model_db_name=} {--schema_path=}
-trident:generate:strict_type                  | Create a strict type | {strict_type_name} {function_name} {entity_name} {--workflow} {--schema_path=} {--force}
-trident:generate:validation                   | Create a validation | {entity_name} {function_name} {--schema_path=} {--force}
-trident:generate:workflow                     | Create a workflow | {name}
-trident:generate:workflow_function_process    | Create a workflow function process from existing workflow function | {entity_name} {type} {function_name} {schema_path}
-trident:generate:workflow_logic_function      | Create a workflow logic function | {entity_name} {function_name}
-trident:generate:workflow_restful_crud        | Create a workflow with the accompanied restful crud | {name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=}
-trident:generate:workflow_test_logic_function | Create workflow test logic function | {entity_name} {function_name}
-trident:generate:workflow_tests               | Create workflow tests | {name}
-trident:install                               | Trident installer | -
-trident:refresh:class_interface               | Refreshes the interface that a class implements according to class functions | {name} {relative_input_path} {relative_output_path}
-trident:refresh:class_interfaces              | Refreshes all the interfaces from the classes of a specific type/folder | {td_entity_type}
-trident:refresh:di_binds                      | Refreshes DI containers binds | -
-trident:refresh:workflow_logic_function       | Refresh a workflow logic function | {entity_name} {function_name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=}
-trident:refresh:workflow_restful_crud         | Refresh a workflow with the accompanied restful crud | {name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=}
-trident:remove:entity                         | Removes trident entity completely or a part. | {td_entity_name}
-trident:remove:entity_function                | Removes trident entity's function with the structures connected to it. | {entity_name} {function_name}
-trident:setup:tests                           | Trident test setup | -
+trident:build:migrations                        | Create all migrations from current database connection | {--output-path=}
+trident:build:model_exports                     | Create all model exports from current models | {--output-path=}
+trident:build:models                            | Create all models from current database connection | {--output-path=}
+trident:export:model                            | export a models schema | {entity_name} {--output-path=}
+trident:generate:business_logic_function        | Create a business logic function | {entity_name} {function_name}
+trident:generate:controller_function            | Create a controller function | {entity_name} {function_name}
+trident:generate:events                         | Create an event | {td_entity_type} {event_type} {td_entity_name}
+trident:generate:exception                      | Create an exception | {td_entity_type} {td_entity_name}
+trident:generate:factory                        | Create a factory for a model | {model} {--force}
+trident:generate:policy_function                | Create a policy function | {entity_name} {function_name}
+trident:generate:process                        | Create a process | {td_entity_name} {process_name} {schema_path}
+trident:generate:resources                      | Create resources for restful entity | {entity_name} {--collection} {--workflow} {--schema_path=} {--force}
+trident:generate:resource                       | Create a resource | {entity_name} {function_name} {--collection} {--workflow} {--schema_path=} {--force}
+trident:generate:restful_crud                   | Create a RESTFUL CRUD | {name} {--model_db_name=} {--schema_path=}
+trident:generate:strict_type                    | Create a strict type | {strict_type_name} {function_name} {entity_name} {--workflow} {--schema_path=} {--force}
+trident:generate:validation                     | Create a validation | {entity_name} {function_name} {--schema_path=} {--force}
+trident:generate:workflow                       | Create a workflow | {name}
+trident:generate:workflow_function_process      | Create a workflow function process from existing workflow function | {entity_name} {type} {function_name} {schema_path}
+trident:generate:workflow_logic_function        | Create a workflow logic function | {entity_name} {function_name}
+trident:generate:workflow_restful_crud          | Create a workflow with the accompanied restful crud | {name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=}
+trident:generate:workflow_restful_crud_tests    |  Create workflow restful crud tests | {name} {--functionality_schema_path=} {--request_schema_path=} {--response_schema_path=}
+trident:generate:workflow_restful_function_test | Create a restful function test | {entity_name} {function_name} {--functionality_schema_path=} {--request_schema_path=} {--response_schema_path=}
+trident:generate:workflow_test_logic_function   | Create workflow test logic function | {entity_name} {function_name}
+trident:generate:workflow_tests                 | Create workflow tests | {name}
+trident:install                                 | Trident installer | -
+trident:refresh:class_interface                 | Refreshes the interface that a class implements according to class functions | {name} {relative_input_path} {relative_output_path}
+trident:refresh:class_interfaces                | Refreshes all the interfaces from the classes of a specific type/folder | {td_entity_type}
+trident:refresh:di_binds                        | Refreshes DI containers binds | -
+trident:refresh:workflow_logic_function         | Refresh a workflow logic function | {entity_name} {function_name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=}
+trident:refresh:workflow_restful_crud           | Refresh a workflow with the accompanied restful crud | {name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=}
+trident:refresh:workflow_restful_crud_tests     | Refresh workflow restful crud tests | {name} {--functionality_schema_path=} {--request_schema_path=} {--response_schema_path=}
+trident:refresh:workflow_restful_function_test  | Refresh a restful function test | {entity_name} {function_name} {--functionality_schema_path=} {--request_schema_path=} {--response_schema_path=}
+trident:remove:entity                           | Removes trident entity completely or a part. | {td_entity_name}
+trident:remove:entity_function                  | Removes trident entity's function with the structures connected to it. | {entity_name} {function_name}
+trident:setup:tests                             | Trident test setup | -
 

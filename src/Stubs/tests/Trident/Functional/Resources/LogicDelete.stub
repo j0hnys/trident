@@ -1,0 +1,30 @@
+    public function test{{function_name}}(): void
+    {
+        $user = factory(User::class)->create();
+        $td_entity = factory({{Td_entity}}::class)->create([
+            'user_id' => $user->id,
+        {{# request_properties }}
+            {{{property}}}
+        {{/ request_properties }}
+        {{^ request_properties }}
+            //
+        {{/ request_properties }}
+        ]);
+
+        $response = $this->actingAs($user)
+                            ->json(
+                            'DELETE', 
+                            '{{endpoint_uri}}/'.$td_entity->id
+                            );
+        
+        $this->assertDatabaseMissing('{{model_db_name}}', [
+            'user_id' => $user->id,
+        {{# request_properties }}
+            {{{property}}}
+        {{/ request_properties }}
+        {{^ request_properties }}
+            //
+        {{/ request_properties }}
+        ]);
+        $response->assertStatus(200);
+    }

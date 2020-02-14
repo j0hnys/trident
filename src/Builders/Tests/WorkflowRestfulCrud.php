@@ -70,50 +70,79 @@ class WorkflowRestfulCrud
 
             $stub = str_replace('{{Td_entity}}', $name, $stub);
             $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{model_db_name}}', $model_db_name, $stub);
             $request_properties = [];
             if (!empty($request_schema)) {
                 foreach ($request_schema['data'] as $key => $data) {
                     if ($data['property_type'] != 'auto_id') {
                         if (is_string($data['value'])) {
                             $request_properties []= [
-                                'property' => '\''.$key.'\' => \''.$data['value'].'\','
+                                'property' => '\''.$key.'\' => \''.$data['value'].'\',',
+                                'property_type' => $data['property_type'],
                             ];
                         } else if (is_bool($data['value'])) {
                             $request_properties []= [
-                                'property' => '\''.$key.'\' => '.($data['value'] ? 'true' : 'false').','
+                                'property' => '\''.$key.'\' => '.($data['value'] ? 'true' : 'false').',',
+                                'property_type' => $data['property_type'],
                             ];
                         } else {
                             $request_properties []= [
-                                'property' => '\''.$key.'\' => '.$data['value'].','
+                                'property' => '\''.$key.'\' => '.$data['value'].',',
+                                'property_type' => $data['property_type'],
                             ];
                         }
                     }
                 }
             }
-
+    
             $response_properties = [];
             if (!empty($request_schema)) {
                 foreach ($request_schema['data'] as $key => $data) {
                     if ($data['property_type'] != 'auto_id') {
                         if (is_string($data['value'])) {
                             $response_properties []= [
-                                'property' => '\''.$key.'\' => \''.$data['value'].'\','
+                                'property' => '\''.$key.'\' => \''.$data['value'].'\',',
+                                'property_type' => $data['property_type'],
                             ];
                         } else if (is_bool($data['value'])) {
                             $response_properties []= [
-                                'property' => '\''.$key.'\' => '.($data['value'] ? 'true' : 'false').','
+                                'property' => '\''.$key.'\' => '.($data['value'] ? 'true' : 'false').',',
+                                'property_type' => $data['property_type'],
                             ];
                         } else {
                             $response_properties []= [
-                                'property' => '\''.$key.'\' => '.$data['value'].','
+                                'property' => '\''.$key.'\' => '.$data['value'].',',
+                                'property_type' => $data['property_type'],
                             ];
                         }
                     }
                 }
             }
+    
+            //relation ids
+            $index_request_properties = [];
+            $show_request_properties = [];
+            $has_relation_ids = false;
+            foreach ($request_properties as $request_property) {
+                if ($request_property['property_type'] != 'relation_id') {
+                    $index_request_properties []= $request_property;
+                    $show_request_properties []= $request_property;
+                } else {
+                    $has_relation_ids = true;
+                }
+            }
+    
             $stub = $this->mustache->render($stub, [
-                'request_properties' => $request_properties,
-                'response_properties' => $response_properties,
+                'index_request_properties' => $index_request_properties,
+                'show_request_properties' => $show_request_properties,
+                'store_request_properties' => $request_properties,
+                'update_request_properties' => $request_properties,
+                'destroy_request_properties' => $request_properties,
+                
+                'index_response_properties' => $response_properties,
+                'show_response_properties' => $response_properties,
+    
+                'has_relation_ids' => $has_relation_ids,
             ]);
             
             $this->storage_disk->writeFile($workflow_restful_crud_logic_test_path, $stub);

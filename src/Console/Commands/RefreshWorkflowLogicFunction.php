@@ -49,14 +49,11 @@ class RefreshWorkflowLogicFunction extends Command
             $options['functionality_schema_path'] = $this->option('functionality_schema_path') ? $this->option('functionality_schema_path') : '';
             $options['resource_schema_path'] = $this->option('resource_schema_path') ? $this->option('resource_schema_path') : '';
             $options['validation_schema_path'] = $this->option('validation_schema_path') ? $this->option('validation_schema_path') : '';
-            $options['strict_type_schema_path'] = $this->option('strict_type_schema_path') ? $this->option('strict_type_schema_path') : '';
-            
+            $options['strict_type_schema_path'] = $this->option('strict_type_schema_path') ? $this->option('strict_type_schema_path') : '';            
 
-            $builders = $this->workflow_logic_function->generate($entity_name, $function_name, $options, $this);
-            
+            $builders = $this->workflow_logic_function->generate($entity_name, $function_name, $options, $this);            
 
-            $this->info($entity_name.' '.$function_name.' workflow logic function successfully refreshed');
-            
+            $this->info($entity_name.' '.$function_name.' workflow logic function successfully refreshed');            
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
         }

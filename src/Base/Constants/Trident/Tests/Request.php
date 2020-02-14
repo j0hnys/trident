@@ -21,7 +21,7 @@ final class Request extends Definition
     ];
     const entity_property = 'T::string()';
     const property_type = [
-        'default', 'auto_id'
+        'default', 'auto_id', 'relation_id'
     ];
 }
 

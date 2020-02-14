@@ -202,6 +202,43 @@ class WorkflowRestfulCrud
 
 
         $this->storage_disk->writeFile($trident_event_service_provider_path, $stub);
+
+        //
+        //update routes
+        $this->updateRoutes($name);
+    }
+
+    public function updateRoutes(string $td_entity_name)
+    {
+        $this->folder_structure->checkPath('routes/trident.php');
+        $trident_resource_routes_path = $this->storage_disk->getBasePath() . '/routes/trident.php';
+        
+        $lines = $this->storage_disk->readFileArray($trident_resource_routes_path); 
+
+        $auth_group_start_line = 0;
+        $auth_group_end_line = 0;
+        $endpoint_exist = false;
+        foreach ($lines as $i => $line) {
+            if (strpos($line, "Route::middleware(['auth'])") === 0) {
+                $auth_group_start_line = $i;
+            }
+            if (strpos($line, "});") === 0) {
+                $auth_group_end_line = $i;
+            }
+
+            if ($auth_group_start_line > 0) {
+                if (strpos($line, '/trident/resource/'.lcfirst($td_entity_name)) !== false) {
+                    $endpoint_exist = true;
+                }
+            }
+        }
+
+        if (!$endpoint_exist) {
+            $line = "Route::resource('/trident/resource/".lcfirst($td_entity_name)."', '".$td_entity_name."Controller');";
+            array_splice($lines, $auth_group_end_line, 0, ['    '.$line, "\r\n"]);
+        }
+
+        $this->storage_disk->writeFileArray($trident_resource_routes_path, $lines); 
     }
 
      /**

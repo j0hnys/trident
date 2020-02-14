@@ -1,0 +1,10 @@
+{
+    "model": {
+        "db_name": "demo_process"
+    },
+    "endpoint": {
+        "uri": "/aaaa",
+        "group": "",
+        "type": "delete"
+    }
+}

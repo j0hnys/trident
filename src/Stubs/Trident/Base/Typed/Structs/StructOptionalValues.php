@@ -27,7 +27,7 @@ class StructOptionalValues extends Struct
         $all = $this->toArray();
 
         foreach ($all as $key => $value) {
-            if ($value != null) {
+            if ($value !== null) {
                 $values[$key] = $value;
             }
         }
