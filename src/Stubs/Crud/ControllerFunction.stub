@@ -1,4 +1,3 @@
-
     public function {{function_name}}({{Td_entity}}{{Function_name}}Request $request, int $id = 0): JsonResponse
     {
         $this->authorize('{{function_name}}', [$this->{{td_entity}}_repository,$id]);

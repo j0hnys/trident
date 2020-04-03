@@ -31,7 +31,6 @@ class TridentServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //EDW THA PREPEI NA KANW GENERATED TOYS PROVIDERS MOY!!!
         {{# register_workflows }}
         \App::bind('App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface',function($app){
             return new \App\Trident\Workflows\Logic\{{Td_entity}}(

@@ -65,5 +65,4 @@ class {{Td_entity}}Controller extends Controller
         return response()->json( $this->{{td_entity}}_repository->destroy($id) );
     }
 
-    
 }
