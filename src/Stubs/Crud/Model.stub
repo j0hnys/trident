@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class {{Td_entity}} extends Model
 {
-        
+
     protected $table = '{{db_name}}';
 
     protected $fillable = [{{fillables_comma_separated}}];
-    
+
 }

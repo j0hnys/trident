@@ -6,13 +6,9 @@ use App\Trident\Workflows\Events\Triggers\{{Td_entity}}Trigger;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class {{Td_entity}}Listener {
+class {{Td_entity}}Listener 
+{
 
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
     public function __construct() {
         //
     }

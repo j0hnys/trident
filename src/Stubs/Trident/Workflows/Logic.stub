@@ -9,43 +9,21 @@ use App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface as {{Td_entity}
 
 class {{Td_entity}} implements {{Td_entity}}Interface
 {
-    
-    /**
-     * @var App
-     */
     protected $app;
-
-    /**
-     * @var {{Td_entity}}Repository
-     */
     protected ${{td_entity}}_repository;
 
-    /**
-     * constructor.
-     *
-     * @var string
-     * @return void
-     */
     public function __construct({{Td_entity}}Business ${{td_entity}}_business, {{Td_entity}}Repository ${{td_entity}}_repository)
     {
         $this->{{td_entity}}_business = ${{td_entity}}_business;
         $this->{{td_entity}}_repository = ${{td_entity}}_repository;
     }
 
-
-    /**
-     * validate.
-     *
-     * @var array
-     * @return void
-     */
     public function demo(Array $data)
     {
         $result = $this->{{td_entity}}->demo([
             'string' => 'string',
             'integer' => 1,
         ]);
-
 
         return true;
     }

@@ -8,34 +8,8 @@ use App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface;
 
 class {{Td_entity}} implements {{Td_entity}}Interface
 {
-
-    /**
-     * constructor.
-     *
-     * @var string
-     * @return void
-     */
     public function __construct()
     {
        //
     }
-
-    /**
-     * validate.
-     *
-     * @var array
-     * @return void
-     */
-    public function demo(Array $data)   //~not to be included in code generator~   //edw tha valw spatie Struct!!! (h similar)
-    {
-        $string = $data['string'];
-        $integer = $data['integer'];
-
-        if ($integer_parameter != 1) {
-            throw new {{Td_entity}}Exception('integer_parameter is not 1');
-        } 
-
-        return $data;
-    }
-
 }

@@ -1,16 +1,7 @@
 
-    /**
-     * Determine whether the user can permanently {{function_name}} the trident super_test.
-     *
-     * @param  \App\User  $user
-     * @param  App\Trident\Workflows\Repositories\{{Td_entity}}Repository ${{Td_entity}}
-     * @return mixed
-     */
-    public function {{function_name}}(User $user, {{Td_entity}} ${{td_entity}}, int $id)
+    public function {{function_name}}(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
         return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
-
-
 
 }

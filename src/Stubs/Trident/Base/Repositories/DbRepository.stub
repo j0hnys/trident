@@ -7,42 +7,18 @@ use App\Trident\Base\Exceptions\DbRepositoryException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Container\Container as App;
  
-/**
- * Class Repository
- * @package Bosnadev\Repositories\Eloquent
- */
-abstract class DbRepository implements DbRepositoryInterface {
- 
-    /**
-     * @var App
-     */
+abstract class DbRepository implements DbRepositoryInterface 
+{
     private $app;
- 
-    /**
-     * @var
-     */
     protected $model;
- 
-    /**
-     * Specify Model class name
-     * 
-     * @return mixed
-     */
+
     abstract function model();
 
-    /**
-     * @param App $app
-     * @throws App\Td\Base\Exceptions\DbRepositoryException
-     */
     public function __construct(App $app) {
         $this->app = $app;
         $this->makeModel();
     }
 
-    /**
-     * @return Model
-     * @throws RepositoryException
-     */
     public function makeModel() {
         $model = $this->app->make($this->model());
  
@@ -51,7 +27,6 @@ abstract class DbRepository implements DbRepositoryInterface {
  
         return $this->model = $model;
     }
-
 
     /**
      * This method breaks isolation from the Data Source implementation. It is used now to have all the features of
@@ -68,106 +43,61 @@ abstract class DbRepository implements DbRepositoryInterface {
         }
     }
 
-
-    // Get all instances of model
     public function all()
     {
         return $this->model->all();
     }
-    
-    // save a new record in the database
+
     public function save()
     {
         return $this->model->save();
     }
 
-    // show the record with the given id
     public function show($id)
     {
         return $this->model-findOrFail($id);
     }
 
-    /**
-     * @param int $perPage
-     * @param array $columns
-     * @return mixed
-     */
     public function paginate($perPage = 15, $columns = array('*')) {
         return $this->model->paginate($perPage, $columns);
     }
- 
-    /**
-     * @param array $data
-     * @return mixed
-     */
+
     public function create(array $data) {
         return $this->model->create($data);
     }
- 
-    /**
-     * @param array $data
-     * @param $id
-     * @param string $attribute
-     * @return mixed
-     */
+
     public function update(array $data, $id, $attribute="id") {
         return $this->model->where($attribute, '=', $id)->update($data);
     }
- 
-    /**
-     * @param $id
-     * @return mixed
-     */
+
     public function delete($id) {
         return $this->model->destroy($id);
     }
- 
-    /**
-     * @param $id
-     * @param array $columns
-     * @return mixed
-     */
+
     public function find($id, $columns = array('*')) {
         return $this->model->find($id, $columns);
     }
- 
-    /**
-     * @param $attribute
-     * @param $value
-     * @param array $columns
-     * @return mixed
-     */
+
     public function findBy($attribute, $value, $columns = array('*')) {
         return $this->model->where($attribute, '=', $value)->first($columns);
     }
 
-    /**
-     * @param array $relations
-     * @return mixed
-     */
     public function with(array $relations) {
         return $this->model->with($relations);
     }
 
-    /**
-     * @param string $column_name
-     * @return mixed
-     */
     public function where(string $column_name, $relations) {
         return $this->model->where($column_name, $relations);
     }
 
-    // set value
     public function __set($name, $value)
     {
         return $this->model->{$name} = $value;
     }
 
-    // get value
     public function __get($name)
     {
         return $this->model->{$name};
     }
-
 
 }
