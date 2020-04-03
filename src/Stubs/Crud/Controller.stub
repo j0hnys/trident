@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Trident;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use \Illuminate\Http\JsonResponse;
 use Illuminate\Container\Container as App;
 use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface as {{Td_entity}}Workflow;
 use App\Trident\Interfaces\Workflows\Repositories\{{Td_entity}}RepositoryInterface as {{Td_entity}}Repository;
@@ -11,9 +12,6 @@ use App\Trident\Workflows\Exceptions\{{Td_entity}}Exception;
 
 class {{Td_entity}}Controller extends Controller
 {
-    /**
-     * @var {{Td_entity}}
-     */
     protected ${{td_entity}};
 
     public function __construct({{Td_entity}}Workflow ${{td_entity}}_workflow, {{Td_entity}}Repository ${{td_entity}}_repository)
@@ -22,39 +20,18 @@ class {{Td_entity}}Controller extends Controller
         $this->{{td_entity}}_repository = ${{td_entity}}_repository;
     }
 
-
-    //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // RESTFUL CRUD START
-    //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $this->authorize('list',{{Td_entity}}Repository::class);
         return $this->{{td_entity}}_repository->all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {   
         $this->authorize('create',{{Td_entity}}Repository::class);
         return view('{{td_entity}}_create');  //ayto DEN tha to exw sto restful_crud code generation
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $data = $request->all();
@@ -63,24 +40,12 @@ class {{Td_entity}}Controller extends Controller
         return response()->json( $this->{{td_entity}}_repository->create($data) );
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $this->authorize('view', [$this->{{td_entity}}_repository, $id]);
         return response()->json( $this->{{td_entity}}_repository->find($id) );
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $this->authorize('update', [$this->{{td_entity}}_repository, $id]);
@@ -88,36 +53,17 @@ class {{Td_entity}}Controller extends Controller
         return view('{{td_entity}}_edit', compact('{{td_entity}}'));    //ayto DEN tha to exw sto restful_crud code generation
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {   
         $this->authorize('update', [$this->{{td_entity}}_repository, $id]);
         return response()->json( $this->{{td_entity}}_repository->find($id)->update($request->all()) );
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $this->authorize('delete', [$this->{{td_entity}}_repository, $id]);
         return response()->json( $this->{{td_entity}}_repository->destroy($id) );
     }
-
-    //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-    // RESTFUL CRUD END
-    //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-
 
     
 }

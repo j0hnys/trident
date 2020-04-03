@@ -188,7 +188,7 @@ class WorkflowLogicFunction
             } else if ($functionality_schema['endpoint']['type'] === 'delete') {
                 $http_method = 'delete';
             }
-            $line = "Route::".$http_method."('".$functionality_schema['endpoint']['uri']."', 'Trident\\".$td_entity_name."Controller@".$function_name."');";
+            $line = "Route::".$http_method."('".$functionality_schema['endpoint']['uri']."', '".$td_entity_name."Controller@".$function_name."');";
             if ($functionality_schema['endpoint']['group'] === 'auth') {
                 array_splice($lines, $auth_group_end_line, 0, ['    '.$line, "\r\n"]);
             } else {
