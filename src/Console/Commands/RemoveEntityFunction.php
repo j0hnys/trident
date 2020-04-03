@@ -46,13 +46,10 @@ class RemoveEntityFunction extends Command
         try {
             $entity_name = $this->argument('entity_name');
             $function_name = $this->argument('function_name');
-            
 
             $crud = $this->remove_entity_function->run($entity_name, $function_name);
-            
 
             $this->info($entity_name.': '.$function_name.' removed successfully');
-            
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
         }
