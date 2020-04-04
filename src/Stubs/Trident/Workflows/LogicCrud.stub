@@ -9,6 +9,7 @@ use App\Trident\Interfaces\Workflows\Logic\{{Td_entity}}Interface;
 use App\Trident\Interfaces\Business\Logic\{{Td_entity}}Interface as {{Td_entity}}Business;
 use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructIndex{{Td_entity}};
 use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructStore{{Td_entity}};
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructShow{{Td_entity}};
 use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructUpdate{{Td_entity}};
 use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}Resource;
 use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}ResourceCollection;
@@ -25,33 +26,32 @@ class {{Td_entity}} implements {{Td_entity}}Interface
         $this->{{td_entity}}_repository = ${{td_entity}}_repository;
     }
 
-    public function index(StructIndex{{Td_entity}} $structIndex{{Td_entity}}): {{Td_entity}}ResourceCollection
+    public function index(StructIndex{{Td_entity}} $struct_index_{{td_entity}}): {{Td_entity}}ResourceCollection
     {
-        $data = $structIndex{{Td_entity}}->getFilledValues();
-        
-        ${{td_entity}}s = $this->{{td_entity}}_repository->get();
-        return new {{Td_entity}}ResourceCollection(${{td_entity}}s);        
+        $data = $struct_index_{{td_entity}}->getFilledValues();
+        $result = $this->{{td_entity}}_repository->get();
+        return $struct_index_{{td_entity}}->getReturnResourceCollection($result);        
     }
 
     public function create()
-    {   
+    {
         //
         // TO DO
         //
     }
 
-    public function store(StructStore{{Td_entity}} $structStore{{Td_entity}}): {{Td_entity}}Resource
-    {        
-        $data = $structStore{{Td_entity}}->getFilledValues();
-        $new_{{td_entity}} = $this->{{td_entity}}_repository->create($data);
-
-        return new {{Td_entity}}Resource($new_{{td_entity}});
+    public function store(StructStore{{Td_entity}} $struct_store_{{td_entity}}): {{Td_entity}}Resource
+    {
+        $data = $struct_store_{{td_entity}}->getFilledValues();
+        $result = $this->{{td_entity}}_repository->create($data);
+        return $struct_store_{{td_entity}}->getReturnResource($result);
     }
 
-    public function show($id): {{Td_entity}}Resource
+    public function show(StructShow{{Td_entity}} $struct_show_{{td_entity}}): {{Td_entity}}Resource
     {
-        ${{td_entity}} = $this->{{td_entity}}_repository->findOrFail($id);
-        return new {{Td_entity}}Resource(${{td_entity}});
+        $data = $struct_show_{{td_entity}}->getFilledValues();
+        $result = $this->{{td_entity}}_repository->findOrFail($data['id']);
+        return $struct_show_{{td_entity}}->getReturnResource($result);
     }
 
     public function edit($id): {{Td_entity}}Model
@@ -59,19 +59,18 @@ class {{Td_entity}} implements {{Td_entity}}Interface
         return $this->{{td_entity}}_repository->find($id);
     }
 
-    public function update(StructUpdate{{Td_entity}} $structUpdate{{Td_entity}}): {{Td_entity}}Resource
-    {   
-        $id = $structUpdate{{Td_entity}}['id'];
-        $data = $structUpdate{{Td_entity}}->getFilledValues();
-        ${{td_entity}} = $this->{{td_entity}}_repository->findOrFail($id);
+    public function update(StructUpdate{{Td_entity}} $struct_update_{{td_entity}}): {{Td_entity}}Resource
+    {
+        $data = $struct_update_{{td_entity}}->getFilledValues();
+        $result = $this->{{td_entity}}_repository->findOrFail($data['id']);
 
         try {
-            ${{td_entity}}->update($data);
+            $result->update($data);
         } catch (\Exception $e) {
             throw new {{Td_entity}}Exception('updateFailed');
         }
 
-        return new {{Td_entity}}Resource(${{td_entity}});
+        return $struct_update_{{td_entity}}->getReturnResource($result);
     }
 
     public function destroy($id)

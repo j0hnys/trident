@@ -3,7 +3,6 @@
 namespace j0hnys\Trident\Builders\Crud;
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;

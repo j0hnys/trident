@@ -55,13 +55,10 @@ class GenerateWorkflowRestfulCrud extends Command
             $options['resource_schema_path'] = $this->option('resource_schema_path') ? $this->option('resource_schema_path') : '';
             $options['validation_schema_path'] = $this->option('validation_schema_path') ? $this->option('validation_schema_path') : '';
             $options['strict_type_schema_path'] = $this->option('strict_type_schema_path') ? $this->option('strict_type_schema_path') : '';
-                        
-            //workflow building
-            $crud = $this->crud_workflow_builder->generate($name, $options, $this);
 
-            
+            $this->crud_workflow_builder->generate($name, $options, $this);
+
             $this->info($name.' workflow restful crud successfully created');
-            
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
         }

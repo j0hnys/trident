@@ -12,6 +12,7 @@ use App\Trident\Workflows\Validations\{{Td_entity}}StoreRequest;
 use App\Trident\Workflows\Validations\{{Td_entity}}UpdateRequest;
 use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructIndex{{Td_entity}};
 use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructStore{{Td_entity}};
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructShow{{Td_entity}};
 use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed\StructUpdate{{Td_entity}};
 
 class {{Td_entity}}Controller extends Controller
@@ -28,13 +29,13 @@ class {{Td_entity}}Controller extends Controller
     public function index(Request $request): JsonResponse
     {
         $this->authorize('list',$this->{{td_entity}}_repository);
-        $structIndex{{Td_entity}} = new StructIndex{{Td_entity}}( $request->all() );
-        ${{td_entity}}ResourceCollection = $this->{{td_entity}}_workflow->index($structIndex{{Td_entity}});
+        $struct_index_{{td_entity}} = new StructIndex{{Td_entity}}( $request->all() );
+        ${{td_entity}}ResourceCollection = $this->{{td_entity}}_workflow->index($struct_index_{{td_entity}});
         return response()->json( ${{td_entity}}ResourceCollection );
     }
 
     public function create(): Response
-    {   
+    {
         $this->authorize('create',$this->{{td_entity}}_repository);
         return response('');
     }
@@ -42,15 +43,16 @@ class {{Td_entity}}Controller extends Controller
     public function store({{Td_entity}}StoreRequest $request): JsonResponse
     {
         $this->authorize('create',$this->{{td_entity}}_repository);
-        $structStore{{Td_entity}} = new StructStore{{Td_entity}}( $request->all() );
-        ${{td_entity}}Resource = $this->{{td_entity}}_workflow->store($structStore{{Td_entity}});
+        $struct_store_{{td_entity}} = new StructStore{{Td_entity}}( $request->all() );
+        ${{td_entity}}Resource = $this->{{td_entity}}_workflow->store($struct_store_{{td_entity}});
         return response()->json( ${{td_entity}}Resource );
     }
 
     public function show(int $id): JsonResponse
     {
         $this->authorize('view', [$this->{{td_entity}}_repository, $id]);
-        return response()->json( $this->{{td_entity}}_workflow->show($id) );
+        $struct_show_{{td_entity}} = new StructShow{{Td_entity}}(['id' => (int)$id]);
+        return response()->json( $this->{{td_entity}}_workflow->show($struct_show_{{td_entity}}) );
     }
 
     public function edit(int $id): Response
@@ -61,10 +63,10 @@ class {{Td_entity}}Controller extends Controller
     }
 
     public function update({{Td_entity}}UpdateRequest $request, int $id): JsonResponse
-    {   
+    {
         $this->authorize('update', [$this->{{td_entity}}_repository, $id]);
-        $structUpdate{{Td_entity}} = new StructUpdate{{Td_entity}}($request->all());        
-        ${{td_entity}}Resource = $this->{{td_entity}}_workflow->update($structUpdate{{Td_entity}});
+        $struct_update_{{td_entity}} = new StructUpdate{{Td_entity}}($request->all());        
+        ${{td_entity}}Resource = $this->{{td_entity}}_workflow->update($struct_update_{{td_entity}});
         return response()->json( ${{td_entity}}Resource );
     }
 

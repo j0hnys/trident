@@ -293,7 +293,14 @@ class WorkflowRestfulCrud
             '--schema_path' => $options['validation_schema_path']
         ]);
         
-        // Make the basic strict types for crud
+        // Make the basic strict types for crud        
+        $command->call('trident:generate:strict_type', [
+            'strict_type_name' => 'struct_optional',
+            'function_name' => 'index',
+            'entity_name' => ucfirst($name),
+            '--workflow' => true,
+            '--schema_path' => $options['strict_type_schema_path']
+        ]);
         $command->call('trident:generate:strict_type', [
             'strict_type_name' => 'struct_optional',
             'function_name' => 'store',
@@ -303,14 +310,14 @@ class WorkflowRestfulCrud
         ]);
         $command->call('trident:generate:strict_type', [
             'strict_type_name' => 'struct_optional',
-            'function_name' => 'update',
+            'function_name' => 'show',
             'entity_name' => ucfirst($name),
             '--workflow' => true,
             '--schema_path' => $options['strict_type_schema_path']
         ]);
         $command->call('trident:generate:strict_type', [
             'strict_type_name' => 'struct_optional',
-            'function_name' => 'index',
+            'function_name' => 'update',
             'entity_name' => ucfirst($name),
             '--workflow' => true,
             '--schema_path' => $options['strict_type_schema_path']

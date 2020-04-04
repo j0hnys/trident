@@ -54,7 +54,6 @@ class GenerateStrictType extends Command
             $this->strict_type->generate($strict_type_name, $function_name, $entity_name, $domain, $schema_path, $force);
 
             $this->info($strict_type_name.' '.$entity_name.' '.$function_name.' strict type successfully created for '.$domain);
-            
         } catch (\Exception $ex) {
             $this->error($ex->getMessage() . ' on line ' . $ex->getLine() . ' in ' . $ex->getFile());
         }
