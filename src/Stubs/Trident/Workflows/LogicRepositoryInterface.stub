@@ -20,6 +20,8 @@ interface {{Td_entity}}RepositoryInterface
 
     public function findBy($attribute, $value, array $columns);
 
+    public function findOrFail($id, array $columns = ['*']);
+
     public function with(array $relations);
 
     public function where(string $column_name, $relations);
