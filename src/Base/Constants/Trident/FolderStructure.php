@@ -100,7 +100,7 @@ final class FolderStructure extends Definition
         'tests' => [
             'Trident' => [
                 'Functional' => [
-                    'Resource' => [
+                    'Resources' => [
                         'Logic' => 'T::string()',
                     ],
                 ],

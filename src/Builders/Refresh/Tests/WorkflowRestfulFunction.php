@@ -35,8 +35,8 @@ class WorkflowRestfulFunction
      */
     public function refresh(string $name, string $function_name, array $options = []): void
     {
-        $this->folder_structure->checkPath('tests/Trident/Functional/Resource/*');
-        $workflow_restful_crud_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Functional/Resource/'.$name.'Test.php';
+        $this->folder_structure->checkPath('tests/Trident/Functional/Resources/*');
+        $workflow_restful_crud_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Functional/Resources/'.$name.'Test.php';
 
         if (!$this->storage_disk->fileExists($workflow_restful_crud_logic_test_path)) {
             throw new \Exception("workflow_restful_crud_test ".$name." does not exist!", 1);

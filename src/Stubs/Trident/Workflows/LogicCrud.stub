@@ -40,7 +40,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
         //
     }
 
-    public function store(StructStore{{Td_entity}}  $structStore{{Td_entity}}): {{Td_entity}}Resource
+    public function store(StructStore{{Td_entity}} $structStore{{Td_entity}}): {{Td_entity}}Resource
     {        
         $data = $structStore{{Td_entity}}->getFilledValues();
         $new_{{td_entity}} = $this->{{td_entity}}_repository->create($data);
@@ -59,7 +59,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
         return $this->{{td_entity}}_repository->find($id);
     }
 
-    public function update(StructUpdate{{Td_entity}}  $structUpdate{{Td_entity}}): {{Td_entity}}Resource
+    public function update(StructUpdate{{Td_entity}} $structUpdate{{Td_entity}}): {{Td_entity}}Resource
     {   
         $id = $structUpdate{{Td_entity}}['id'];
         $data = $structUpdate{{Td_entity}}->getFilledValues();
