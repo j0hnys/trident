@@ -54,7 +54,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
         return $struct_show_{{td_entity}}->getReturnResource($result);
     }
 
-    public function edit($id): {{Td_entity}}Model
+    public function edit(int $id): {{Td_entity}}Model
     {
         return $this->{{td_entity}}_repository->find($id);
     }
@@ -73,7 +73,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
         return $struct_update_{{td_entity}}->getReturnResource($result);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $deleted_count = $this->{{td_entity}}_repository->destroy($id);
         return ($deleted_count > 0);

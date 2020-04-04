@@ -1,5 +1,5 @@
 
-    public function {{function_name}}($request_struct, $id)
+    public function {{function_name}}(Struct{{Function_name}}{{Td_entity}} $request_struct, int $id): {{Td_entity}}{{function_name}}Resource
     {
         $data = $request_struct->getFilledValues();
         $model = $this->{{td_entity}}_repository->find($id);
@@ -8,7 +8,7 @@
         // TO DO
         //
 
-        return new {{Td_entity}}{{function_name}}Resource( $model );
+        return $request_struct->getReturnResource( $model );
     }
 
 

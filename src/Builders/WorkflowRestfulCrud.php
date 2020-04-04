@@ -309,7 +309,7 @@ class WorkflowRestfulCrud
             '--schema_path' => $options['strict_type_schema_path']
         ]);
         $command->call('trident:generate:strict_type', [
-            'strict_type_name' => 'struct_optional',
+            'strict_type_name' => 'struct_optional_show',
             'function_name' => 'show',
             'entity_name' => ucfirst($name),
             '--workflow' => true,

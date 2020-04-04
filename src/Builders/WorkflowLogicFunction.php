@@ -136,11 +136,13 @@ class WorkflowLogicFunction
 
         //use addition in code
         $new_use_string = 'use App\Trident\Workflows\Schemas\Logic\\'.$td_entity_name.'\Resources\\'.$td_entity_name.$function_name.'Resource;'."\r\n";
+        $use_struct_string = 'use App\Trident\Workflows\Schemas\Logic\\'.$td_entity_name.'\Typed\Struct'.ucfirst($function_name).$td_entity_name.';'."\r\n";
 
         $start_line = ($analysis_result->used_namespaces[count($analysis_result->used_namespaces)-1])->getStartLine();
         $end_line = ($analysis_result->used_namespaces[count($analysis_result->used_namespaces)-1])->getEndLine();
 
         array_splice($lines, $start_line, 0, $new_use_string);
+        array_splice($lines, ($start_line+1), 0, $use_struct_string);
 
         //update file
         $this->storage_disk->writeFileArray($workflow_logic_path, $lines); 
@@ -237,7 +239,7 @@ class WorkflowLogicFunction
 
         //new strict type
         $command->call('trident:generate:strict_type', [
-            'strict_type_name' => 'struct_optional',
+            'strict_type_name' => 'struct_optional_workflow_function',
             'function_name' => $function_name,
             'entity_name' => $td_entity_name,
             '--workflow' => true,

@@ -16,7 +16,7 @@ class Struct{{function_name}}{{Td_entity}} extends StructOptionalValues
             {{{type}}}
         {{/ types }}
         {{^ types }}
-            //
+            'id' => T::nullable(T::integer())
         {{/ types }}
         ];
         

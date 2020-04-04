@@ -86,7 +86,7 @@ class ControllerFunction
 
         //use addition in code
         $use_validation_string = 'use App\Trident\Workflows\Validations\\'.$td_entity_name.$function_name.'Request;'."\r\n";
-        $use_struct_string = 'use App\Trident\Workflows\Schemas\Logic\\'.$td_entity_name.'\Typed\Struct'.$function_name.$td_entity_name.';'."\r\n";
+        $use_struct_string = 'use App\Trident\Workflows\Schemas\Logic\\'.$td_entity_name.'\Typed\Struct'.ucfirst($function_name).$td_entity_name.';'."\r\n";
 
         $start_line = ($analysis_result->used_namespaces[count($analysis_result->used_namespaces)-1])->getStartLine();
         $end_line = ($analysis_result->used_namespaces[count($analysis_result->used_namespaces)-1])->getEndLine();
