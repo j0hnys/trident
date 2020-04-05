@@ -152,34 +152,22 @@ use App\Trident\Workflows\Schemas\Logic\TestEntity\Typed\StructStoreTestEntity;
 
 class TestEntityController extends Controller
 {
-    /**
-     * @var TestEntity
-     */
     protected $TestEntity;
 
-    public function __construct(TestEntityWorkflow $TestEntityWorkflow, TestEntityRepository $test_entity_repository)
+    public function __construct(TestEntityWorkflow $test_entity_workflow, TestEntityRepository $test_entity_repository)
     {
-        $this->test_entity_workflow = $TestEntityWorkflow;
+        $this->test_entity_workflow = $test_entity_workflow;
         $this->test_entity_repository = $test_entity_repository;
     }
 
-
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreRequest $request)
+    public function store(TestEntityStoreRequest $test_entity_store_request)
     {
         $this->authorize('store',$this->test_entity_restful_crud_repository);
-        $structStoreTestEntity = new StructStoreTestEntity( $request->all() );
-        $testEntityResource = $this->test_entity_workflow->store($structStoreTestEntity);
-        return response()->json( $testEntityResource );
+        $struct_store_test_entity = new StructStoreTestEntity( $test_entity_store_request->all() );
+        $test_entity_resource = $this->test_entity_workflow->store($struct_store_test_entity);
+        return response()->json( $test_entity_resource );
     }
 
-    
 }
 
 ```
@@ -200,37 +188,19 @@ use App\Trident\Workflows\Schemas\Logic\TestEntity\Resources\TestEntityResource;
 
 class TestEntity implements TestEntityInterface
 {
-
-    /**
-     * @var TestEntityRepository
-     */
     protected $test_entity_repository;
 
-    /**
-     * constructor.
-     *
-     * @var string
-     * @return void
-     */
     public function __construct(TestEntityBusiness $test_entity_business, TestEntityRepository $test_entity_repository)
     {
         $this->test_entity_repository = $test_entity_repository;
         $this->test_entity_business = $test_entity_business;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  StructStoreTestEntity  $structStoreTestEntity
-     * @return TestEntityResource
-     */
-    public function store(StructStoreTestEntity $structStoreTestEntity): TestEntityResource
+    public function store(StructStoreTestEntity $struct_store_test_entity): TestEntityResource
     {
-        $data = $this->test_entity_business->addSuffix($structStoreTestEntity,'_edit');
-
+        $data = $this->test_entity_business->addSuffix($struct_store_test_entity,'_edit');
         $result = $this->test_entity_repository->create($data);
-
-        return new TestEntityResource($result);
+        return $struct_store_test_entity->getReturnResource($result);
     }
 
 
@@ -250,30 +220,10 @@ use App\Trident\Workflows\Schemas\Logic\TestEntity\Typed\StructStoreTestEntity;
 
 class TestEntity implements TestEntityInterface
 {
-
-    /**
-     * constructor.
-     *
-     * @var string
-     * @return void
-     */
-    public function __construct()
+    public function addSuffix(StructStoreTestEntity $struct_store_test_entity, string $suffix): array
     {
-       //
-    }
-
-    /**
-     * put a suffix to username.
-     *
-     * @param  StructStoreTestEntity  $structStoreTestEntity
-     * @return string
-     */
-    public function addSuffix(StructStoreTestEntity $structStoreTestEntity, string $suffix): array
-    {
-        $data = $structStoreTestEntity->getFilledValues();
-        
-        $data['username'] = $data['username'].$suffix;
-        
+        $data = $struct_store_test_entity->getFilledValues();        
+        $data['username'] = $data['username'].$suffix;        
         return $data;
     }
 
