@@ -4,6 +4,7 @@ namespace j0hnys\Trident\Builders;
 
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class BusinessLogicFunction
 {
@@ -16,6 +17,7 @@ class BusinessLogicFunction
             $this->storage_disk = $storage_disk;
         }
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
 
     /**
@@ -45,7 +47,7 @@ class BusinessLogicFunction
 
         $stub = $this->storage_disk->readFile(__DIR__.'/../Stubs/Trident/Business/LogicFunction.stub');
 
-        $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
+        $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ($function_name), $stub);
         

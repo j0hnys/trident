@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class CrudWorkflowBuilder
 {
@@ -27,6 +28,7 @@ class CrudWorkflowBuilder
             $this->storage_trident = $storage_trident;
         }
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
 
     /**
@@ -46,7 +48,7 @@ class CrudWorkflowBuilder
 
             $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/Crud/ControllerCrudWorkflow.stub');
 
-            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
 
             $this->storage_disk->writeFile($controller_path, $stub);
@@ -111,7 +113,7 @@ class CrudWorkflowBuilder
         $workflows = array_map(function ($element) {
             return [
                 'Td_entity' => ucfirst($element),
-                'td_entity' => lcfirst($element),
+                'td_entity' => $this->word_case_converter->camelCaseToSnakeCase($element),
             ];
         }, $Td_entities_workflows);
         
@@ -145,7 +147,7 @@ class CrudWorkflowBuilder
 
             $stub = $this->storage_disk->readFile(__DIR__ . '/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
 
-            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
 
             $this->storage_disk->writeFile($trident_policy_path, $stub);

@@ -1,14 +1,14 @@
 
-    public function {{function_name}}(Struct{{Function_name}}{{Td_entity}} $request_struct, int $id): {{Td_entity}}{{function_name}}Resource
+    public function {{function_name}}(Struct{{Function_name}}{{Td_entity}} $struct_{{function_parameter_name}}_{{td_entity}}, int $id): {{Td_entity}}{{function_name}}Resource
     {
-        $data = $request_struct->getFilledValues();
+        $data = $struct_{{function_parameter_name}}_{{td_entity}}->getFilledValues();
         $model = $this->{{td_entity}}_repository->find($id);
         
         //
         // TO DO
         //
 
-        return $request_struct->getReturnResource( $model );
+        return $struct_{{function_parameter_name}}_{{td_entity}}->getReturnResource( $model );
     }
 
 

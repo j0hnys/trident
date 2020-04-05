@@ -11,6 +11,7 @@ use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Builders;
 use j0hnys\Trident\Base\Constants\Trident\Functionality;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class WorkflowLogicFunction
 {
@@ -33,6 +34,7 @@ class WorkflowLogicFunction
         $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder();
         $this->functionality_definition = new Functionality();
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
     
     /**
@@ -82,10 +84,11 @@ class WorkflowLogicFunction
 
         $stub = $this->storage_disk->readFile(__DIR__.'/../Stubs/Trident/Workflows/LogicFunction.stub');
 
-        $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
+        $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ($function_name), $stub);
         $stub = str_replace('{{Function_name}}', ucfirst($function_name), $stub);
+        $stub = str_replace('{{function_parameter_name}}', $this->word_case_converter->camelCaseToSnakeCase($function_name), $stub);
         
         $this->storage_disk->writeFile($workflow_logic_path, $stub, [
             'append_file' => true

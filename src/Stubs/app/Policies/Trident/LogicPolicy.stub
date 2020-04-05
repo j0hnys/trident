@@ -15,9 +15,9 @@ class {{Td_entity}}Policy
         return \Auth::check();
     }
 
-    public function view(User $user, {{Td_entity}} ${{Td_entity}}, int $id): bool
+    public function view(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 
     public function create(User $user): bool
@@ -25,23 +25,23 @@ class {{Td_entity}}Policy
         return \Auth::check();
     }
 
-    public function update(User $user, {{Td_entity}} ${{Td_entity}}, int $id): bool
+    public function update(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 
-    public function delete(User $user, {{Td_entity}} ${{Td_entity}}, int $id): bool
+    public function delete(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 
-    public function restore(User $user, {{Td_entity}} ${{Td_entity}}, int $id): bool
+    public function restore(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 
-    public function forceDelete(User $user, {{Td_entity}} ${{Td_entity}}, int $id): bool
+    public function forceDelete(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 }

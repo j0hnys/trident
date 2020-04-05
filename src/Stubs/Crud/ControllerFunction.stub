@@ -1,9 +1,9 @@
     public function {{function_name}}({{Td_entity}}{{Function_name}}Request $request, int $id = 0): JsonResponse
     {
         $this->authorize('{{function_name}}', [$this->{{td_entity}}_repository,$id]);
-        $struct{{function_name}}{{Td_entity}} = new Struct{{Function_name}}{{Td_entity}}($request->all());    
-        ${{td_entity}}{{function_name}}Resource = $this->{{td_entity}}_workflow->{{function_name}}( $struct{{function_name}}{{Td_entity}} ,$id);
-        return response()->json( ${{td_entity}}{{function_name}}Resource );
+        $struct_{{function_parameter_name}}_{{td_entity}} = new Struct{{Function_name}}{{Td_entity}}($request->all());    
+        ${{td_entity}}_{{function_parameter_name}}_resource = $this->{{td_entity}}_workflow->{{function_name}}( $struct_{{function_parameter_name}}_{{td_entity}} ,$id);
+        return response()->json( ${{td_entity}}_{{function_parameter_name}}_resource );
     }
 
 }

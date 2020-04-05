@@ -30,8 +30,8 @@ class {{Td_entity}}Controller extends Controller
     {
         $this->authorize('list',$this->{{td_entity}}_repository);
         $struct_index_{{td_entity}} = new StructIndex{{Td_entity}}( $request->all() );
-        ${{td_entity}}ResourceCollection = $this->{{td_entity}}_workflow->index($struct_index_{{td_entity}});
-        return response()->json( ${{td_entity}}ResourceCollection );
+        ${{td_entity}}_resource_collection = $this->{{td_entity}}_workflow->index($struct_index_{{td_entity}});
+        return response()->json( ${{td_entity}}_resource_collection );
     }
 
     public function create(): Response
@@ -44,8 +44,8 @@ class {{Td_entity}}Controller extends Controller
     {
         $this->authorize('create',$this->{{td_entity}}_repository);
         $struct_store_{{td_entity}} = new StructStore{{Td_entity}}( $request->all() );
-        ${{td_entity}}Resource = $this->{{td_entity}}_workflow->store($struct_store_{{td_entity}});
-        return response()->json( ${{td_entity}}Resource );
+        ${{td_entity}}_resource = $this->{{td_entity}}_workflow->store($struct_store_{{td_entity}});
+        return response()->json( ${{td_entity}}_resource );
     }
 
     public function show(int $id): JsonResponse
@@ -66,8 +66,8 @@ class {{Td_entity}}Controller extends Controller
     {
         $this->authorize('update', [$this->{{td_entity}}_repository, $id]);
         $struct_update_{{td_entity}} = new StructUpdate{{Td_entity}}($request->all());        
-        ${{td_entity}}Resource = $this->{{td_entity}}_workflow->update($struct_update_{{td_entity}});
-        return response()->json( ${{td_entity}}Resource );
+        ${{td_entity}}_resource = $this->{{td_entity}}_workflow->update($struct_update_{{td_entity}});
+        return response()->json( ${{td_entity}}_resource );
     }
 
     public function destroy(int $id): JsonResponse

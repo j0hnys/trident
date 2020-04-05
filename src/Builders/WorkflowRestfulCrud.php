@@ -8,6 +8,7 @@ use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Builders;
 use j0hnys\Trident\Base\Constants\Trident\Functionality;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class WorkflowRestfulCrud
 {    
@@ -30,6 +31,7 @@ class WorkflowRestfulCrud
         $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder($storage_disk, $storage_trident);
         $this->functionality_definition = new Functionality();
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
 
     /**
@@ -227,14 +229,14 @@ class WorkflowRestfulCrud
             }
 
             if ($auth_group_start_line > 0) {
-                if (strpos($line, '/trident/resource/'.lcfirst($td_entity_name)) !== false) {
+                if (strpos($line, '/trident/resource/'.$this->word_case_converter->camelCaseToSnakeCase($td_entity_name)) !== false) {
                     $endpoint_exist = true;
                 }
             }
         }
 
         if (!$endpoint_exist) {
-            $line = "Route::resource('/trident/resource/".lcfirst($td_entity_name)."', '".$td_entity_name."Controller');";
+            $line = "Route::resource('/trident/resource/".$this->word_case_converter->camelCaseToSnakeCase($td_entity_name)."', '".$td_entity_name."Controller');";
             array_splice($lines, $auth_group_end_line, 0, ['    '.$line, "\r\n"]);
         }
 
@@ -261,7 +263,7 @@ class WorkflowRestfulCrud
 
         $stub = $this->storage_disk->readFile($stub_fullpath);
 
-        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+        $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
         
         $this->storage_disk->writeFile($fullpath_to_create, $stub);
