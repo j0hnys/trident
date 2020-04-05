@@ -48,6 +48,11 @@ abstract class DbRepository implements DbRepositoryInterface
         return $this->model->all();
     }
 
+    public function get(array $columns = ['*'])
+    {
+        return $this->model->get($columns);
+    }
+
     public function save()
     {
         return $this->model->save();
@@ -70,8 +75,12 @@ abstract class DbRepository implements DbRepositoryInterface
         return $this->model->where($attribute, '=', $id)->update($data);
     }
 
-    public function delete($id) {
-        return $this->model->destroy($id);
+    public function delete() {
+        return $this->model->delete();
+    }
+
+    public function destroy($ids) {
+        return $this->model->destroy($ids);
     }
 
     public function find($id, array $columns = ['*']) {
