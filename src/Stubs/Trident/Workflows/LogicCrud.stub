@@ -36,8 +36,6 @@ class {{Td_entity}} implements {{Td_entity}}Interface
     public function create()
     {
         //
-        // TO DO
-        //
     }
 
     public function store(StructStore{{Td_entity}} $struct_store_{{td_entity}}): {{Td_entity}}Resource
@@ -73,7 +71,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
         return $struct_update_{{td_entity}}->getReturnResource($result);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): bool
     {
         $deleted_count = $this->{{td_entity}}_repository->destroy($id);
         return ($deleted_count > 0);
