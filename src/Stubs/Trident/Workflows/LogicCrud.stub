@@ -35,7 +35,7 @@ class {{Td_entity}} implements {{Td_entity}}Interface
 
     public function create()
     {
-        //
+        // TODO
     }
 
     public function store(StructStore{{Td_entity}} $struct_store_{{td_entity}}): {{Td_entity}}Resource

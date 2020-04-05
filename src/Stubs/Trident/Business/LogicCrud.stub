@@ -11,56 +11,42 @@ class {{Td_entity}} implements {{Td_entity}}Interface
     
     public function __construct()
     {
-       //
+        // TODO
     }
 
     public function index(array $data): void
     {
-        //
-        // TO DO
-        //
+        // TODO
     }
 
     public function create(array $data): void
     {   
-        //
-        // TO DO
-        //
+        // TODO
     }
 
     public function store(array $data): void
     {
-        //
-        // TO DO
-        //
+        // TODO
     }
 
     public function show(array $data): void
     {
-        //
-        // TO DO
-        //
+        // TODO
     }
 
     public function edit(array $data): void
     {
-        //
-        // TO DO
-        //
+        // TODO
     }
 
     public function update(array $data): void
     {   
-        //
-        // TO DO
-        //
+        // TODO
     }
 
     public function destroy(array $data): void
     {
-        //
-        // TO DO
-        //
+        // TODO
     }
 
 }
