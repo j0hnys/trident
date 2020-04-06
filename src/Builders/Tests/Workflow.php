@@ -4,6 +4,7 @@ namespace j0hnys\Trident\Builders\Tests;
 
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class Workflow
 {
@@ -18,6 +19,7 @@ class Workflow
         }
         $this->mustache = new \Mustache_Engine;
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
 
     /**
@@ -47,7 +49,7 @@ class Workflow
 
             $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Workflows/Logic/Logic.stub');
 
-            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             $stub = $this->mustache->render($stub, [
                 'methods' => $class_methods,
@@ -80,7 +82,7 @@ class Workflow
 
             $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Business/Logic/Logic.stub');
 
-            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             $stub = $this->mustache->render($stub, [
                 'methods' => $class_methods,

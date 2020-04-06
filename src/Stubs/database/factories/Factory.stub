@@ -8,7 +8,6 @@ use Faker\Generator as Faker;
 |--------------------------------------------------------------------------
 */
 
-
 $factory->define({{class_name}}::class, function (Faker $faker) {
     return [
 {{# properties }}

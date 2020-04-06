@@ -1,8 +1,3 @@
-    /**
-     * {{function_name}} test example.
-     *
-     * @return void
-     */
     public function test{{function_name}}()
     {
         $this->assertTrue(false);

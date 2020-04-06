@@ -64,7 +64,7 @@ class EntityFunction
         //remove workflow function
         if (isset($workflow_result->function_signature_)) {
             $starting_line = $workflow_result->function_signature_->lines->start-1;
-            $ending_line = $workflow_result->function_signature_->lines->end;
+            $ending_line = $workflow_result->function_signature_->lines->end-1;
             $lines_to_remove = range($starting_line,$ending_line);
     
             // Filter lines based on line number (+1 because the array is zero-indexed)
@@ -177,13 +177,13 @@ class EntityFunction
                         'parameters' => [],
                         'return_type' => null,
                         'lines' => (object)[
-                            'start' => -1,
+                            'start' => $node->getAttributes()['startLine'],
                             'end' => $node->getAttributes()['endLine'],
                         ],
                         'used_namespaces_indexes' => [],
                     ];
                     
-                    $function_comments = $node->getAttributes()['comments'];
+                    $function_comments = isset($node->getAttributes()['comments']) ? $node->getAttributes()['comments'] : [];
                     foreach ($function_comments as $function_comment) {
                         if ($function_comment instanceof \PhpParser\Comment\Doc) {
                             $tmp_function->lines->start = $function_comment->getLine();
@@ -280,7 +280,7 @@ class EntityFunction
 
         //gia tn epistrefomenh time ths function
         if (isset($analysis_result->function_signature_->return_type)) {
-            $type_name = $analysis_result->function_signature_->return_type->parts[ count($parameter->type->parts)-1 ];
+            $type_name = $analysis_result->function_signature_->return_type->parts[ count($analysis_result->function_signature_->return_type->parts)-1 ];
             
             //gia na valw t swsta `use` sthn arxh toy arxeioy
             foreach ($analysis_result->used_namespaces as $index => $used_namespace) {

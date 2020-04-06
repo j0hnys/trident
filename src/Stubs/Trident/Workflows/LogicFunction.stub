@@ -1,20 +1,14 @@
 
-    /**
-     * *description goes here*.
-     *
-     * @var array
-     * @return array
-     */
-    public function {{function_name}}($request_struct, $id)
-    {   //!!! IMPORTANT !!! -->  add "use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}{{function_name}}Resource;" on top of this file
-        $data = $request_struct->getFilledValues();
+    public function {{function_name}}(Struct{{Function_name}}{{Td_entity}} $struct_{{function_parameter_name}}_{{td_entity}}, int $id): {{Td_entity}}{{function_name}}Resource
+    {
+        $data = $struct_{{function_parameter_name}}_{{td_entity}}->getFilledValues();
         $model = $this->{{td_entity}}_repository->find($id);
         
         //
         // TO DO
         //
 
-        return new {{Td_entity}}{{function_name}}Resource( $model );
+        return $struct_{{function_parameter_name}}_{{td_entity}}->getReturnResource( $model );
     }
 
 

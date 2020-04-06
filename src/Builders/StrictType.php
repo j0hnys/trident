@@ -91,6 +91,48 @@ class StrictType
 
             $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStructOptional.stub');
 
+        } elseif (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT_OPTIONAL_WORKFLOW']['name']) {
+            //
+            //struct logic generation
+            $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');
+            $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name). ucfirst($td_entity_name).'.php';
+            
+            if ($this->storage_disk->fileExists($struct_path) && $force === false) {
+                throw new \Exception('Struct'.ucfirst($function_name) . ucfirst($td_entity_name) . ' struct already exists!');
+            }
+
+            $this->storage_disk->makeDirectory($struct_path);
+
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStructOptionalWorkflow.stub');
+
+        } elseif (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT_OPTIONAL_SHOW']['name']) {
+            //
+            //struct logic generation
+            $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');
+            $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name). ucfirst($td_entity_name).'.php';
+            
+            if ($this->storage_disk->fileExists($struct_path) && $force === false) {
+                throw new \Exception('Struct'.ucfirst($function_name) . ucfirst($td_entity_name) . ' struct already exists!');
+            }
+
+            $this->storage_disk->makeDirectory($struct_path);
+
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStructOptionalShow.stub');
+
+        } elseif (strtolower($strict_type_name) == $this->declarations::STRICT_TYPES['STRUCT_OPTIONAL_WORKFLOW_FUNCTION']['name']) {
+            //
+            //struct logic generation
+            $this->folder_structure->checkPath('app/Trident/'.$domain.'/Schemas/Logic/{{td_entity_name}}/Typed/*');
+            $struct_path = $this->storage_disk->getBasePath().'/app/Trident/'.$domain.'/Schemas/Logic/'.ucfirst($td_entity_name).'/Typed/'.'Struct'.ucfirst($function_name). ucfirst($td_entity_name).'.php';
+            
+            if ($this->storage_disk->fileExists($struct_path) && $force === false) {
+                throw new \Exception('Struct'.ucfirst($function_name) . ucfirst($td_entity_name) . ' struct already exists!');
+            }
+
+            $this->storage_disk->makeDirectory($struct_path);
+
+            $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$domain.'/Typed/LogicStructOptionalWorkflowFunction.stub');
+
         } else {
             throw new \Exception("unknown strict type", 1);            
         }
@@ -119,6 +161,7 @@ class StrictType
             'td_entity' => lcfirst($td_entity_name),
             'Td_entity' => ucfirst($td_entity_name),
             'function_name' => lcfirst($function_name),
+            'Function_name' => ucfirst($function_name),
             'types' => $types,
         ]);
         

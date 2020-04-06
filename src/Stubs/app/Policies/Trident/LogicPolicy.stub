@@ -10,85 +10,38 @@ class {{Td_entity}}Policy
 {
     use HandlesAuthorization;
 
-    /**
-     * Determine whether the user can create trident {{td_entity}}.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function list(User $user)
+    public function list(User $user): bool
     {
         return \Auth::check();
     }
 
-    /**
-     * Determine whether the user can view the trident {{td_entity}}.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
-     * @return mixed
-     */
-    public function view(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
+    public function view(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 
-    /**
-     * Determine whether the user can create trident {{td_entity}}.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         return \Auth::check();
     }
 
-    /**
-     * Determine whether the user can update the trident {{td_entity}}.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
-     * @return mixed
-     */
-    public function update(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
+    public function update(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 
-    /**
-     * Determine whether the user can delete the trident {{td_entity}}.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
-     * @return mixed
-     */
-    public function delete(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
+    public function delete(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 
-    /**
-     * Determine whether the user can restore the trident {{td_entity}}.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
-     * @return mixed
-     */
-    public function restore(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
+    public function restore(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 
-    /**
-     * Determine whether the user can permanently delete the trident {{td_entity}}.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Trident\Workflows\Repositories\{{Td_entity}}Repository  ${{Td_entity}}
-     * @return mixed
-     */
-    public function forceDelete(User $user, {{Td_entity}} ${{Td_entity}}, int $id)
+    public function forceDelete(User $user, {{Td_entity}} ${{td_entity}}, int $id): bool
     {
-        return $user->id == ${{Td_entity}}->findOrFail($id)->user_id;
+        return $user->id == ${{td_entity}}->findOrFail($id)->user_id;
     }
 }

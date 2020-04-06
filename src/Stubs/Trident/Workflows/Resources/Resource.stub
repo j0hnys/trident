@@ -6,12 +6,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class {{Entity_name}}{{function_name}}Resource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
     public function toArray($request)
     {
         {{# render_types }}
@@ -22,8 +16,6 @@ class {{Entity_name}}{{function_name}}Resource extends JsonResource
         ];
         {{/ render_types }}
 
-        
         return parent::toArray($request);
     }
-
 }

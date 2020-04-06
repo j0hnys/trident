@@ -6,6 +6,7 @@ use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Base\Constants\Declarations;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class Events
 {
@@ -27,6 +28,7 @@ class Events
         $this->mustache = new \Mustache_Engine;
         $this->declarations = new Declarations();
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
     
     /**
@@ -69,7 +71,7 @@ class Events
                 $this->storage_disk->makeDirectory($workflow_event_path);
 
                 $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$type.'/Events/LogicTrigger.stub');
-                $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
+                $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($td_entity_name), $stub);
                 $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
                 
                 $this->storage_disk->writeFile($workflow_event_path, $stub);
@@ -85,7 +87,7 @@ class Events
                 $this->storage_disk->makeDirectory($workflow_event_path);
 
                 $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$type.'/Events/LogicListener.stub');
-                $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
+                $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($td_entity_name), $stub);
                 $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
                 
                 $this->storage_disk->writeFile($workflow_event_path, $stub);
@@ -102,7 +104,7 @@ class Events
                 $this->storage_disk->makeDirectory($workflow_event_path);
                 
                 $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/'.$type.'/Events/Logic'.ucfirst($event_type).'.stub');
-                $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
+                $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($td_entity_name), $stub);
                 $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
                 
                 $this->storage_disk->writeFile($workflow_event_path, $stub);

@@ -4,6 +4,8 @@ namespace App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed;
 
 use J0hnys\Typed\T;
 use App\Trident\Base\Typed\Structs\StructOptionalValues;
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}Resource;
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}ResourceCollection;
 
 class Struct{{function_name}}{{Td_entity}} extends StructOptionalValues
 {
@@ -21,6 +23,16 @@ class Struct{{function_name}}{{Td_entity}} extends StructOptionalValues
         parent::__construct($this->types);
 
         $this->set($data);
+    }
+
+    public function getReturnResource($data): {{Td_entity}}Resource
+    {
+        return new {{Td_entity}}Resource($data);
+    }
+
+    public function getReturnResourceCollection($data): {{Td_entity}}ResourceCollection
+    {
+        return new {{Td_entity}}ResourceCollection($data);
     }
 }
 

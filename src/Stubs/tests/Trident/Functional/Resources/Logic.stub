@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Trident\Workflows\Logic;
+namespace Tests\Trident\Functional\Resources\Logic;
 
 use App\User;
 use App\Models\{{Td_entity}};
@@ -36,12 +36,10 @@ class {{Td_entity}}Test extends TestCase
         $response->assertStatus(200);
     }
 
-
     public function testCreate(): void
     {
         $this->assertTrue(true);
     }
-
 
     public function testStore(): void
     {
@@ -69,7 +67,6 @@ class {{Td_entity}}Test extends TestCase
         $response->assertStatus(200);
     }
 
-
     public function testShow(): void
     {
         $user = factory(User::class)->create();
@@ -96,12 +93,10 @@ class {{Td_entity}}Test extends TestCase
         $response->assertStatus(200);
     }
 
-
     public function testEdit(): void
     {
         $this->assertTrue(true);
     }
-
 
     public function testUpdate(): void
     {
@@ -137,7 +132,6 @@ class {{Td_entity}}Test extends TestCase
         $response->assertStatus(200);
     }
 
-
     public function testDestroy(): void
     {
         $user = factory(User::class)->create();
@@ -168,6 +162,5 @@ class {{Td_entity}}Test extends TestCase
         ]);
         $response->assertStatus(200);
     }
-
 
 }

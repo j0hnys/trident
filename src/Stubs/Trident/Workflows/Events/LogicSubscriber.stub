@@ -2,7 +2,8 @@
 
 namespace App\Trident\Workflows\Events\Subscribers;
 
-class {{Td_entity}}Subscriber { 
+class {{Td_entity}}Subscriber 
+{
 
     /**
      * Handle user login events. 

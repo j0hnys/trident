@@ -3,11 +3,15 @@
 namespace j0hnys\Trident\Builders;
 
 use Illuminate\Console\Command;
+use PhpParser\Error;
+use PhpParser\ParserFactory;
+use PhpParser\{Node, NodeFinder};
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Builders;
 use j0hnys\Trident\Base\Constants\Trident\Functionality;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class WorkflowLogicFunction
 {
@@ -30,6 +34,7 @@ class WorkflowLogicFunction
         $this->crud_builder = new Builders\Crud\CrudWorkflowBuilder();
         $this->functionality_definition = new Functionality();
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
     
     /**
@@ -75,18 +80,23 @@ class WorkflowLogicFunction
         $last = sizeof($lines) - 1; 
         unset($lines[$last]); 
 
-        $this->storage_disk->writeFileArray($workflow_logic_path, $lines); 
+        $this->storage_disk->writeFileArray($workflow_logic_path, $lines);
 
         $stub = $this->storage_disk->readFile(__DIR__.'/../Stubs/Trident/Workflows/LogicFunction.stub');
 
-        $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
+        $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ($function_name), $stub);
         $stub = str_replace('{{Function_name}}', ucfirst($function_name), $stub);
+        $stub = str_replace('{{function_parameter_name}}', $this->word_case_converter->camelCaseToSnakeCase($function_name), $stub);
         
         $this->storage_disk->writeFile($workflow_logic_path, $stub, [
             'append_file' => true
         ]);
+
+        //
+        //update dependencies in use
+        $this->addDependenciesInUses($workflow_logic_path, $td_entity_name, $function_name);
 
         //
         //update routes
@@ -96,7 +106,58 @@ class WorkflowLogicFunction
                
     }
 
-    public function updateRoutes(string $td_entity_name, string $function_name, array $functionality_schema)
+    /**
+     * @param string $workflow_logic_path
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @return void
+     */
+    public function addDependenciesInUses(string $workflow_logic_path, string $td_entity_name, string $function_name): void
+    {
+        $code = $this->storage_disk->readFile($workflow_logic_path); 
+        $lines = $this->storage_disk->readFileArray($workflow_logic_path); 
+
+        //code analysis
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        try {
+            $ast = $parser->parse($code);
+        } catch (Error $error) {
+            echo "Parse error: {$error->getMessage()}\n";
+            return;
+        }
+
+        $analysis_result = (object)[
+            'used_namespaces' => [],
+        ];
+
+        $nodeFinder = new NodeFinder;
+        $nodeFinder->find($ast, function(Node $node) use (&$analysis_result){
+            if ($node instanceof Node\Stmt\Use_) {
+                $analysis_result->used_namespaces []= $node->uses[0];
+            }
+        });
+
+        //use addition in code
+        $new_use_string = 'use App\Trident\Workflows\Schemas\Logic\\'.$td_entity_name.'\Resources\\'.$td_entity_name.$function_name.'Resource;'."\r\n";
+        $use_struct_string = 'use App\Trident\Workflows\Schemas\Logic\\'.$td_entity_name.'\Typed\Struct'.ucfirst($function_name).$td_entity_name.';'."\r\n";
+
+        $start_line = ($analysis_result->used_namespaces[count($analysis_result->used_namespaces)-1])->getStartLine();
+        $end_line = ($analysis_result->used_namespaces[count($analysis_result->used_namespaces)-1])->getEndLine();
+
+        array_splice($lines, $start_line, 0, $new_use_string);
+        array_splice($lines, ($start_line+1), 0, $use_struct_string);
+
+        //update file
+        $this->storage_disk->writeFileArray($workflow_logic_path, $lines); 
+    }
+
+    /**
+     * @param string $td_entity_name
+     * @param string $function_name
+     * @param array $functionality_schema
+     * @return void
+     */
+    public function updateRoutes(string $td_entity_name, string $function_name, array $functionality_schema): void
     {
         $this->folder_structure->checkPath('routes/trident.php');
         $trident_resource_routes_path = $this->storage_disk->getBasePath() . '/routes/trident.php';
@@ -132,14 +193,13 @@ class WorkflowLogicFunction
             } else if ($functionality_schema['endpoint']['type'] === 'delete') {
                 $http_method = 'delete';
             }
-            $line = "Route::".$http_method."('".$functionality_schema['endpoint']['uri']."', 'Trident\\".$td_entity_name."Controller@".$function_name."');";
+            $line = "Route::".$http_method."('".$functionality_schema['endpoint']['uri']."', '".$td_entity_name."Controller@".$function_name."');";
             if ($functionality_schema['endpoint']['group'] === 'auth') {
                 array_splice($lines, $auth_group_end_line, 0, ['    '.$line, "\r\n"]);
             } else {
                 array_splice($lines, count($lines), 0, ["\r\n", $line]);
             }
         }
-
 
         $this->storage_disk->writeFileArray($trident_resource_routes_path, $lines); 
     }
@@ -182,7 +242,7 @@ class WorkflowLogicFunction
 
         //new strict type
         $command->call('trident:generate:strict_type', [
-            'strict_type_name' => 'struct_optional',
+            'strict_type_name' => 'struct_optional_workflow_function',
             'function_name' => $function_name,
             'entity_name' => $td_entity_name,
             '--workflow' => true,

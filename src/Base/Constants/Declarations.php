@@ -57,6 +57,18 @@ final class Declarations extends Definition
             'name' => 'struct_optional',
             'enabled' => true
         ],
+        'STRUCT_OPTIONAL_WORKFLOW' => [
+            'name' => 'struct_optional_workflow',
+            'enabled' => true
+        ],
+        'STRUCT_OPTIONAL_SHOW' => [
+            'name' => 'struct_optional_show',
+            'enabled' => true
+        ],
+        'STRUCT_OPTIONAL_WORKFLOW_FUNCTION' => [
+            'name' => 'struct_optional_workflow_function',
+            'enabled' => true
+        ],
     ];
     
 }

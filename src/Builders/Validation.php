@@ -5,6 +5,7 @@ namespace j0hnys\Trident\Builders;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Constants\Trident\Request;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class Validation
 {
@@ -20,6 +21,7 @@ class Validation
         $this->mustache = new \Mustache_Engine;
         $this->request_definition = new Request();
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
     
     /**
@@ -71,9 +73,9 @@ class Validation
 
         $stub = $this->storage_disk->readFile(__DIR__.'/../../src/Stubs/Trident/Workflows/LogicRequestValidation.stub');
         $stub = $this->mustache->render($stub, [
-            'td_entity' => lcfirst($name),
+            'td_entity' => $this->word_case_converter->camelCaseToSnakeCase($name),
             'Td_entity' => ucfirst($name),
-            'id_request_parameter' => lcfirst($td_entity_name),
+            'id_request_parameter' => $this->word_case_converter->camelCaseToSnakeCase($td_entity_name),
             'rules' => $rules,
             'messages' => $messages,
         ]);

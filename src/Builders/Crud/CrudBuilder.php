@@ -6,12 +6,14 @@ use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Base\Constants\Trident\Request;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class CrudBuilder
 {
     private $storage_disk;
     private $storage_trident;
     private $mustache;
+    private $word_case_converter;
 
     public function __construct(Disk $storage_disk = null, Trident $storage_trident = null)
     {
@@ -26,6 +28,7 @@ class CrudBuilder
         $this->mustache = new \Mustache_Engine;
         $this->request_definition = new Request();
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
     
     /**
@@ -46,7 +49,7 @@ class CrudBuilder
 
             $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Crud/Controller.stub');
 
-            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             
             $this->storage_disk->writeFile($controller_path, $stub);
@@ -82,7 +85,7 @@ class CrudBuilder
             }
 
             if (empty($model_db_name)) {
-                $model_db_name = lcfirst($name);
+                $model_db_name = $this->word_case_converter->camelCaseToSnakeCase($name);
             }
 
             $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/Crud/Model.stub');
@@ -101,7 +104,7 @@ class CrudBuilder
         $workflows = array_map(function($element){
             return [
                 'Td_entity' => ucfirst($element),
-                'td_entity' => lcfirst($element),
+                'td_entity' => $this->word_case_converter->camelCaseToSnakeCase($element),
             ];
         },$Td_entities_workflows);
 
@@ -134,7 +137,7 @@ class CrudBuilder
             
             $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/app/Policies/Trident/LogicPolicy.stub');
             
-            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
             $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
             
             $this->storage_disk->writeFile($trident_policy_path, $stub);

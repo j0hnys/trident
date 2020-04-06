@@ -4,6 +4,7 @@ namespace j0hnys\Trident\Builders\Tests;
 
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class WorkflowLogicFunction
 {
@@ -16,6 +17,7 @@ class WorkflowLogicFunction
             $this->storage_disk = $storage_disk;
         }
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
 
     /**
@@ -46,7 +48,7 @@ class WorkflowLogicFunction
 
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Workflows/Logic/LogicFunction.stub');
 
-        $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
+        $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         
@@ -71,7 +73,7 @@ class WorkflowLogicFunction
 
         $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Business/Logic/LogicFunction.stub');
 
-        $stub = str_replace('{{td_entity}}', lcfirst($td_entity_name), $stub);
+        $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($td_entity_name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($td_entity_name), $stub);
         $stub = str_replace('{{function_name}}', ucfirst($function_name), $stub);
         

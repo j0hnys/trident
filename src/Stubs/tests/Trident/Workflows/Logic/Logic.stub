@@ -9,13 +9,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class {{Td_entity}}Test extends TestCase
 {
-    use RefreshDatabase; //<-- an einai mesa THA SVHSEI T PANTA OLA APO TN DB!!!! (kanei MIGRATIONS APO TN ARXH!!)
+    use RefreshDatabase;
 
-    /**
-     * A demo test example.
-     *
-     * @return void
-     */
     public function testDemo()
     {
         $this->assertTrue(true);
@@ -42,16 +37,10 @@ class {{Td_entity}}Test extends TestCase
     }
 
     {{# methods }}
-    /**
-     * {{method}} test example.
-     *
-     * @return void
-     */
     public function test{{method}}()
     {
         $this->assertTrue(false);
     }
-
 
     {{/ methods }}
 }

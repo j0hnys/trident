@@ -5,6 +5,7 @@ namespace j0hnys\Trident\Builders;
 use j0hnys\Trident\Base\Storage\Disk;
 use j0hnys\Trident\Base\Storage\Trident;
 use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class Workflow
 {
@@ -24,6 +25,7 @@ class Workflow
         }
         $this->mustache = new \Mustache_Engine;
         $this->folder_structure = new FolderStructure();
+        $this->word_case_converter = new WordCaseConverter();
     }
     
     /**
@@ -167,7 +169,7 @@ class Workflow
 
         $stub = $this->storage_disk->readFile($stub_fullpath);
 
-        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+        $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
         $stub = str_replace('{{Td_entity}}', ucfirst($name), $stub);
         
         $this->storage_disk->writeFile($fullpath_to_create, $stub);

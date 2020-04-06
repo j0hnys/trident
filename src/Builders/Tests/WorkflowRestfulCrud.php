@@ -7,6 +7,7 @@ use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 use j0hnys\Trident\Base\Constants\Trident\Functionality;
 use j0hnys\Trident\Base\Constants\Trident\Tests\Request;
 use j0hnys\Trident\Base\Constants\Trident\Tests\Response;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class WorkflowRestfulCrud
 {
@@ -24,6 +25,7 @@ class WorkflowRestfulCrud
         $this->functionality_definition = new Functionality();
         $this->request_definition = new Request();
         $this->response_definition = new Response();
+        $this->word_case_converter = new WordCaseConverter();
     }
 
     /**
@@ -60,8 +62,8 @@ class WorkflowRestfulCrud
         
         //
         //restful crud test generation
-        $this->folder_structure->checkPath('tests/Trident/Functional/Resource/*');
-        $workflow_restful_crud_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Functional/Resource/'.$name.'Test.php';
+        $this->folder_structure->checkPath('tests/Trident/Functional/Resources/*');
+        $workflow_restful_crud_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Functional/Resources/'.$name.'Test.php';
 
         if (!$this->storage_disk->fileExists($workflow_restful_crud_logic_test_path)) {
             $this->storage_disk->makeDirectory($workflow_restful_crud_logic_test_path);
@@ -69,7 +71,7 @@ class WorkflowRestfulCrud
             $stub = $this->storage_disk->readFile(__DIR__.'/../../Stubs/tests/Trident/Functional/Resources/Logic.stub');
 
             $stub = str_replace('{{Td_entity}}', $name, $stub);
-            $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+            $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
             $stub = str_replace('{{model_db_name}}', $model_db_name, $stub);
             $request_properties = [];
             if (!empty($request_schema)) {

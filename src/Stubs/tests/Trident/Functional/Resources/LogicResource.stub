@@ -23,12 +23,10 @@
         $response->assertStatus(200);
     }
 
-
     public function testCreate(): void
     {
         $this->assertTrue(true);
     }
-
 
     public function testStore(): void
     {
@@ -56,7 +54,6 @@
         $response->assertStatus(200);
     }
 
-
     public function testShow(): void
     {
         $user = factory(User::class)->create();
@@ -83,12 +80,10 @@
         $response->assertStatus(200);
     }
 
-
     public function testEdit(): void
     {
         $this->assertTrue(true);
     }
-
 
     public function testUpdate(): void
     {
@@ -123,7 +118,6 @@
         ]);
         $response->assertStatus(200);
     }
-
 
     public function testDestroy(): void
     {

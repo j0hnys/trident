@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Typed;
+
+use J0hnys\Typed\T;
+use App\Trident\Base\Typed\Structs\StructOptionalValues;
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}{{Function_name}}Resource;
+use App\Trident\Workflows\Schemas\Logic\{{Td_entity}}\Resources\{{Td_entity}}{{Function_name}}ResourceCollection;
+
+class Struct{{function_name}}{{Td_entity}} extends StructOptionalValues
+{
+    public function __construct($data = [])
+    {
+        $this->types = [
+        {{# types }}
+            {{{type}}}
+        {{/ types }}
+        {{^ types }}
+            //
+        {{/ types }}
+        ];
+        
+        parent::__construct($this->types);
+
+        $this->set($data);
+    }
+
+    public function getReturnResource($data): {{Td_entity}}{{Function_name}}Resource
+    {
+        return new {{Td_entity}}{{Function_name}}Resource($data);
+    }
+
+    public function getReturnResourceCollection($data): {{Td_entity}}{{Function_name}}ResourceCollection
+    {
+        return new {{Td_entity}}{{Function_name}}ResourceCollection($data);
+    }
+}
+

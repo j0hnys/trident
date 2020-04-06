@@ -7,6 +7,7 @@ use j0hnys\Trident\Base\Constants\Trident\FolderStructure;
 use j0hnys\Trident\Base\Constants\Trident\Functionality;
 use j0hnys\Trident\Base\Constants\Trident\Tests\Request;
 use j0hnys\Trident\Base\Constants\Trident\Tests\Response;
+use j0hnys\Trident\Base\Utilities\WordCaseConverter;
 
 class WorkflowRestfulFunction
 {
@@ -24,6 +25,7 @@ class WorkflowRestfulFunction
         $this->functionality_definition = new Functionality();
         $this->request_definition = new Request();
         $this->response_definition = new Response();
+        $this->word_case_converter = new WordCaseConverter();
     }
 
     /**
@@ -32,8 +34,8 @@ class WorkflowRestfulFunction
      */
     public function generate(string $name, string $function_name, array $options = []): void
     {
-        $this->folder_structure->checkPath('tests/Trident/Functional/Resource/*');
-        $workflow_restful_crud_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Functional/Resource/'.$name.'Test.php';
+        $this->folder_structure->checkPath('tests/Trident/Functional/Resources/*');
+        $workflow_restful_crud_logic_test_path = $this->storage_disk->getBasePath().'/tests/Trident/Functional/Resources/'.$name.'Test.php';
 
         if (!$this->storage_disk->fileExists($workflow_restful_crud_logic_test_path)) {
             throw new \Exception("workflow_restful_crud_test ".$name." does not exist!", 1);
@@ -74,7 +76,7 @@ class WorkflowRestfulFunction
         }
 
         $stub = str_replace('{{Td_entity}}', $name, $stub);
-        $stub = str_replace('{{td_entity}}', lcfirst($name), $stub);
+        $stub = str_replace('{{td_entity}}', $this->word_case_converter->camelCaseToSnakeCase($name), $stub);
         $stub = str_replace('{{function_name}}', $function_name, $stub);
         $stub = str_replace('{{endpoint_uri}}', $functionality_schema['endpoint']['uri'], $stub);
         $stub = str_replace('{{model_db_name}}', $functionality_schema['model']['db_name'], $stub);
