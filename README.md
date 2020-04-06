@@ -69,7 +69,7 @@ The first deviation is in definitions. There are `Workflows` and `Business`. The
 
 The main differences between a pure DDD and the structure above are the following
  - Building blocks
-   - the "Aggregates", "Value Objects", "Factories" are implemented by `StrictTypes` (described below) and eloquent-resources
+   - the "Mappers", "Value Objects", "Factories" are implemented by `StrictTypes` (described below) and eloquent-resources
    - "Entities" are implemented by laravel models and migrations
    - "Services" are implemented by "Workflows" -> "Logic" 
    - "Repositories" are implemented as an abstraction above laravel models
@@ -83,19 +83,19 @@ For more information about DDD you can reference [this](https://en.wikipedia.org
 
  Everything inside the `app/Trident` folder is Dependency Injected with Interfaces, the "bind" to laravel happens through dedicated providers in the `app/Providers` folder
 
-The `app/Trident/Business` folder is for implementing domain processes as pure php classes. It is encouraged generally to write "thin" repositories, that only do reads/writes to persistant storage, and everything else put in the Business Layer  
+The `app/Trident/Business` folder is for implementing domain processes as pure php classes.
 
 The `app/Trident/Workflow/Processes` are for implementing the steps of one workflow process.
 
 ----- 
 
-All this complexity is handled by the package. Using the CLI commands all the necessary objects are created and binded together and to the framework. The developer implementes the functionality needed to the designated places, `Policies` is for authorization, `Events` are for events, `Repositories` are for repositories e.t.c.
+All the complexity is handled by the package. Using the CLI commands all the necessary objects are created and binded together and to the framework. The developer implementes the functionality needed to the designated places, `Policies` is for authorization, `Events` are for events, `Repositories` are for repositories e.t.c.
 
 ### Strict Types
 
 Trident uses [j0hnys/trident-typed](https://github.com/j0hnys/trident-typed) which is a fork of [spatie/typed](https://github.com/spatie/typed) that is tailored for the purpose of Trident.
 
-The main usage is to define strict data structures that are passed through different layers of the architecture. 
+The main usage is to define strict data structures that are passed through different layers of the architecture.
 
 For example this struct data structure:
 ```php
@@ -202,8 +202,7 @@ class TestEntity implements TestEntityInterface
         $result = $this->test_entity_repository->create($data);
         return $struct_store_test_entity->getReturnResource($result);
     }
-
-
+    
 }
 
 ```
@@ -231,8 +230,7 @@ class TestEntity implements TestEntityInterface
 
 ```
 
-So in this example the `TestEntityController` calls `TestEntity` from workflow which calls `TestEntity` from logic. Authentication, authorization and validation are being done in the controller before we reach the workflow, the workflow interacts with the database (our only external source in this example) and the business only does logic. By this paradigm all concerns are seperated and isolated using native laravel functionallity (IoC DI, Exceptions, Policies, Validations, authentication) and we have a good base structure for pure unit, integration, functional tests. Abstracting `StructStoreTestEntity` and `TestEntityResource` instantiation from controller and workflow is left to the developer at the moment.
-
+So in this example the `TestEntityController` calls `TestEntity` from workflow which calls `TestEntity` from logic. Authentication, authorization and validation are being done in the controller before we reach the workflow, the workflow interacts with the database (our only external source in this example) and the business only does logic. Workflows should only contain dependency injected functions, "if" statements and "throws" of new Exception as this is all that is needed in order to describe a workflow. By this paradigm all concerns are seperated and isolated using native laravel functionallity (IoC DI, Exceptions, Policies, Validations, authentication) and we have a good base structure for unit, integration, functional tests.
 
 # Available artisan commands
 
@@ -246,6 +244,7 @@ trident:generate:business_logic_function        | Create a business logic functi
 trident:generate:controller_function            | Create a controller function | {entity_name} {function_name}
 trident:generate:events                         | Create an event | {td_entity_type} {event_type} {td_entity_name}
 trident:generate:exception                      | Create an exception | {td_entity_type} {td_entity_name}
+trident:generate:factories                        | Create database factories for all models | {--force}
 trident:generate:factory                        | Create a factory for a model | {model} {--force}
 trident:generate:policy_function                | Create a policy function | {entity_name} {function_name}
 trident:generate:process                        | Create a process | {td_entity_name} {process_name} {schema_path}
@@ -266,6 +265,7 @@ trident:install                                 | Trident installer | -
 trident:refresh:class_interface                 | Refreshes the interface that a class implements according to class functions | {name} {relative_input_path} {relative_output_path}
 trident:refresh:class_interfaces                | Refreshes all the interfaces from the classes of a specific type/folder | {td_entity_type}
 trident:refresh:di_binds                        | Refreshes DI containers binds | -
+trident:refresh:factories                       | Refreshes all database factories | -
 trident:refresh:workflow_logic_function         | Refresh a workflow logic function | {entity_name} {function_name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=}
 trident:refresh:workflow_restful_crud           | Refresh a workflow with the accompanied restful crud | {name} {--functionality_schema_path=} {--resource_schema_path=} {--validation_schema_path=} {--strict_type_schema_path=}
 trident:refresh:workflow_restful_crud_tests     | Refresh workflow restful crud tests | {name} {--functionality_schema_path=} {--request_schema_path=} {--response_schema_path=}
