@@ -74,7 +74,7 @@ class BuildMigrationsTest extends TestCase
         $this->build_migrations->generate($output_path, $mock_command);
 
         $method_parameters['--no-interaction'] = true;
-        $method_parameters['--templatePath'] = realpath($this->base_path.'/../../vendor/xethron/laravel-4-generators/src/Way/Generators/templates/migration.txt');
+        $method_parameters['--templatePath'] = realpath($this->base_path.'/../../vendor/kitloong/laravel-migrations-generator/src/Way/Generators/templates/migration.txt');
 
         $this->artisan($method_command, $method_parameters);
         

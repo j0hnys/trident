@@ -40,8 +40,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
         return [
             'j0hnys\Trident\TridentServiceProvider',
             'Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider',
-            'Way\Generators\GeneratorsServiceProvider',
-            'Xethron\MigrationsGenerator\MigrationsGeneratorServiceProvider'
+            'KitLoong\MigrationsGenerator\MigrationsGeneratorServiceProvider'
         ];
     }
 
